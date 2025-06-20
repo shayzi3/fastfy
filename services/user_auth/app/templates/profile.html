@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        .user-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000; /* Добавлено для гарантированного отображения поверх других элементов */
+        }
+        .username {
+            font-weight: 600;
+            font-size: 16px;
+            color: #000000; /* Чёрный цвет вместо #2d3748 */
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-profile">
+        <span class="username">{{ steam_name }}</span>
+        <img class="avatar" src="{{ steam_avatar }}" alt="User Avatar">
+    </div>
+
+    <script>
+        // Сохраняем токен в cookies (сессионный)
+        document.cookie = `token={{ token }}; path=/; Secure; SameSite=Lax`;
+    </script>
+</body>
+</html>
