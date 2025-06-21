@@ -26,7 +26,6 @@ template = Jinja2Templates(
 )
 
 
-
 @auth_router.get(path="/steam/login")
 async def steam_redirect(
      service: Annotated[AuthService, Depends(get_auth_service)]
@@ -34,6 +33,7 @@ async def steam_redirect(
      url = await service.steam_redirest()
      return RedirectResponse(url=url)
       
+     
      
      
 @auth_router.get(path="/steam/processing", response_class=HTMLResponse)
@@ -54,7 +54,6 @@ async def steam_processing(
                "steam_avatar": result.steam_avatar
           }
      )
-
 
 
 @auth_router.get(path="/telegram/login")
@@ -79,7 +78,6 @@ async def telegram_login(
      )
      
      
-
 @auth_router.post(path="/telegram/processing")
 async def telegram_processing(
      processid: str,

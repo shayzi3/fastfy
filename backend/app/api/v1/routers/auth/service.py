@@ -4,10 +4,9 @@ from typing import Any
 from steam_openid import SteamOpenID
 
 from app.core import my_config
-from app.schemas import SteamLoginUser
 from app.responses.abstract import AbstractResponse
 from app.db.repository import UserRepository
-from app.infrastracture.https import HttpSteamClient
+from app.infrastracture.https.steam import HttpSteamClient
 from app.infrastracture.redis import RedisPool
 from app.responses import (
      SteamLoginError, 
@@ -19,6 +18,7 @@ from app.core.utils import (
      generate_payload_deeplink,
      generate_processid
 )
+from .schema import SteamLoginUser
 
 
 
