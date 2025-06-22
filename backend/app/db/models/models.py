@@ -1,25 +1,19 @@
+import uuid
+
 from datetime import datetime
-from sqlalchemy import BigInteger, Index, func, Table, Column, ForeignKey, UUID
+from sqlalchemy import BigInteger, Index, func, ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.schemas import (
      SkinModel,
-     SkinRelModel,
      UserModel,
      UserRelModel,
-     SkinPriceHistoryModel
+     SkinPriceHistoryModel,
+     UserPortfolioRelModel,
+     UserPortfolioModel
 )
 from .base import Base
 
-
- 
-
-assotiation_table = Table(
-     "assotiation",
-     Base.metadata,
-     Column("uuid", ForeignKey("users.uuid"), primary_key=True, unique=True),
-     Column("id", ForeignKey("skins.skin_id"), primary_key=True, unique=True)
-)
 
 
 
@@ -32,7 +26,7 @@ class Users(Base):
      pydantic_model = UserModel
      pydantic_rel_model = UserRelModel
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, unique=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, unique=True, default=uuid.uuid4())
      steam_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
      steam_name: Mapped[str] = mapped_column(nullable=False)
      steam_avatar: Mapped[str] = mapped_column(nullable=False)
@@ -40,17 +34,15 @@ class Users(Base):
      telegram_username: Mapped[str] = mapped_column(nullable=True)
      created_at: Mapped[datetime] = mapped_column(default=func.now())
      
-     skins: Mapped[list["Skins"]] = relationship(
-          "Skins",
-          secondary=assotiation_table,
-          back_populates="users",
+     portfolio: Mapped[list["UsersPortfolio"]] = relationship(
+          "UserPortfolio",
+          back_populates="user",
           uselist=True
      )
      
      @classmethod
      def selectinload(cls):
           return cls.skins
-     
      
      @classmethod
      def returning(cls):
@@ -67,7 +59,6 @@ class Skins(Base):
           Index("idx_item_type", "item_type")
      )
      pydantic_model = SkinModel
-     pydantic_rel_model = SkinRelModel
      
      skin_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
      skin_name: Mapped[str] = mapped_column(nullable=False)
@@ -79,13 +70,6 @@ class Skins(Base):
      price_last_1_day: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_7_days: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_30_days: Mapped[float] = mapped_column(nullable=True) # percent
-     
-     users: Mapped[list["Users"]] = relationship(
-          "Users",
-          secondary=assotiation_table,
-          back_populates="skins",
-          uselist=True
-     )
      
      @classmethod
      def selectinload(cls):
@@ -109,3 +93,25 @@ class SkinsPriceHistory(Base):
      skin_name: Mapped[str] = mapped_column(nullable=False)
      price: Mapped[float] = mapped_column(nullable=False)
      timestamp: Mapped[datetime] = mapped_column(default=func.now())
+     
+     
+     
+class UsersPortfolio(Base):
+     __tablename__ = "users_portfolio"
+     __table_args__ = (
+          Index("idx_portfolio_user_uuid", "user_uuid"),
+          Index("idx_portfolio_skin_id", "skin_id")
+     )
+     pydantic_model = UserPortfolioModel
+     pydantic_rel_model = UserPortfolioRelModel
+     
+     item_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
+     user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid"))
+     skin_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+     quantity: Mapped[int] = mapped_column(default=1, nullable=False)
+     buy_price: Mapped[float] = mapped_column(nullable=False)
+     
+     user: Mapped["Users"] = relationship(
+          "Users",
+          back_populates="portfolio"
+     )

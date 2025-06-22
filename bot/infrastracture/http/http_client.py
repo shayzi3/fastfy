@@ -4,7 +4,7 @@ import aiohttp
 
 class HttpClient:
      def __init__(self):
-          self.base_url = "https://ql2n8wmtcfph.share.zrok.io/api/v1"
+          self.base_url = "https://hbcbva-185-247-185-62.ru.tuna.am/api/v1"
           
           
      async def verify_processid(

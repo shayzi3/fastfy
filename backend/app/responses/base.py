@@ -5,6 +5,7 @@ from .abstract import AbstractResponse
 
 
 class BaseResponse(AbstractResponse):
+     description = None
      message = None
      status_code = None
      
@@ -18,6 +19,22 @@ class BaseResponse(AbstractResponse):
                },
                status_code=cls.status_code
           )
+          
+          
+     @classmethod
+     def endpoint_response(cls) -> dict:
+          return {
+               "description": cls.description,
+               "content": {
+                    "application/json": {
+                         "example": {
+                              "message": cls.message,
+                              "status": cls.status_code
+                         }
+                    }
+               }
+          }
+     
           
           
 

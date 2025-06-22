@@ -4,5 +4,6 @@ from .schema import (
      SkinModel,
      SkinPriceHistoryModel,
      UserRelModel,
-     SkinRelModel
+     UserPortfolioModel,
+     UserPortfolioRelModel
 )

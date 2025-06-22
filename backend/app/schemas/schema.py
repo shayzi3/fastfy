@@ -26,7 +26,8 @@ class SkinModel(BaseModel):
      price_last_1_day: float
      price_last_7_days: float
      price_last_30_days: float     
-
+     
+     
 
 
 class SkinPriceHistoryModel(BaseModel):
@@ -36,14 +37,23 @@ class SkinPriceHistoryModel(BaseModel):
      timestamp: datetime
      
      
+
+class UserPortfolioModel(BaseModel):
+     item_id: int
+     skin_id: int
+     user_uuid: str
+     quantity: int
+     buy_price: float
+     
+     
+     
+class UserPortfolioRelModel(UserPortfolioModel):
+     user: "UserModel"
+     
+     
      
 class UserRelModel(UserModel):
-     skins: list[SkinModel]
-     
-
-
-class SkinRelModel(SkinModel):
-     users: list[UserModel]
+     portfolio: list["UserPortfolioModel"]
      
      
           

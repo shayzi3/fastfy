@@ -1,5 +1,3 @@
-import uuid
-
 from typing import Any
 from steam_openid import SteamOpenID
 
@@ -53,17 +51,15 @@ class AuthService:
                if isresponse(steamdata):
                     return steamdata
                
-               uuid4 = uuid.uuid4()
                steam_name, steam_avatar = steamdata
-               await self.user_repository.insert(
-                    uuid=uuid4,
+               uuid = await self.user_repository.create(
                     steam_id=steamid,
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
                )
                
           return SteamLoginUser(
-               uuid=str(exists.uuid) if exists else str(uuid4),
+               uuid=str(exists.uuid) if exists else str(uuid),
                steam_name=exists.steam_name if exists else steam_name,
                steam_avatar=exists.steam_avatar if exists else steam_avatar,
           )

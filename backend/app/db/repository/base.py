@@ -28,6 +28,9 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
                result = await async_session.execute(sttm)
                result_scalar = result.first()
                
+               if result_scalar is None:
+                    return None
+               
           return_model = cls.model.pydantic_model
           if selectload is True:
                return_model = cls.model.pydantic_rel_model
@@ -38,11 +41,17 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
      async def create(
           cls,
           **insert_args
-     ) -> None:
+     ) -> Any:
           async with Session.session() as async_session:
-               sttm = insert(cls.moel).values(**insert_args)
-               await async_session.execute(sttm)
+               sttm = (
+                    insert(cls.model).
+                    values(**insert_args).
+                    returning(cls.model.returning())
+               )
+               result = await async_session.execute(sttm)
+               result = result.scalar()
                await async_session.commit()
+          return result
                
                
      @classmethod
@@ -54,8 +63,8 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
           async with Session.session() as async_session:
                sttm = (
                     update(cls.model).
-                    where(**where).
-                    filter_by(**update_args).
+                    filter_by(**where).
+                    values(**update_args).
                     returning(cls.model.returning())
                )
                result = await async_session.execute(sttm)
