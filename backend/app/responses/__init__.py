@@ -2,19 +2,8 @@ from .error import (
      SteamLoginError, 
      HttpError,
      TokenError,
-     TelegramProcessError
+     TelegramProcessError,
+     UserNotFoundError
 )
-from .success import TelegramProcessSuccess
+from .success import TelegramProcessSuccess, ResponseSuccess
 from .base import isresponse
-
-
-__all__ = [
-     "SteamLoginError",
-     "SteamLoginSuccess",
-     "SteamAlreadyExistsError",
-     "HttpError",
-     "isresponse",
-     "TokenError",
-     "TelegramProcessError",
-     "TelegramProcessSuccess"
-]

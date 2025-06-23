@@ -1,12 +1,13 @@
 from typing import Any, Generic, TypeVar
+from pydantic import BaseModel
 from sqlalchemy import insert, delete, update, select
 from sqlalchemy.orm import selectinload
 
 from ..session import Session
 
 
-PYDANTIC_MODEL = TypeVar("MODEL")
-PYDANTIC_MODELRel = TypeVar("MODELRel")
+PYDANTIC_MODEL = TypeVar("MODEL", bound=BaseModel)
+PYDANTIC_MODELRel = TypeVar("MODELRel", bound=BaseModel)
 
 
 
@@ -26,7 +27,7 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
                
           async with Session.session() as async_session:
                result = await async_session.execute(sttm)
-               result_scalar = result.first()
+               result_scalar = result.scalar()
                
                if result_scalar is None:
                     return None

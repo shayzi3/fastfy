@@ -1,27 +1,27 @@
-
 from .base import BaseResponse
 
 
+
 class SteamLoginError(BaseResponse):
-     description = "Error when login with Steam"
-     message = "SteamLoginError"
+     detail = "SteamLoginError"
      status_code = 403
      
 
-     
 class HttpError(BaseResponse):
-     description = "Error when server send http request"
-     message = "TryLater"
+     detail = "TryLater"
      status_code = 500
      
      
 class TokenError(BaseResponse):
-     description = "Invalid token"
-     message = "TokenError"
+     detail = "TokenError"
      status_code = 401
      
      
 class TelegramProcessError(BaseResponse):
-     description = "Link not valid"
-     message = "OldLink"
+     detail = "OldLink"
      status_code = 400
+     
+     
+class UserNotFoundError(BaseResponse):
+     detail = "UserNotFound"
+     status_code = 404

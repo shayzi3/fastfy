@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Response
 from fastapi.responses import (
      RedirectResponse, 
      JSONResponse, 
@@ -7,10 +7,11 @@ from fastapi.responses import (
 )
 from fastapi.templating import Jinja2Templates
 
-from app.slow_api import limiter
+from app.core.slow_api import limiter
 from app.types import TokenData
-from app.responses import isresponse
+from app.responses import isresponse, ResponseSuccess
 from app.core.security import jwt_encode
+from app.schemas import EndpointResponse
 from .service import get_auth_service, AuthService
 from .schema import TelegramData
 from ..dependency import current_user
@@ -18,7 +19,7 @@ from ..dependency import current_user
 
 
 auth_router = APIRouter(
-     prefix="/api/v1/auth",
+     prefix="/api/v1",
      tags=["Auth"]
 )
 template = Jinja2Templates(
@@ -26,7 +27,8 @@ template = Jinja2Templates(
 )
 
 
-@auth_router.get(path="/steam/login")
+
+@auth_router.get(path="/auth/SteamLogin")
 async def steam_redirect(
      service: Annotated[AuthService, Depends(get_auth_service)]
 ) -> RedirectResponse:
@@ -36,55 +38,48 @@ async def steam_redirect(
      
      
      
-@auth_router.get(path="/steam/processing", response_class=HTMLResponse)
+@auth_router.get(path="/auth/SteamProcessing")
 async def steam_processing(
      request: Request,
+     response: Response,
      service: Annotated[AuthService, Depends(get_auth_service)]
-):
+) -> HTMLResponse:
      result = await service.steam_processing(request.query_params)
      if isresponse(result):
           return result.response()
      
+     response.set_cookie(
+          key="token",
+          value=await jwt_encode({"uuid": result.uuid})
+     )
      return template.TemplateResponse(
           name="profile.html",
           context={
                "request": request,
-               "token": await jwt_encode({"uuid": result.uuid}),
                "steam_name": result.steam_name,
                "steam_avatar": result.steam_avatar
           }
      )
 
 
-@auth_router.get(path="/telegram/login")
+@auth_router.get(path="/auth/TelegramLogin")
 @limiter.limit("1/4 minute")
 async def telegram_login(
      request: Request,
      current_user: Annotated[TokenData, Depends(current_user)],
      service: Annotated[AuthService, Depends(get_auth_service)]
-) -> JSONResponse:
-     if isresponse(current_user):
-          return current_user.response()
-     
-     deeplink = await service.telegram_login(
-          user_uuid=current_user.uuid
-     )
-     return JSONResponse(
-          content={
-               "payload": deeplink,
-               "status": 200
-          },
-          status_code=200
-     )
+) -> EndpointResponse[str]:
+     deeplink = await service.telegram_login(user_uuid=current_user.uuid)
+     return ResponseSuccess(deeplink)
      
      
      
-@auth_router.post(path="/telegram/processing")
+@auth_router.post(path="/auth/TelegramProcessing")
 async def telegram_processing(
      processid: str,
      data: TelegramData,
      service: Annotated[AuthService, Depends(get_auth_service)]
-) -> JSONResponse:
+) -> EndpointResponse[str]:
      result = await service.telegram_processing(
           processid=processid,
           telegram_id=data.telegram_id,

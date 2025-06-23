@@ -1,6 +1,11 @@
 from uuid import UUID
+from typing import Generic, TypeVar
 from datetime import datetime
 from pydantic import BaseModel
+
+
+
+T = TypeVar("T")
 
 
 
@@ -16,13 +21,14 @@ class UserModel(BaseModel):
 
 
 class SkinModel(BaseModel):
-     skin_id: int
-     skin_name: str
-     skin_avatar: str
-     skin_price: float
-     rarity: str
-     collection: str
-     item_type: str
+     id: int
+     name: str
+     avatar: str
+     price: float
+     rarity: str | None
+     category: str | None
+     collection: str | None
+     skin_type: str | None
      price_last_1_day: float
      price_last_7_days: float
      price_last_30_days: float     
@@ -31,8 +37,8 @@ class SkinModel(BaseModel):
 
 
 class SkinPriceHistoryModel(BaseModel):
-     skin_id: int
-     skin_name: str
+     id: int
+     name: str
      price: float
      timestamp: datetime
      
@@ -56,8 +62,26 @@ class UserRelModel(UserModel):
      portfolio: list["UserPortfolioModel"]
      
      
+    
           
 class TokenPayload(BaseModel):
      uuid: str
      iat: datetime
      exp: datetime
+     
+     
+     
+     
+class SteamItem(BaseModel):
+     name: str
+     avatar: str
+     rarity: str | None
+     collection: str | None
+     skin_type: str | None
+     quantity: int
+     
+     
+     
+class EndpointResponse(BaseModel, Generic[T]):
+     detail: T
+     

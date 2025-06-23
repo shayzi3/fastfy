@@ -35,7 +35,7 @@ class Users(Base):
      created_at: Mapped[datetime] = mapped_column(default=func.now())
      
      portfolio: Mapped[list["UsersPortfolio"]] = relationship(
-          "UserPortfolio",
+          "UsersPortfolio",
           back_populates="user",
           uselist=True
      )
@@ -53,20 +53,22 @@ class Users(Base):
 class Skins(Base):
      __tablename__ = "skins"
      __table_args__ = (
-          Index("idx_skin_name", "skin_name"),
+          Index("idx_skin_name", "name"),
           Index("idx_rarity", "rarity"),
           Index("idx_collection", "collection"),
-          Index("idx_item_type", "item_type")
+          Index("idx_skin_type", "skin_type"),
+          Index("idx_category", "category")
      )
      pydantic_model = SkinModel
      
-     skin_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
-     skin_name: Mapped[str] = mapped_column(nullable=False)
-     skin_avatar: Mapped[str] = mapped_column(nullable=False)
-     skin_price: Mapped[float] = mapped_column(nullable=False)
-     rarity: Mapped[str] = mapped_column(nullable=False)
-     collection: Mapped[str] = mapped_column(nullable=False)
-     item_type: Mapped[str] = mapped_column(nullable=False)
+     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
+     name: Mapped[str] = mapped_column(nullable=False)
+     avatar: Mapped[str] = mapped_column(nullable=False)
+     price: Mapped[float] = mapped_column(nullable=False)
+     rarity: Mapped[str] = mapped_column(nullable=True)
+     collection: Mapped[str] = mapped_column(nullable=True)
+     category: Mapped[str] = mapped_column(nullable=True)
+     skin_type: Mapped[str] = mapped_column(nullable=True)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_7_days: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_30_days: Mapped[float] = mapped_column(nullable=True) # percent
@@ -84,13 +86,13 @@ class Skins(Base):
 class SkinsPriceHistory(Base):
      __tablename__ = "skins_price_history"
      __table_args__ = (
-          Index("idx_skin_history_name", "skin_name"),
+          Index("idx_skin_history_name", "name"),
           Index("idx_skin_history_timestamp", "timestamp")
      )
      pydantic_model = SkinPriceHistoryModel
      
-     skin_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
-     skin_name: Mapped[str] = mapped_column(nullable=False)
+     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
+     name: Mapped[str] = mapped_column(nullable=False)
      price: Mapped[float] = mapped_column(nullable=False)
      timestamp: Mapped[datetime] = mapped_column(default=func.now())
      

@@ -13,5 +13,7 @@ async def current_user(
      token = request.cookies.get("token")
      if token is not None:
           payload = await jwt_decode(token)
+          if isresponse(payload):
+               raise payload.exec()
           return payload
-     return TokenError
+     raise TokenError.exec()

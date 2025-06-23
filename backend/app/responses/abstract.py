@@ -1,13 +1,18 @@
 from typing import Protocol
 from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 
 
 class AbstractResponse(Protocol):
-     description: str | None
-     message: str | None
+     detail: str | None
      status_code: int | None
      
      
      @classmethod
      def response(cls) -> JSONResponse:
+          raise NotImplementedError
+     
+     
+     @classmethod
+     def exec(cls) -> HTTPException:
           raise NotImplementedError
