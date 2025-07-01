@@ -42,8 +42,7 @@ class HttpSteamClient:
                try:
                     result = await session.get(url)
                     
-                    if result.status == 401:
-                         ...
+                    # errors
                          
                     data = await result.json()
                except:
@@ -52,39 +51,20 @@ class HttpSteamClient:
                assets = data.get("assets")
                descriptions = data.get("descriptions")
                
-               count_skins = {}
+               quantity_skins = {}
                for item in assets:
-                    if item.get("classid") not in count_skins.keys():
-                         count_skins[item.get("classid")] = 0
-                    count_skins[item.get("classid")] += 1
+                    if item.get("classid") not in quantity_skins.keys():
+                         quantity_skins[item.get("classid")] = 0
+                    quantity_skins[item.get("classid")] += 1
                     
                inventory = []
                for inventory_item in descriptions:
                     if inventory_item.get("marketable") == 1:
-                         rarity, collection, skin_type, category = None, None, None, None
-                         for types in inventory_item.get("tags"):
-                              catalog = types.get("localized_category_name")
-                              
-                              if catalog == "Type":
-                                   skin_type = types.get("localized_tag_name")
-                                   
-                              if catalog == "Collection":
-                                   collection = types.get("localized_tag_name")
-                                   
-                              if catalog == "Quality":
-                                   rarity = types.get("localized_tag_name")
-                                   
-                              if catalog == "Weapon":
-                                   category = types.get("localized_tag_name")
-                              
                          inventory.append(
                               SteamItem(
                                    name=inventory_item.get("market_hash_name"),
                                    avatar=icon_url + inventory_item.get("icon_url"),
-                                   rarity=rarity,
-                                   collection=collection,
-                                   skin_type=skin_type,
-                                   quantity=count_skins.get(inventory_item.get("classid"))
+                                   quantity=quantity_skins.get(inventory_item.get("classid")),
                               )
                          )
                return inventory

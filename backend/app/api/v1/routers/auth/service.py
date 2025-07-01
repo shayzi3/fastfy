@@ -59,7 +59,7 @@ class AuthService:
                )
                
           return SteamLoginUser(
-               uuid=str(exists.uuid) if exists else str(uuid),
+               uuid=exists.uuid if exists else str(uuid),
                steam_name=exists.steam_name if exists else steam_name,
                steam_avatar=exists.steam_avatar if exists else steam_avatar,
           )

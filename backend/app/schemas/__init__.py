@@ -5,7 +5,6 @@ from .schema import (
      SkinPriceHistoryModel,
      UserRelModel,
      UserPortfolioModel,
-     UserPortfolioRelModel,
      SteamItem,
-     EndpointResponse
+     SkinRelModel,
 )

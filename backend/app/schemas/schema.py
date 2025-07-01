@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Generic, TypeVar
+from typing import TypeVar, Any
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -17,28 +17,30 @@ class UserModel(BaseModel):
      created_at: datetime
      telegram_id: int | None = None
      telegram_username: str | None = None
+     
+     def model_post_init(self, _: Any) -> None:
+         self.uuid = str(self.uuid)
+
 
 
 
 class SkinModel(BaseModel):
-     id: int
+     id: str
      name: str
      avatar: str
      price: float
-     rarity: str | None
-     category: str | None
-     collection: str | None
-     skin_type: str | None
-     price_last_1_day: float
-     price_last_7_days: float
-     price_last_30_days: float     
+     price_last_1_day: float | None
+     price_last_7_days: float | None
+     price_last_30_days: float | None    
      
      
 
 
 class SkinPriceHistoryModel(BaseModel):
-     id: int
-     name: str
+     item_id: int
+     skin_id: str
+     skin_name: str
+     volume: int
      price: float
      timestamp: datetime
      
@@ -46,21 +48,21 @@ class SkinPriceHistoryModel(BaseModel):
 
 class UserPortfolioModel(BaseModel):
      item_id: int
-     skin_id: int
+     skin_id: str
      user_uuid: str
      quantity: int
      buy_price: float
      
      
      
-class UserPortfolioRelModel(UserPortfolioModel):
-     user: "UserModel"
-     
-     
      
 class UserRelModel(UserModel):
      portfolio: list["UserPortfolioModel"]
      
+   
+     
+class SkinRelModel(SkinModel):
+     history: list["SkinPriceHistoryModel"]
      
     
           
@@ -75,13 +77,5 @@ class TokenPayload(BaseModel):
 class SteamItem(BaseModel):
      name: str
      avatar: str
-     rarity: str | None
-     collection: str | None
-     skin_type: str | None
      quantity: int
-     
-     
-     
-class EndpointResponse(BaseModel, Generic[T]):
-     detail: T
      

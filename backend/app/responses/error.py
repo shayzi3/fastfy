@@ -25,3 +25,13 @@ class TelegramProcessError(BaseResponse):
 class UserNotFoundError(BaseResponse):
      detail = "UserNotFound"
      status_code = 404
+     
+     
+class ArgumentError(BaseResponse):
+     detail = "ArgumentError"
+     status_code = 403
+     
+     
+class SkinNotFoundError(BaseResponse):
+     detail = "SkinNotFound"
+     status_code = 404

@@ -41,19 +41,27 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
      @classmethod
      async def create(
           cls,
+          data: list[dict] | dict = [],
           **insert_args
      ) -> Any:
           async with Session.session() as async_session:
-               sttm = (
-                    insert(cls.model).
-                    values(**insert_args).
-                    returning(cls.model.returning())
-               )
-               result = await async_session.execute(sttm)
-               result = result.scalar()
-               await async_session.commit()
-          return result
+               if not data:
+                    sttm = (
+                         insert(cls.model).
+                         values(**insert_args).
+                         returning(cls.model.returning())
+                    )
+               else:
+                    sttm = insert(cls.model).values(data)
                
+               if not data:
+                    result = await async_session.execute(sttm)
+                    await async_session.commit()
+                    return result.scalar()
+               else:
+                    await async_session.execute(sttm)
+                    await async_session.commit()
+                    
                
      @classmethod
      async def update(

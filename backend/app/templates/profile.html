@@ -33,5 +33,9 @@
         <span class="username">{{ steam_name }}</span>
         <img class="avatar" src="{{ steam_avatar }}" alt="User Avatar">
     </div>
+    <script>
+        // Сохраняем токен в cookies (сессионный)
+        document.cookie = `token={{ token }}; path=/; Secure; SameSite=Lax`;
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-from app.schemas import UserPortfolioRelModel, UserPortfolioModel
+from app.schemas import UserPortfolioModel
 from app.db.models import UsersPortfolio
 
 from .base import BaseRepository
@@ -6,6 +6,6 @@ from .base import BaseRepository
 
 
 class UserPortfolioRepository(
-     BaseRepository[UserPortfolioModel, UserPortfolioRelModel]
+     BaseRepository[UserPortfolioModel, None]
 ):
      model = UsersPortfolio

@@ -9,8 +9,8 @@ from app.schemas import (
      UserModel,
      UserRelModel,
      SkinPriceHistoryModel,
-     UserPortfolioRelModel,
-     UserPortfolioModel
+     UserPortfolioModel,
+     SkinRelModel
 )
 from .base import Base
 
@@ -35,14 +35,13 @@ class Users(Base):
      created_at: Mapped[datetime] = mapped_column(default=func.now())
      
      portfolio: Mapped[list["UsersPortfolio"]] = relationship(
-          "UsersPortfolio",
-          back_populates="user",
-          uselist=True
+          uselist=True,
+          cascade="all, delete-orphan"
      )
      
      @classmethod
      def selectinload(cls):
-          return cls.skins
+          return cls.portfolio
      
      @classmethod
      def returning(cls):
@@ -54,47 +53,48 @@ class Skins(Base):
      __tablename__ = "skins"
      __table_args__ = (
           Index("idx_skin_name", "name"),
-          Index("idx_rarity", "rarity"),
-          Index("idx_collection", "collection"),
-          Index("idx_skin_type", "skin_type"),
-          Index("idx_category", "category")
      )
      pydantic_model = SkinModel
+     pydantic_rel_model = SkinRelModel
      
-     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
+     id: Mapped[str] = mapped_column(primary_key=True)
      name: Mapped[str] = mapped_column(nullable=False)
      avatar: Mapped[str] = mapped_column(nullable=False)
      price: Mapped[float] = mapped_column(nullable=False)
-     rarity: Mapped[str] = mapped_column(nullable=True)
-     collection: Mapped[str] = mapped_column(nullable=True)
-     category: Mapped[str] = mapped_column(nullable=True)
-     skin_type: Mapped[str] = mapped_column(nullable=True)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_7_days: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_30_days: Mapped[float] = mapped_column(nullable=True) # percent
      
+     history: Mapped[list["SkinsPriceHistory"]] = relationship(
+          uselist=True,
+          cascade="all, delete-orphan"
+     )
+     
      @classmethod
      def selectinload(cls):
-          return cls.users
+          return cls.history
      
      @classmethod
      def returning(cls):
-          return cls.skin_id
+          return cls.id
      
      
      
 class SkinsPriceHistory(Base):
      __tablename__ = "skins_price_history"
      __table_args__ = (
-          Index("idx_skin_history_name", "name"),
+          Index("idx_skin_history_name", "skin_name"),
+          Index("idx_skin_history_id", "skin_id"),
           Index("idx_skin_history_timestamp", "timestamp")
      )
      pydantic_model = SkinPriceHistoryModel
      
-     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
-     name: Mapped[str] = mapped_column(nullable=False)
+     item_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+     skin_id: Mapped[str] = mapped_column(ForeignKey("skins.id", ondelete="CASCADE"))
+     skin_name: Mapped[str] = mapped_column(nullable=False)
      price: Mapped[float] = mapped_column(nullable=False)
-     timestamp: Mapped[datetime] = mapped_column(default=func.now())
+     volume: Mapped[int] = mapped_column(nullable=False)
+     timestamp: Mapped[datetime] = mapped_column(nullable=False)
      
      
      
@@ -105,15 +105,10 @@ class UsersPortfolio(Base):
           Index("idx_portfolio_skin_id", "skin_id")
      )
      pydantic_model = UserPortfolioModel
-     pydantic_rel_model = UserPortfolioRelModel
      
-     item_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
-     user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid"))
-     skin_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+     item_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+     user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
+     skin_id: Mapped[str] = mapped_column(ForeignKey("skins.id"))
      quantity: Mapped[int] = mapped_column(default=1, nullable=False)
      buy_price: Mapped[float] = mapped_column(nullable=False)
      
-     user: Mapped["Users"] = relationship(
-          "Users",
-          back_populates="portfolio"
-     )

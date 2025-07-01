@@ -3,7 +3,9 @@ from .error import (
      HttpError,
      TokenError,
      TelegramProcessError,
-     UserNotFoundError
+     UserNotFoundError,
+     ArgumentError,
+     SkinNotFoundError
 )
-from .success import TelegramProcessSuccess, ResponseSuccess
+from .success import TelegramProcessSuccess
 from .base import isresponse
