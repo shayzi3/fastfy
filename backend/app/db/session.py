@@ -4,5 +4,5 @@ from app.core import my_config
 
 
 class Session:
-     engine = create_async_engine(my_config.postgres_url, echo=False)
+     engine = create_async_engine(my_config.postgres_url, echo=True)
      session = async_sessionmaker(engine)

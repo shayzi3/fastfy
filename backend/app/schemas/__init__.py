@@ -3,6 +3,8 @@ from .schema import (
      TokenPayload,
      SkinModel,
      SkinPriceHistoryModel,
+     SkinHistoryModel,
+     SkinHistoryTimePartModel,
      UserRelModel,
      UserPortfolioModel,
      SteamItem,

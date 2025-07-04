@@ -1,4 +1,6 @@
 from typing import Annotated
+
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Request, Depends, Response
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 
@@ -7,9 +9,10 @@ from app.core.slow_api import limiter
 from app.type import TokenData
 from app.responses import isresponse
 from app.core.security import jwt_encode
+from app.infrastracture.redis import RedisPool
 from .service import get_auth_service, AuthService
 from .schema import TelegramData
-from ..dependency import current_user
+from ..dependency import current_user, get_async_session, get_redis_session
 
 
 
@@ -33,9 +36,13 @@ async def steam_redirect(
 @auth_router.get(path="/auth/SteamProcessing")
 async def steam_processing(
      request: Request,
-     service: Annotated[AuthService, Depends(get_auth_service)]
+     service: Annotated[AuthService, Depends(get_auth_service)],
+     async_session: Annotated[AsyncSession, Depends(get_async_session)]
 ) -> HTMLResponse:
-     result = await service.steam_processing(request.query_params)
+     result = await service.steam_processing(
+          request.query_params,
+          async_session=async_session
+     )
      if isresponse(result):
           return result.response()
      
@@ -56,9 +63,13 @@ async def steam_processing(
 async def telegram_login(
      request: Request,
      current_user: Annotated[TokenData, Depends(current_user)],
-     service: Annotated[AuthService, Depends(get_auth_service)]
+     service: Annotated[AuthService, Depends(get_auth_service)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)]
 ) -> str:
-     deeplink = await service.telegram_login(user_uuid=current_user.uuid)
+     deeplink = await service.telegram_login(
+          user_uuid=current_user.uuid,
+          redis_session=redis_session
+     )
      return Response(content=deeplink)
      
      
@@ -68,9 +79,13 @@ async def telegram_login(
 async def telegram_processing(
      processid: str,
      data: TelegramData,
-     service: Annotated[AuthService, Depends(get_auth_service)]
+     service: Annotated[AuthService, Depends(get_auth_service)],
+     async_session: Annotated[AsyncSession, Depends(get_async_session)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)]
 ) -> JSONResponse:
      result = await service.telegram_processing(
+          async_session=async_session,
+          redis_session=redis_session,
           processid=processid,
           telegram_id=data.telegram_id,
           telegram_username=data.telegram_username

@@ -1,23 +1,26 @@
 import aiohttp
+import json
+
+from typing import Any
 
 from app.core import my_config
+from app.infrastracture.redis import RedisPool
 from app.responses.abstract import AbstractResponse
-from app.responses import HttpError
-from app.schemas import SteamItem
+from app.responses import HttpError, SkinNotFoundError
+from app.schemas import SteamItem, SkinModel
 
 
 
 
 class HttpSteamClient:
      def __init__(self):
-          self.base_url = "https://api.steampowered.com"
           self.api_key = my_config.steam_api_key
+          self.icon_url = "https://community.akamai.steamstatic.com/economy/image/"
      
      
      async def get_steam_profile(self, steamids: int) -> tuple[str, str] | AbstractResponse:
           url = (
-               self.base_url + 
-               "/ISteamUser/GetPlayerSummaries/v0002/" +
+               "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/" +
                f"?key={self.api_key}&steamids={steamids}"
           )
           async with aiohttp.ClientSession() as session:
@@ -36,14 +39,13 @@ class HttpSteamClient:
                
      async def get_steam_inventory(self, steamid: int) -> list[SteamItem] | AbstractResponse:
           url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
-          icon_url = "https://community.akamai.steamstatic.com/economy/image/"
           
           async with aiohttp.ClientSession() as session:
                try:
                     result = await session.get(url)
                     
                     # errors
-                         
+                     
                     data = await result.json()
                except:
                     return HttpError
@@ -63,11 +65,58 @@ class HttpSteamClient:
                          inventory.append(
                               SteamItem(
                                    name=inventory_item.get("market_hash_name"),
-                                   avatar=icon_url + inventory_item.get("icon_url"),
+                                   avatar=self.icon_url + inventory_item.get("icon_url"),
                                    quantity=quantity_skins.get(inventory_item.get("classid")),
                               )
                          )
                return inventory
+               
+               
+     async def search_steam_skins(
+          self,
+          redis_session: RedisPool,
+          query: str,
+          offset: int,
+     ) -> list[dict[str, Any]] | AbstractResponse:
+          key = f"search:{query}:offset={offset}"
+          skins = await redis_session.get(key)
+          if skins is not None:
+               skins = json.loads(skins)
+          
+          url = (
+               "https://steamcommunity.com/market/search/render/"
+               f"?query={query}&start={offset}&count=10&search_descriptions=0"
+               "&sort_column=default&sort_dir=desc&appid=730&norender=1"
+          )
+          if skins is None:
+               async with aiohttp.ClientSession() as session:
+                    for _ in range(3):
+                         try:
+                              response = await session.get(url)
+                              data = await response.json()
+                              break
+                         except:
+                              continue
+                    
+                    results: list[dict[str, Any]] = data.get("results") 
+                    if not results:
+                         return SkinNotFoundError
+                    
+                    skins = [
+                         SkinModel(
+                              name=item.get("asset_description").get("market_hash_name"),
+                              avatar=self.icon_url + item.get("asset_description").get("icon_url"),
+                              price=float(item.get("sell_price_text")[1:].replace(",", ""))
+                         ).model_dump()
+                         for item in results
+                    ]
+                    await redis_session.set(
+                         name=key,
+                         value=json.dumps(skins),
+                         ex=1000
+                    )
+          return skins
+          
                
                
                

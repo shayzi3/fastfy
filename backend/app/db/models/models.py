@@ -62,8 +62,8 @@ class Skins(Base):
      avatar: Mapped[str] = mapped_column(nullable=False)
      price: Mapped[float] = mapped_column(nullable=False)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True) # percent
-     price_last_7_days: Mapped[float] = mapped_column(nullable=True) # percent
-     price_last_30_days: Mapped[float] = mapped_column(nullable=True) # percent
+     price_last_30_day: Mapped[float] = mapped_column(nullable=True) # percent
+     price_last_365_day: Mapped[float] = mapped_column(nullable=True) # percent
      
      history: Mapped[list["SkinsPriceHistory"]] = relationship(
           uselist=True,

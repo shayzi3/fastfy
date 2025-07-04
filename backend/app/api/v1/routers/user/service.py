@@ -1,4 +1,6 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.infrastracture.redis import RedisPool
 from app.db.repository import UserRepository
 from app.schemas import UserModel, SteamItem
 from app.responses import UserNotFoundError
@@ -12,15 +14,35 @@ class UserService:
           self.http_steam_client = HttpSteamClient()
           
      
-     async def get_user(self, uuid: str) -> UserModel | AbstractResponse:
-          user = await self.user_repository.read(uuid=uuid)
+     async def get_user(
+          self, 
+          async_session: AsyncSession,
+          redis_session: RedisPool,
+          uuid: str
+     ) -> UserModel | AbstractResponse:
+          user = await self.user_repository.read(
+               session=async_session,
+               redis_session=redis_session,
+               redis_key=f"user:{uuid}",
+               uuid=uuid,
+          )
           if user is None:
                return UserNotFoundError
           return user
      
      
-     async def get_user_steam_inventory(self, uuid: str) -> list[SteamItem] | AbstractResponse:
-          user = await self.user_repository.read(uuid=uuid)
+     async def get_user_steam_inventory(
+          self, 
+          async_session: AsyncSession,
+          redis_session: RedisPool,
+          uuid: str
+     ) -> list[SteamItem] | AbstractResponse:
+          user = await self.user_repository.read(
+               session=async_session,
+               redis_session=redis_session,
+               redis_key=f"user:{uuid}",
+               uuid=uuid
+          )
           if user is None:
                return UserNotFoundError
           

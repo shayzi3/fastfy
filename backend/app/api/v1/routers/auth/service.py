@@ -1,4 +1,6 @@
 from typing import Any
+
+from sqlalchemy.ext.asyncio import AsyncSession
 from steam_openid import SteamOpenID
 
 from app.core import my_config
@@ -28,7 +30,6 @@ class AuthService:
                return_to=my_config.steam_return_to
           )
           self.steam_http_client = HttpSteamClient()
-          self.redis = RedisPool()
           self.user_repository = UserRepository
           
           
@@ -38,14 +39,18 @@ class AuthService:
      
      async def steam_processing(
           self, 
-          query_params: Any
+          query_params: Any,
+          async_session: AsyncSession
      ) -> AbstractResponse | SteamLoginUser:
           steamid = self.openid.validate_results(query_params)
           if steamid is None:
                return SteamLoginError
           
           steamid = int(steamid)
-          exists = await self.user_repository.read(steam_id=steamid)
+          exists = await self.user_repository.read(
+               session=async_session,
+               steam_id=steamid
+          )
           if exists is None:
                steamdata = await self.steam_http_client.get_steam_profile(steamid)
                if isresponse(steamdata):
@@ -53,6 +58,7 @@ class AuthService:
                
                steam_name, steam_avatar = steamdata
                uuid = await self.user_repository.create(
+                    session=async_session,
                     steam_id=steamid,
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
@@ -65,33 +71,46 @@ class AuthService:
           )
           
      
-     async def telegram_login(self, user_uuid: str) -> str:
+     async def telegram_login(
+          self, 
+          user_uuid: str, 
+          redis_session: RedisPool
+     ) -> str:
           payload_deeplink = await generate_payload_deeplink()
           processid = await generate_processid()
-          await self.redis.set(
-               name=payload_deeplink,
-               value=processid,
-               ex=180
-          )
-          await self.redis.set(
-               name=processid,
-               value=user_uuid,
-               ex=180
-          )
+          
+          async with redis_session.pipeline() as pool:
+               await pool.set(
+                    name=payload_deeplink,
+                    value=processid,
+                    ex=180
+               )
+               await pool.set(
+                    name=processid,
+                    value=user_uuid,
+                    ex=180
+               )
+               await pool.execute()
+               
           deeplink = my_config.bot_deep_link + payload_deeplink
           return deeplink
           
           
      async def telegram_processing(
           self,
+          async_session: AsyncSession,
+          redis_session: RedisPool,
           processid: str,
           telegram_id: int,
           telegram_username: str
      ):
-          user_uuid = await self.redis.get(processid)
+          user_uuid = await redis_session.get(processid)
           if user_uuid is not None:
-               await self.redis.delete(processid)
+               await redis_session.delete(processid)
                await self.user_repository.update(
+                    session=async_session,
+                    redis_session=redis_session,
+                    delete_redis_values=[f"user:{user_uuid}", f"user_rel:{user_uuid}"],
                     where={"uuid": user_uuid},
                     telegram_id=telegram_id,
                     telegram_username=telegram_username

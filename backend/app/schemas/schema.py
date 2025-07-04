@@ -10,7 +10,7 @@ T = TypeVar("T")
 
 
 class UserModel(BaseModel):
-     uuid: UUID
+     uuid: UUID | str
      steam_id: int
      steam_name: str
      steam_avatar: str
@@ -25,13 +25,13 @@ class UserModel(BaseModel):
 
 
 class SkinModel(BaseModel):
-     id: str
+     id: str | None = None
      name: str
      avatar: str
      price: float
-     price_last_1_day: float | None
-     price_last_7_days: float | None
-     price_last_30_days: float | None    
+     price_last_1_day: float | None = None
+     price_last_30_day: float | None = None
+     price_last_365_day: float | None = None
      
      
 
@@ -43,6 +43,21 @@ class SkinPriceHistoryModel(BaseModel):
      volume: int
      price: float
      timestamp: datetime
+     
+
+
+class SkinHistoryModel(BaseModel):
+     price: float
+     volume: int
+     timestamp: str
+     
+     
+     
+class SkinHistoryTimePartModel(BaseModel):
+     all: list["SkinHistoryModel"]
+     year: list["SkinHistoryModel"]
+     month: list["SkinHistoryModel"]
+     day: list["SkinHistoryModel"]
      
      
 
@@ -70,8 +85,6 @@ class TokenPayload(BaseModel):
      uuid: str
      iat: datetime
      exp: datetime
-     
-     
      
      
 class SteamItem(BaseModel):
