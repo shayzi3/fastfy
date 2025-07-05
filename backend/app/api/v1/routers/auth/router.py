@@ -2,13 +2,12 @@ from typing import Annotated
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Request, Depends, Response
-from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 
-from app.core.template import templates
+from app.core.config import my_config
 from app.core.slow_api import limiter
 from app.type import TokenData
 from app.responses import isresponse
-from app.core.security import jwt_encode
 from app.infrastracture.redis import RedisPool
 from .service import get_auth_service, AuthService
 from .schema import TelegramData
@@ -37,23 +36,19 @@ async def steam_redirect(
 async def steam_processing(
      request: Request,
      service: Annotated[AuthService, Depends(get_auth_service)],
-     async_session: Annotated[AsyncSession, Depends(get_async_session)]
-) -> HTMLResponse:
+     async_session: Annotated[AsyncSession, Depends(get_async_session)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)]
+) -> RedirectResponse:
      result = await service.steam_processing(
           request.query_params,
-          async_session=async_session
+          async_session=async_session,
+          redis_session=redis_session
      )
      if isresponse(result):
           return result.response()
      
-     return templates.TemplateResponse(
-          name="profile.html",
-          context={
-               "request": request,
-               "token": await jwt_encode({"uuid": result.uuid}),
-               "steam_name": result.steam_name,
-               "steam_avatar": result.steam_avatar
-          }
+     return RedirectResponse(
+          url=my_config.profile_url + f"?session={result}"
      )
 
 
@@ -65,7 +60,7 @@ async def telegram_login(
      current_user: Annotated[TokenData, Depends(current_user)],
      service: Annotated[AuthService, Depends(get_auth_service)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)]
-) -> str:
+):
      deeplink = await service.telegram_login(
           user_uuid=current_user.uuid,
           redis_session=redis_session

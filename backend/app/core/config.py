@@ -15,5 +15,9 @@ class Config(BaseSettings):
      def steam_return_to(self) -> str:
           return self.domain + "/api/v1/auth/SteamProcessing"
      
+     @property
+     def profile_url(self) -> str:
+          return self.domain + "/main/profile"
+     
      
 my_config = Config()

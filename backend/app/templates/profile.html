@@ -12,12 +12,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            z-index: 1000; /* Добавлено для гарантированного отображения поверх других элементов */
+            z-index: 1000;
         }
         .username {
             font-weight: 600;
             font-size: 16px;
-            color: #000000; /* Чёрный цвет вместо #2d3748 */
+            color: #000000;
         }
         .avatar {
             width: 40px;
@@ -33,9 +33,13 @@
         <span class="username">{{ steam_name }}</span>
         <img class="avatar" src="{{ steam_avatar }}" alt="User Avatar">
     </div>
+
     <script>
-        // Сохраняем токен в cookies (сессионный)
-        document.cookie = `token={{ token }}; path=/; Secure; SameSite=Lax`;
+        const token = "{{ token }}";
+        if (token && token !== "None") {
+            const expires = new Date(Date.now() + 172800 * 1000).toUTCString();
+            document.cookie = `token=${token}; path=/; expires=${expires}; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+        }
     </script>
 </body>
 </html>

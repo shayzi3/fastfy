@@ -16,7 +16,8 @@ from app.responses import (
 )
 from app.core.utils import (
      generate_payload_deeplink,
-     generate_processid
+     generate_processid,
+     generate_session
 )
 from .schema import SteamLoginUser
 
@@ -40,16 +41,16 @@ class AuthService:
      async def steam_processing(
           self, 
           query_params: Any,
-          async_session: AsyncSession
+          async_session: AsyncSession,
+          redis_session: RedisPool
      ) -> AbstractResponse | SteamLoginUser:
           steamid = self.openid.validate_results(query_params)
           if steamid is None:
                return SteamLoginError
           
-          steamid = int(steamid)
           exists = await self.user_repository.read(
                session=async_session,
-               steam_id=steamid
+               steam_id=int(steamid)
           )
           if exists is None:
                steamdata = await self.steam_http_client.get_steam_profile(steamid)
@@ -63,12 +64,13 @@ class AuthService:
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
                )
-               
-          return SteamLoginUser(
-               uuid=exists.uuid if exists else str(uuid),
-               steam_name=exists.steam_name if exists else steam_name,
-               steam_avatar=exists.steam_avatar if exists else steam_avatar,
+          session = await generate_session()
+          await redis_session.set(
+               name=f"session:{session}",
+               value=uuid if exists is None else exists.uuid,
+               ex=120
           )
+          return session
           
      
      async def telegram_login(

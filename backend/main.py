@@ -7,7 +7,8 @@ from slowapi.errors import RateLimitExceeded
 from app.api.v1.routers import (
      auth_router,
      user_router,
-     skin_router
+     skin_router,
+     template_router
 )
 from app.core.slow_api import limiter
 
@@ -21,6 +22,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(skin_router)
+app.include_router(template_router)
 
 
 if __name__ == "__main__":

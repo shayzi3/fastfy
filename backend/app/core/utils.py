@@ -13,3 +13,7 @@ async def generate_payload_deeplink() -> str:
 async def generate_processid() -> str:
      # aaaaa-aaaaa-aaaaa
      return "-".join(["".join([random.choice(symbols) for _ in range(5)]) for _ in range(3)])
+
+
+async def generate_session() -> str:
+     return "".join([random.choice(digits) for _ in range(10)])
