@@ -23,19 +23,13 @@ class SkinService:
           self,
           async_session: AsyncSession,
           redis_session: RedisPool,
-          skin_id: int | None = None,
-          skin_name: str | None = None
+          skin_name: str
      ) -> SkinModel | AbstractResponse:
-          arguments = {
-               "id": skin_id
-          } if skin_id is not None else {
-               "name": skin_name
-          }
           result = await self.skin_repository.read(
                session=async_session,
                redis_session=redis_session,
-               redis_key=f"skin:{list(arguments.values())[0]}",
-               **arguments
+               redis_key=f"skin:{skin_name}",
+               name=skin_name
           )
           if result is None:
                return SkinNotFoundError
@@ -73,19 +67,13 @@ class SkinService:
           self,
           async_session: AsyncSession,
           redis_session: RedisPool,
-          skin_id: str | None = None,
-          skin_name: str | None = None
+          skin_name: str
      ) -> AbstractResponse | SkinHistoryTimePartModel:
-          arguments = {
-               "skin_id": skin_id
-          } if skin_id is not None else {
-               "skin_name": skin_name
-          }
           result = await self.skin_history_repository.filter_timestamp(
                session=async_session,
                redis_session=redis_session,
-               redis_key=f"skin_price_history:{list(arguments.values())[0]}",
-               **arguments
+               redis_key=f"skin_price_history:{skin_name}",
+               skin_name=skin_name
           )
           return result
           

@@ -1,17 +1,17 @@
 from typing import Annotated
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Request, Depends, Response
 from fastapi.responses import RedirectResponse, JSONResponse
 
+from app.infrastracture.redis import RedisPool, get_redis_session
+from app.db.session import AsyncSession, get_async_session
 from app.core.config import my_config
 from app.core.slow_api import limiter
 from app.type import TokenData
 from app.responses import isresponse
-from app.infrastracture.redis import RedisPool
 from .service import get_auth_service, AuthService
 from .schema import TelegramData
-from ..dependency import current_user, get_async_session, get_redis_session
+from ..dependency import current_user
 
 
 

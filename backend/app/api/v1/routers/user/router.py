@@ -1,12 +1,12 @@
 from typing import Annotated
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 
+from app.db.session import AsyncSession, get_async_session
+from app.infrastracture.redis import RedisPool, get_redis_session
 from app.responses import isresponse
 from app.schemas import TokenPayload, UserModel, SteamItem
-from app.infrastracture.redis import RedisPool
-from ..dependency import current_user, get_async_session, get_redis_session
+from ..dependency import current_user
 from .service import UserService, get_user_service
 
 

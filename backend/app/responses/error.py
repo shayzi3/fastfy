@@ -35,3 +35,13 @@ class ArgumentError(BaseResponse):
 class SkinNotFoundError(BaseResponse):
      detail = "SkinNotFound"
      status_code = 404
+     
+     
+class SkinPortfolioAlreadyExists(BaseResponse):
+     detail = "SkinPortfolioAlreadyExists"
+     status_code = 400
+     
+     
+class PortfolioEmpty(BaseResponse):
+     detail = "PortfolioEmpty"
+     status_code = 400

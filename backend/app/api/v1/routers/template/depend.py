@@ -1,8 +1,7 @@
 from typing import Annotated
 from fastapi import Request, Depends
 
-from app.infrastracture.redis import RedisPool
-from app.api.v1.routers.dependency import get_redis_session
+from app.infrastracture.redis import RedisPool, get_redis_session
 from app.core.security import jwt_decode, jwt_encode
 from app.responses import isresponse
 from app.core.security import jwt_decode

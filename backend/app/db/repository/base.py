@@ -62,9 +62,14 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
      async def create(
           cls,
           session: AsyncSession,
+          redis_session: RedisPool | None = None,
+          delete_redis_values: list[str] = [],
           data: list[dict] | dict = [], # many data for insert
           **insert_args
      ) -> Any:
+          if (redis_session is not None) and (delete_redis_values):
+               await redis_session.delete(*delete_redis_values)
+               
           if not data:
                sttm = (
                     insert(cls.model).

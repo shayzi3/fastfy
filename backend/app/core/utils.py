@@ -15,5 +15,9 @@ async def generate_processid() -> str:
      return "-".join(["".join([random.choice(symbols) for _ in range(5)]) for _ in range(3)])
 
 
-async def generate_session() -> str:
-     return "".join([random.choice(digits) for _ in range(10)])
+def sync_generate_id() -> int:
+     return int("".join([random.choice(digits) for _ in range(10)]))
+
+
+async def async_generate_id() -> int:
+     return int("".join([random.choice(digits) for _ in range(10)]))

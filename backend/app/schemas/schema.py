@@ -1,11 +1,10 @@
 from uuid import UUID
-from typing import TypeVar, Any
+from typing import  Any
 from datetime import datetime
 from pydantic import BaseModel
 
 
 
-T = TypeVar("T")
 
 
 
@@ -25,7 +24,6 @@ class UserModel(BaseModel):
 
 
 class SkinModel(BaseModel):
-     id: str | None = None
      name: str
      avatar: str
      price: float
@@ -35,15 +33,43 @@ class SkinModel(BaseModel):
      
      
 
-
 class SkinPriceHistoryModel(BaseModel):
-     item_id: int
-     skin_id: str
+     item_id: UUID | str
      skin_name: str
      volume: int
      price: float
      timestamp: datetime
      
+     
+     def model_post_init(self, _: Any) -> None:
+          self.item_id = str(self.item_id)
+          
+     
+
+
+class UserPortfolioModel(BaseModel):
+     item_id: UUID | str
+     user_uuid: UUID | str
+     skin_name: str
+     quantity: int
+     buy_price: float  
+     
+     
+     def model_post_init(self, _: Any) -> None:
+         self.user_uuid = str(self.user_uuid)   
+         self.item_id = str(self.item_id)
+
+
+
+class UserRelModel(UserModel):
+     portfolio: list["UserPortfolioModel"]
+          
+     
+     
+class UserPortfolioRelModel(UserPortfolioModel):
+     skin: "SkinModel"
+
+
 
 
 class SkinHistoryModel(BaseModel):
@@ -53,38 +79,20 @@ class SkinHistoryModel(BaseModel):
      
      
      
+     
 class SkinHistoryTimePartModel(BaseModel):
      all: list["SkinHistoryModel"]
      year: list["SkinHistoryModel"]
      month: list["SkinHistoryModel"]
      day: list["SkinHistoryModel"]
      
-     
-
-class UserPortfolioModel(BaseModel):
-     item_id: int
-     skin_id: str
-     user_uuid: str
-     quantity: int
-     buy_price: float
-     
-     
-     
-     
-class UserRelModel(UserModel):
-     portfolio: list["UserPortfolioModel"]
-     
-   
-     
-class SkinRelModel(SkinModel):
-     history: list["SkinPriceHistoryModel"]
-     
-    
+          
           
 class TokenPayload(BaseModel):
      uuid: str
      iat: datetime
      exp: datetime
+     
      
      
 class SteamItem(BaseModel):

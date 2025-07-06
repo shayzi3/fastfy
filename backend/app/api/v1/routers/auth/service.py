@@ -17,7 +17,7 @@ from app.responses import (
 from app.core.utils import (
      generate_payload_deeplink,
      generate_processid,
-     generate_session
+     async_generate_id
 )
 from .schema import SteamLoginUser
 
@@ -48,9 +48,10 @@ class AuthService:
           if steamid is None:
                return SteamLoginError
           
+          steamid = int(steamid)
           exists = await self.user_repository.read(
                session=async_session,
-               steam_id=int(steamid)
+               steam_id=steamid
           )
           if exists is None:
                steamdata = await self.steam_http_client.get_steam_profile(steamid)
@@ -64,10 +65,10 @@ class AuthService:
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
                )
-          session = await generate_session()
+          session = await async_generate_id()
           await redis_session.set(
                name=f"session:{session}",
-               value=uuid if exists is None else exists.uuid,
+               value=str(uuid) if exists is None else exists.uuid,
                ex=120
           )
           return session

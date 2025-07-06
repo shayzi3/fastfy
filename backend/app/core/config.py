@@ -9,7 +9,7 @@ class Config(BaseSettings):
      jwt_alghoritm: str
      bot_deep_link: str
      
-     model_config = SettingsConfigDict(env_file="backend/app/core/.env")
+     model_config = SettingsConfigDict(env_file="app/core/.env")
      
      @property
      def steam_return_to(self) -> str:

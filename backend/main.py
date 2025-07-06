@@ -4,12 +4,7 @@ from fastapi import FastAPI
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.v1.routers import (
-     auth_router,
-     user_router,
-     skin_router,
-     template_router
-)
+from app.api.v1.routers import include_routers
 from app.core.slow_api import limiter
 
 
@@ -17,12 +12,8 @@ from app.core.slow_api import limiter
 app = FastAPI(title="FastFy")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+include_routers(app)
 
-
-app.include_router(auth_router)
-app.include_router(user_router)
-app.include_router(skin_router)
-app.include_router(template_router)
 
 
 if __name__ == "__main__":

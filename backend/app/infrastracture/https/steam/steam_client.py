@@ -1,6 +1,8 @@
+import uuid
 import aiohttp
 import json
 
+from datetime import datetime
 from typing import Any
 
 from app.core import my_config
@@ -24,10 +26,14 @@ class HttpSteamClient:
                f"?key={self.api_key}&steamids={steamids}"
           )
           async with aiohttp.ClientSession() as session:
-               try:
-                    result = await session.get(url)
-                    data: dict[str, dict[str, list[dict]]] = await result.json()
-               except:
+               for _ in range(3):
+                    try:
+                         async with session.get(url) as response:
+                              data = await response.json()
+                              break
+                    except:
+                         continue
+               else:
                     return HttpError
                
                response = data.get("response")
@@ -41,13 +47,15 @@ class HttpSteamClient:
           url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
           
           async with aiohttp.ClientSession() as session:
-               try:
-                    result = await session.get(url)
-                    
-                    # errors
-                     
-                    data = await result.json()
-               except:
+               for _ in range(3):
+                    try:
+                         async with session.get(url) as response:
+                              # errors
+                              data = await response.json()
+                              break
+                    except:
+                         continue
+               else:
                     return HttpError
                
                assets = data.get("assets")
@@ -92,11 +100,13 @@ class HttpSteamClient:
                async with aiohttp.ClientSession() as session:
                     for _ in range(3):
                          try:
-                              response = await session.get(url)
-                              data = await response.json()
-                              break
+                              async with session.get(url) as response:
+                                   data = await response.json()
+                                   break
                          except:
                               continue
+                    else:
+                         return HttpError
                     
                     results: list[dict[str, Any]] = data.get("results") 
                     if not results:
@@ -116,8 +126,72 @@ class HttpSteamClient:
                          ex=1000
                     )
           return skins
+     
+     
+     async def skin_exists(
+          self,
+          skin_name: str
+     ) -> AbstractResponse | SkinModel:
+          url = f"https://steamfolio.com/Item/GetReactModel?name={skin_name.replace('&', '%26')}"
           
+          async with aiohttp.ClientSession() as session:
+               for _ in range(3):
+                    try:
+                         async with session.get(url) as response:
+                              if response.status == 400:
+                                   return SkinNotFoundError
+                              data = await response.json()
+                              item = data["data"]["item"]
+                              break
+                    except:
+                         continue
+               else:
+                    return HttpError
+               return SkinModel(
+                    name=item.get("marketHashName"),
+                    avatar=item.get("image"),
+                    price=round(item.get("safePrice"), 2)
+               )
                
+               
+     async def skin_price_history(
+          self,
+          skin_name: str
+     ) -> list[dict[str, Any]]:
+          async with aiohttp.ClientSession() as session:
+               url = f"https://steamfolio.com/api/Graph/itemChart?name={skin_name.replace('&', '%26')}"
+               for _ in range(3):
+                    try:
+                         async with session.get(url) as response:
+                              json_data = await response.json()
+                              data = json_data["data"]["all"]["values"]
+                              volume = json_data["data"]["all"]["volumes"]
+                              break
+                    except:
+                         continue
+               else:
+                    return HttpError
+               
+          
+          price_history = []
+          for index, part in enumerate(data):
+               time = part["time"]
+               if isinstance(time, int):
+                    time = datetime.fromtimestamp(time)
+                         
+               elif isinstance(time, str):
+                    time = datetime.fromisoformat(time)
+                    
+               price_history.append(
+                    {
+                         "item_id": uuid.uuid4(),
+                         "skin_name": skin_name,
+                         "price": round(float(part["value"]), 2),
+                         "volume": volume[index]["value"],
+                         "timestamp": time
+                    }
+               )
+          return price_history
                
                
                

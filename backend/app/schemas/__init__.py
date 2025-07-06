@@ -8,5 +8,5 @@ from .schema import (
      UserRelModel,
      UserPortfolioModel,
      SteamItem,
-     SkinRelModel,
+     UserPortfolioRelModel
 )
