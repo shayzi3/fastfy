@@ -11,7 +11,8 @@ from app.schemas import (
      UserRelModel,
      SkinPriceHistoryModel,
      UserPortfolioModel,
-     UserPortfolioRelModel
+     UserPortfolioRelModel,
+     UserNotifyModel
 )
 from .base import Base
 
@@ -34,11 +35,6 @@ class Users(Base):
      telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=True)
      telegram_username: Mapped[str] = mapped_column(nullable=True)
      created_at: Mapped[datetime] = mapped_column(default=func.now())
-     
-     portfolio: Mapped[list["UsersPortfolio"]] = relationship(
-          uselist=True,
-          cascade="all, delete-orphan"
-     )
      
      @classmethod
      def selectinload(cls):
@@ -101,7 +97,7 @@ class UsersPortfolio(Base):
      user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
      skin_name: Mapped[str] = mapped_column(ForeignKey("skins.name", ondelete="CASCADE"))
      quantity: Mapped[int] = mapped_column(default=1, nullable=False)
-     buy_price: Mapped[float] = mapped_column(nullable=False)
+     buy_price: Mapped[float] = mapped_column(default=0, nullable=False)
      
      skin: Mapped["Skins"] = relationship()
      
@@ -113,3 +109,17 @@ class UsersPortfolio(Base):
      def returning(cls):
           return cls.item_id
      
+     
+     
+class UsersNotify(Base):
+     __tablename__ = "users_notify"
+     __table_args__ = (
+          Index("idx_notify_user_uuid", "user_uuid"),
+     )
+     pydantic_model = UserNotifyModel
+     
+     notify_id: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
+     text: Mapped[str] = mapped_column()
+     created_at: Mapped[datetime] = mapped_column(default=func.now())
+     is_read: Mapped[bool] = mapped_column(default=False)

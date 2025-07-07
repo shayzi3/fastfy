@@ -4,8 +4,6 @@ from app.core.security import jwt_decode
 from app.responses import TokenError, isresponse
 from app.responses.abstract import AbstractResponse
 from app.schemas import TokenPayload
-from app.infrastracture.redis import RedisPool
-from app.db.session import Session
 
 
 

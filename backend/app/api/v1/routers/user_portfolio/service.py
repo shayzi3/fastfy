@@ -1,23 +1,26 @@
-import asyncio
 import uuid
 
-from app.infrastracture.https.steam import HttpSteamClient
+from pydantic import UUID4
 
-from app.db.session import AsyncSession, Session
+from app.infrastracture.https.steam import HttpSteamClient
+from app.db.session import AsyncSession
 from app.responses.abstract import AbstractResponse
 from app.infrastracture.redis import RedisPool
 from app.schemas import SkinModel, UserPortfolioRelModel
 from app.responses import (
      PortfolioSkinCreateSuccess, 
      SkinPortfolioAlreadyExists,
-     PortfolioEmpty
+     PortfolioEmpty,
+     SkinNotExists,
+     SkinDeleteSuccess,
+     SkinChangeSuccess,
+     SkinNotFoundError
 )
 from app.db.repository import (
      UserPortfolioRepository, 
      SkinRepository, 
      SkinPriceHistoryRepository
 )
-
 from .schema import CreateUpdateSkin
 
 
@@ -45,6 +48,66 @@ class UserPortfolioService:
           if skins is None:
                return PortfolioEmpty
           return skins
+     
+     
+     async def delete_portfolio(
+          self,
+          async_session: AsyncSession,
+          redis_session: RedisPool,
+          user_uuid: str,
+          skin_name: str | None,
+          item_id: UUID4 | None
+     ) -> AbstractResponse:
+          delete_args = {
+               "skin_name": skin_name,
+               "user_uuid": user_uuid
+          } if skin_name is not None else {
+               "item_id": item_id
+          }
+          
+          result = await self.portfolio_repository.delete(
+               session=async_session,
+               redis_session=redis_session,
+               delete_redis_values=[
+                    f"portfolio:{user_uuid}", 
+                    f"portfolio_skin:{skin_name}@{user_uuid}"
+               ],
+               **delete_args
+          )
+          if result is False:
+               return SkinNotExists
+          return SkinDeleteSuccess
+     
+     
+     async def patch_portfolio(
+          self,
+          async_session: AsyncSession,
+          redis_session: RedisPool,
+          user_uuid: str,
+          skin_data: CreateUpdateSkin,
+          skin_name: str | None,
+          item_id: UUID4 | None
+     ) -> AbstractResponse:
+          update_where = {
+               "skin_name": skin_name,
+               "user_uuid": user_uuid
+          } if skin_name is not None else {
+               "item_id": item_id
+          }
+          
+          skin_update = await self.portfolio_repository.update(
+               session=async_session,
+               where=update_where,
+               redis_session=redis_session,
+               delete_redis_values=[
+                    f"portfolio:{user_uuid}", 
+                    f"portfolio_skin:{skin_name}@{user_uuid}"
+               ],
+               **skin_data.non_nullable()
+          )
+          if skin_update is False:
+               return SkinNotFoundError
+          return SkinChangeSuccess
           
           
      async def post_portfolio(
@@ -54,7 +117,7 @@ class UserPortfolioService:
           user_uuid: str,
           skin_data: CreateUpdateSkin,
           skin_name: str
-     ) -> AbstractResponse:
+     ) -> AbstractResponse | SkinModel:
           skin_exists =  await self.skin_repository.read(
                session=async_session,
                redis_session=redis_session,
@@ -65,7 +128,7 @@ class UserPortfolioService:
                skin_exists_in_portfolio = await self.portfolio_repository.read(
                     session=async_session,
                     redis_session=redis_session,
-                    redis_key=f"portfolio_skin:{skin_name}",
+                    redis_key=f"portfolio_skin:{skin_name}@{user_uuid}",
                     skin_name=skin_name,
                     user_uuid=user_uuid
                )
@@ -78,8 +141,7 @@ class UserPortfolioService:
                               "item_id": uuid.uuid4(),
                               "user_uuid": user_uuid,
                               "skin_name": skin_name,
-                              "quantity": skin_data.quantity,
-                              "buy_price": skin_data.buy_price
+                              **skin_data.non_nullable()
                          }
                     )
                     return PortfolioSkinCreateSuccess
@@ -115,10 +177,10 @@ class UserPortfolioService:
                     "item_id": uuid.uuid4(),
                     "user_uuid": user_uuid,
                     "skin_name": skin.name,
-                    "quantity": skin_data.quantity,
-                    "buy_price": skin_data.buy_price
+                    **skin_data.non_nullable()
                }
           )
+          # notify
           
      
      

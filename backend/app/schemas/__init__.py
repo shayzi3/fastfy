@@ -8,5 +8,6 @@ from .schema import (
      UserRelModel,
      UserPortfolioModel,
      SteamItem,
-     UserPortfolioRelModel
+     UserPortfolioRelModel,
+     UserNotifyModel
 )

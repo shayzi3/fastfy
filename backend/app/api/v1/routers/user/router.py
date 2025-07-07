@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+from pydantic import UUID4
 
 from app.db.session import AsyncSession, get_async_session
 from app.infrastracture.redis import RedisPool, get_redis_session
@@ -24,7 +25,7 @@ async def get_user(
      service: Annotated[UserService, Depends(get_user_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
-     uuid: str | None = None
+     uuid: UUID4 | None = None
 ) -> UserModel:
      user = current_user.uuid if uuid is None else uuid
      result = await service.get_user(
@@ -44,7 +45,7 @@ async def get_steam_inventory(
      service: Annotated[UserService, Depends(get_user_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
-     uuid: str | None = None
+     uuid: UUID4 | None = None
 ) -> list[SteamItem]:
      user = current_user.uuid if uuid is None else uuid
      result = await service.get_user_steam_inventory(

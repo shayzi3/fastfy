@@ -45,3 +45,13 @@ class SkinPortfolioAlreadyExists(BaseResponse):
 class PortfolioEmpty(BaseResponse):
      detail = "PortfolioEmpty"
      status_code = 400
+     
+     
+class SkinNotExists(BaseResponse):
+     detail = "SkinNotExists"
+     status_code = 400
+     
+     
+class NotifyEmpty(BaseResponse):
+     detail = "NotifyEmpty"
+     status_code = 404

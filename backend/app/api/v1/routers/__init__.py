@@ -5,6 +5,7 @@ from .user.router import user_router
 from .skin.router import skin_router
 from .template.router import template_router
 from .user_portfolio.router import user_portfolio_router
+from .notification.router import notification_router
 
 
 _routers = [
@@ -12,7 +13,8 @@ _routers = [
      user_router,
      skin_router,
      template_router,
-     user_portfolio_router
+     user_portfolio_router,
+     notification_router
 ]
 
 

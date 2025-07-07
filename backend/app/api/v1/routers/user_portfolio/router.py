@@ -1,11 +1,12 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, BackgroundTasks
+from pydantic import UUID4
 
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import get_redis_session, RedisPool
 from app.api.v1.routers.dependency import current_user
 from app.schemas import TokenPayload, UserPortfolioRelModel
-from app.responses import ArgumentError, isresponse, PortfolioSkinSoonCreate
+from app.responses import isresponse, PortfolioSkinSoonCreate, ArgumentError
 from .schema import CreateUpdateSkin
 from .service import get_user_portfolio_service, UserPortfolioService
 
@@ -13,7 +14,7 @@ from .service import get_user_portfolio_service, UserPortfolioService
 
 user_portfolio_router = APIRouter(
      prefix="/api/v1/user",
-     tags=["User"]
+     tags=["User", "User Portfolio"]
 )
 
 
@@ -23,17 +24,19 @@ async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      current_user: Annotated[TokenPayload, Depends(current_user)],
-     service: Annotated[UserPortfolioService,Depends(get_user_portfolio_service)]
+     service: Annotated[UserPortfolioService,Depends(get_user_portfolio_service)],
+     uuid: UUID4 | None = None
 ) -> list[UserPortfolioRelModel]:
      result = await service.get_portfolio(
           async_session=async_session,
           redis_session=redis_session,
-          user_uuid=current_user.uuid,
+          user_uuid=current_user.uuid if uuid is None else uuid,
      )
      if isresponse(result):
           return result.response()
      return result
           
+     
      
 @user_portfolio_router.post("/portfolio")
 async def post_portfolio(
@@ -45,9 +48,6 @@ async def post_portfolio(
      skin_data: CreateUpdateSkin,
      skin_name: str
 ):
-     if not skin_data.non_nullable:
-          return ArgumentError.response()
-     
      result = await service.post_portfolio(
           async_session=async_session,
           redis_session=redis_session,
@@ -72,10 +72,50 @@ async def post_portfolio(
      
      
 @user_portfolio_router.patch("/portfolio")
-async def patch_portfolio():
-     ...
+async def patch_portfolio(
+     async_session: Annotated[AsyncSession, Depends(get_async_session)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)],
+     current_user: Annotated[TokenPayload, Depends(current_user)],
+     service: Annotated[UserPortfolioService, Depends(get_user_portfolio_service)],
+     skin_data: CreateUpdateSkin,
+     skin_name: str | None = None,
+     item_id: UUID4 | None = None
+):
+     if (skin_name is None) and (item_id is None):
+          return ArgumentError.response()
+     
+     if not skin_data.non_nullable():
+          return ArgumentError.response()
+     
+     result = await service.patch_portfolio(
+          async_session=async_session,
+          redis_session=redis_session,
+          user_uuid=current_user.uuid,
+          skin_data=skin_data,
+          skin_name=skin_name,
+          item_id=item_id
+     )
+     return result.response()
+     
      
      
 @user_portfolio_router.delete("/portfolio")
-async def delete_portfolio():
-     ...
+async def delete_portfolio(
+     async_session: Annotated[AsyncSession, Depends(get_async_session)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)],
+     current_user: Annotated[TokenPayload, Depends(current_user)],
+     service: Annotated[UserPortfolioService, Depends(get_user_portfolio_service)],
+     skin_name: str | None = None,
+     item_id: UUID4 | None = None
+):
+     if (skin_name is None) and (item_id is None):
+          return ArgumentError.response()   
+     
+     result = await service.delete_portfolio(
+          async_session=async_session,
+          redis_session=redis_session,
+          user_uuid=current_user.uuid,
+          skin_name=skin_name,
+          item_id=item_id
+     )
+     return result.response()

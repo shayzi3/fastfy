@@ -3,16 +3,13 @@ from pydantic import BaseModel, Field
 
 
 class CreateUpdateSkin(BaseModel):
-     quantity: int = Field(ge=1, default=0)
-     buy_price: float = Field(ge=0, default=-1)
+     quantity: int | None = Field(ge=1, default="null")
+     buy_price: float | None = Field(ge=0, default="null")
      
      
-     @property
      def non_nullable(self) -> dict[str, int | float]:
-          values = {}
-          if self.quantity != 0:
-               values["quantity"] = self.quantity
-               
-          if self.buy_price != -1:
-               values["buy_price"] = self.buy_price
-          return values
+          return {
+               key: value for key, value in self.model_dump().items()
+               if value is not None
+          }
+          

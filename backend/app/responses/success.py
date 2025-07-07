@@ -16,3 +16,19 @@ class PortfolioSkinCreateSuccess(BaseResponse):
 class PortfolioSkinSoonCreate(BaseResponse):
      detail = "PortfolioSkinSoonCreate"
      status_code = 200
+     
+     
+class SkinDeleteSuccess(BaseResponse):
+     detail = "SkinDeleteSuccess"
+     status_code = 200
+     
+     
+     
+class SkinChangeSuccess(BaseResponse):
+     detail = "SkinChangeSuccess"
+     status_code = 200
+     
+     
+class NotifyUpdateSuccess(BaseResponse):
+     detail = "NotifyUpdateSuccess"
+     status_code = 200

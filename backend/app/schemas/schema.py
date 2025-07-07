@@ -58,6 +58,19 @@ class UserPortfolioModel(BaseModel):
      def model_post_init(self, _: Any) -> None:
          self.user_uuid = str(self.user_uuid)   
          self.item_id = str(self.item_id)
+         
+         
+         
+class UserNotifyModel(BaseModel):
+     notify_id: UUID | str
+     user_uuid: UUID | str
+     text: str
+     created_at: datetime
+     is_read: bool
+     
+     def model_post_init(self, _: Any):
+         self.notify_id = str(self.notify_id)
+         self.user_uuid = str(self.user_uuid)
 
 
 
