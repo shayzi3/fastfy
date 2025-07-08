@@ -27,7 +27,7 @@ class NotifyRepository(BaseRepository[UserNotifyModel, None]):
                if result is not None:
                     data = json.loads(result)
                     return [
-                         UserNotifyModel.model_validate(model) for model in data
+                         UserNotifyModel.model_validate(json.loads(model)) for model in data
                     ]
                     
           sttm = select(UsersNotify).filter_by(**read_args)
@@ -44,7 +44,7 @@ class NotifyRepository(BaseRepository[UserNotifyModel, None]):
                await redis_session.set(
                     name=redis_key,
                     value=json.dumps(
-                         [model.model_dump() for model in models]
+                         [model.model_dump_json() for model in models]
                     ),
                     ex=500
                )

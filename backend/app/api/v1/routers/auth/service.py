@@ -1,11 +1,12 @@
 from typing import Any
+import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from steam_openid import SteamOpenID
 
 from app.core import my_config
 from app.responses.abstract import AbstractResponse
-from app.db.repository import UserRepository
+from app.db.repository import UserRepository, NotifyRepository
 from app.infrastracture.https.steam import HttpSteamClient
 from app.infrastracture.redis import RedisPool
 from app.responses import (
@@ -32,6 +33,7 @@ class AuthService:
           )
           self.steam_http_client = HttpSteamClient()
           self.user_repository = UserRepository
+          self.notify_repository = NotifyRepository
           
           
      async def steam_redirest(self) -> str:
@@ -117,6 +119,16 @@ class AuthService:
                     where={"uuid": user_uuid},
                     telegram_id=telegram_id,
                     telegram_username=telegram_username
+               )
+               await self.notify_repository.create(
+                    session=async_session,
+                    redis_session=redis_session,
+                    delete_redis_values=[f"notify_history:{user_uuid}"],
+                    data={
+                         "notify_id": uuid.uuid4(),
+                         "user_uuid": user_uuid,
+                         "text": f"Телеграм аккаунт {telegram_username} привязан успешно."
+                    }
                )
                return TelegramProcessSuccess
           return TelegramProcessError

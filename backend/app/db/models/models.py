@@ -1,7 +1,7 @@
 import uuid
 
 from datetime import datetime
-from sqlalchemy import BigInteger, Index, func, ForeignKey, UUID
+from sqlalchemy import BigInteger, Index, ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -34,7 +34,7 @@ class Users(Base):
      steam_avatar: Mapped[str] = mapped_column()
      telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=True)
      telegram_username: Mapped[str] = mapped_column(nullable=True)
-     created_at: Mapped[datetime] = mapped_column(default=func.now())
+     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
      
      @classmethod
      def selectinload(cls):
@@ -121,5 +121,10 @@ class UsersNotify(Base):
      notify_id: Mapped[str] = mapped_column(UUID(), primary_key=True)
      user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
      text: Mapped[str] = mapped_column()
-     created_at: Mapped[datetime] = mapped_column(default=func.now())
+     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
      is_read: Mapped[bool] = mapped_column(default=False)
+     
+     
+     @classmethod
+     def returning(cls):
+          return cls.created_at
