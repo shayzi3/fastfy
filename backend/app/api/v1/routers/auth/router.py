@@ -7,8 +7,8 @@ from app.infrastracture.redis import RedisPool, get_redis_session
 from app.db.session import AsyncSession, get_async_session
 from app.core.config import my_config
 from app.core.slow_api import limiter
-from app.type import TokenData
 from app.responses import isresponse
+from app.schemas import TokenPayload
 from .service import get_auth_service, AuthService
 from .schema import TelegramData
 from ..dependency import current_user
@@ -57,7 +57,7 @@ async def steam_processing(
 @limiter.limit("1/4 minute")
 async def telegram_login(
      request: Request,
-     current_user: Annotated[TokenData, Depends(current_user)],
+     current_user: Annotated[TokenPayload, Depends(current_user)],
      service: Annotated[AuthService, Depends(get_auth_service)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)]
 ):

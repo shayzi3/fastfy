@@ -1,5 +1,3 @@
-import uuid
-
 from datetime import datetime
 from sqlalchemy import BigInteger, Index, ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -14,6 +12,8 @@ from app.schemas import (
      UserPortfolioRelModel,
      UserNotifyModel
 )
+from app.schemas.enums import UpdateMode
+
 from .base import Base
 
 
@@ -28,7 +28,7 @@ class Users(Base):
      pydantic_model = UserModel
      pydantic_rel_model = UserRelModel
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=uuid.uuid4())
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      steam_id: Mapped[int] = mapped_column(BigInteger)
      steam_name: Mapped[str] = mapped_column()
      steam_avatar: Mapped[str] = mapped_column()
@@ -53,9 +53,11 @@ class Skins(Base):
      name: Mapped[str] = mapped_column(primary_key=True)
      avatar: Mapped[str] = mapped_column()
      price: Mapped[float] = mapped_column()
+     update_mode: Mapped[UpdateMode] = mapped_column(default=UpdateMode.LOW)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_30_day: Mapped[float] = mapped_column(nullable=True) # percent
      price_last_365_day: Mapped[float] = mapped_column(nullable=True) # percent
+     
      
      @classmethod
      def returning(cls):
@@ -75,7 +77,7 @@ class SkinsPriceHistory(Base):
      skin_name: Mapped[str] = mapped_column(ForeignKey("skins.name", ondelete="CASCADE"))
      price: Mapped[float] = mapped_column(nullable=False)
      volume: Mapped[int] = mapped_column(nullable=False)
-     timestamp: Mapped[datetime] = mapped_column(nullable=False)
+     timestamp: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
      
      
      @classmethod

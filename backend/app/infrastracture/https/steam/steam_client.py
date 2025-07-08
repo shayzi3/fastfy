@@ -192,6 +192,31 @@ class HttpSteamClient:
                     }
                )
           return price_history
+     
+     
+     async def get_skin_price(self, skin_name: str) -> tuple[float, int]:
+          url = (
+               "https://steamcommunity.com/market/"
+               f"priceoverview/?currency=1&appid=730&market_hash_name={skin_name.replace('&', '%26')}"
+          )
+          async with aiohttp.ClientSession() as session:
+               async with session.get(url) as response:
+                    if response.status == 403:
+                         return HttpError
+                    data = await response.json()
+                    
+          price = data.get("lowest_price")
+          if price is None:
+               price = data.get("median_price")
+               if price is None:
+                    return HttpError
+          
+          volume = data.get("volume")
+          if volume is None:
+               return HttpError
+          
+          # price = $0.50, volume = '101,456'
+          return (float(price[1:])), int(volume.replace(",", ""))
                
                
                

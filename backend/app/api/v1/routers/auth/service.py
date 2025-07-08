@@ -61,8 +61,9 @@ class AuthService:
                     return steamdata
                
                steam_name, steam_avatar = steamdata
-               uuid = await self.user_repository.create(
+               uuid_ = await self.user_repository.create(
                     session=async_session,
+                    uuid=uuid.uuid4(),
                     steam_id=steamid,
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
@@ -70,7 +71,7 @@ class AuthService:
           session = await async_generate_id()
           await redis_session.set(
                name=f"session:{session}",
-               value=str(uuid) if exists is None else exists.uuid,
+               value=str(uuid_) if exists is None else exists.uuid,
                ex=120
           )
           return session

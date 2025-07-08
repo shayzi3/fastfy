@@ -3,6 +3,8 @@ from typing import  Any
 from datetime import datetime
 from pydantic import BaseModel
 
+from .enums import UpdateMode
+
 
 
 
@@ -27,6 +29,7 @@ class SkinModel(BaseModel):
      name: str
      avatar: str
      price: float
+     update_mode: UpdateMode
      price_last_1_day: float | None = None
      price_last_30_day: float | None = None
      price_last_365_day: float | None = None
