@@ -34,6 +34,7 @@ class Users(Base):
      steam_avatar: Mapped[str] = mapped_column()
      telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=True)
      telegram_username: Mapped[str] = mapped_column(nullable=True)
+     skin_percent: Mapped[int] = mapped_column(default=10)
      created_at: Mapped[datetime] = mapped_column(default=datetime.now())
      
      @classmethod
@@ -102,6 +103,7 @@ class UsersPortfolio(Base):
      buy_price: Mapped[float] = mapped_column(default=0, nullable=False)
      
      skin: Mapped["Skins"] = relationship()
+     user: Mapped["Users"] = relationship()
      
      @classmethod 
      def selectinload(cls):

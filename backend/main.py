@@ -8,12 +8,17 @@ from slowapi.errors import RateLimitExceeded
 from app.api.v1.routers import include_routers
 from app.core.slow_api import limiter
 from app.tasks.update_prices import UpdatePricesTasks
+from app.tasks.notify import NotifyTask
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
      update_prices_task = UpdatePricesTasks()
+     notify_task = NotifyTask()
+     
      await update_prices_task.run()
+     await notify_task.run()
+     
      yield
      
      

@@ -201,7 +201,7 @@ class HttpSteamClient:
           )
           async with aiohttp.ClientSession() as session:
                async with session.get(url) as response:
-                    if response.status == 403:
+                    if response.status != 200:
                          return HttpError
                     data = await response.json()
                     

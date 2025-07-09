@@ -24,11 +24,9 @@ class BaseUpdatePricesTasks:
           timer: int = 0
      ) -> None:
           await asyncio.sleep(timer)
-          result = await self.steam_client.get_skin_price(
-               skin_name=skin.name
-          )
+          result = await self.steam_client.get_skin_price(skin_name=skin.name)
           if isresponse(result):
-               await self._update_skin(skin, timer + 5)
+               await self._update_skin(skin, timer + 2)
           
           price, volume = result
           await self._update_skin_in_database(
@@ -66,6 +64,7 @@ class BaseUpdatePricesTasks:
                          "volume": volume
                     }
                )
+               await pool.close()
           
           
      async def update_all_skins(
@@ -73,7 +72,7 @@ class BaseUpdatePricesTasks:
           mode: UpdateMode
      ) -> None:
           gather_funcs = []
-          skins = await self.skin_repository.read_by_mode(mode)
+          skins = await self.skin_repository.read_all_task(mode)
           for skin in skins:
                gather_funcs.append(self._update_skin(skin))
           await asyncio.gather(*gather_funcs)

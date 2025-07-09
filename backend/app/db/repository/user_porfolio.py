@@ -4,7 +4,7 @@ from sqlalchemy.orm import selectinload
 
 from app.schemas import UserPortfolioModel, UserPortfolioRelModel
 from app.db.models import UsersPortfolio
-from app.db.session import AsyncSession
+from app.db.session import AsyncSession, Session
 from app.infrastracture.redis import RedisPool
 
 from .base import BaseRepository
@@ -54,4 +54,17 @@ class UserPortfolioRepository(
                ex=1000
           )
           return result
+          
+          
+     @classmethod
+     async def read_all_task(cls) -> list[UsersPortfolio]:
+          async with Session.session() as async_session:
+               sttm = (
+                    select(UsersPortfolio).
+                    options(selectinload(UsersPortfolio.skin), selectinload(UsersPortfolio.user))
+               )
+               result = await async_session.execute(sttm)
+               result = result.scalars().all()
+          return result
+          
           

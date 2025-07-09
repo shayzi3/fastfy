@@ -16,6 +16,7 @@ class UserModel(BaseModel):
      steam_name: str
      steam_avatar: str
      created_at: datetime
+     skin_percent: int
      telegram_id: int | None = None
      telegram_username: str | None = None
      

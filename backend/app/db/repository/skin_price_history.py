@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.session import Session, AsyncSession
 from app.schemas import (
      SkinPriceHistoryModel, 
      SkinHistoryModel, 
@@ -36,16 +36,16 @@ class SkinPriceHistoryRepository(
           if not redis_result:
                sttm = (
                     select(
-                         cls.model.price,
-                         cls.model.volume,
-                         cls.model.timestamp,
-                         (cls.model.timestamp <= datetime.now()).label("all"),
-                         (cls.model.timestamp >= datetime.now() - timedelta(days=365)).label("year"),
-                         (cls.model.timestamp >= datetime.now() - timedelta(days=30)).label("month"),
-                         (cls.model.timestamp >= datetime.now() - timedelta(days=1)).label("day"),
+                         SkinsPriceHistory.price,
+                         SkinsPriceHistory.volume,
+                         SkinsPriceHistory.timestamp,
+                         (SkinsPriceHistory.timestamp <= datetime.now()).label("all"),
+                         (SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=365)).label("year"),
+                         (SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=30)).label("month"),
+                         (SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=1)).label("day"),
                     ).
                     filter_by(**where_args).
-                    order_by(cls.model.timestamp)
+                    order_by(SkinsPriceHistory.timestamp)
                )
                result = await session.execute(sttm)
                result = result.all()
@@ -65,6 +65,35 @@ class SkinPriceHistoryRepository(
                day=json.loads(redis_result["day"]),
           )
           
+          
+          
+     @classmethod
+     async def filter_timestamp_task(
+          cls,
+          skin_name: str,
+          time_mode: str
+     ) -> list[dict[str, Any]]:
+          timestamp = [(SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=1)).label("zone")]
+          if time_mode == "week":
+               timestamp = [(SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=7)).label("zone")]
+          elif time_mode == "month":
+               timestamp = [(SkinsPriceHistory.timestamp >= datetime.now() - timedelta(days=30)).label("zone")]
+          
+          async with Session.session() as async_session:
+               sttm = (
+                    select(
+                         SkinsPriceHistory.price,
+                         SkinsPriceHistory.timestamp,
+                         *timestamp
+                    ).
+                    where(SkinsPriceHistory.skin_name == skin_name).
+                    order_by(SkinsPriceHistory.timestamp)
+               )
+               result = await async_session.execute(sttm)
+               result = result.all()
+          return await cls.__item_sorted_task(result)
+               
+               
           
      @staticmethod
      async def __redis_pipeline(
@@ -109,6 +138,22 @@ class SkinPriceHistoryRepository(
                     returning["month"].append(part)
                if item.day:
                     returning["day"].append(part)
+          return returning
+     
+     
+     @staticmethod
+     async def __item_sorted_task(
+          items: Any
+     ) -> list[dict[str, Any]]:
+          returning = []
+          for item in items:
+               if item.zone:
+                    returning.append(
+                         {
+                              "price": item.price, 
+                              "timestamp": item.timestamp.isoformat()
+                         }
+                    )
           return returning
           
                
