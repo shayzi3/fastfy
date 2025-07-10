@@ -30,7 +30,7 @@ class SkinPriceHistoryRepository(
           redis_session: RedisPool,
           redis_key: str,
           **where_args
-     ) -> SkinHistoryTimePartModel:
+     ) -> SkinHistoryTimePartModel | None:
           redis_result = await redis_session.hgetall(redis_key)
           
           if not redis_result:
@@ -49,6 +49,9 @@ class SkinPriceHistoryRepository(
                )
                result = await session.execute(sttm)
                result = result.all()
+               
+               if not result:
+                    return None
                
                returning = await cls.__item_sorted(items=result)
                await cls.__redis_pipeline(

@@ -4,31 +4,34 @@ from .base import BaseResponse
 
 
 class TelegramProcessSuccess(BaseResponse):
-     detail = "TelegramProcessSuccess"
-     status_code = 200
+     description = "Телеграм аккаунт привязан успешно."
      
+     
+class TelegramLoginSuccess(BaseResponse):
+     detail = "link to Telegram bot"
+     description = "Ссылка на телеграм бота по которой должен перейти рользователь."
+          
      
 class PortfolioSkinCreateSuccess(BaseResponse):
-     detail = "PortfolioSkinCreateSuccess"
-     status_code = 200
+     description = "Скин в портфолио создан успешно."
      
      
 class PortfolioSkinSoonCreate(BaseResponse):
-     detail = "PortfolioSkinSoonCreate"
-     status_code = 200
+     description = "Скин в портфолии скоро будет добавлен."
+     status_code = 202
      
      
 class SkinDeleteSuccess(BaseResponse):
-     detail = "SkinDeleteSuccess"
-     status_code = 200
-     
+     description = "Скин удалён успешно."
      
      
 class SkinChangeSuccess(BaseResponse):
-     detail = "SkinChangeSuccess"
-     status_code = 200
+     description = "Данные скины успешно изменены"
      
      
 class NotifyUpdateSuccess(BaseResponse):
-     detail = "NotifyUpdateSuccess"
-     status_code = 200
+     description = "Уведомление создано успешно."
+     
+     
+class UserUpdateSuccess(BaseResponse):
+     description = "Данные пользователя успешно обновлены."

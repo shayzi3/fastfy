@@ -29,7 +29,7 @@ class UserPortfolioRepository(
           if result is not None:
                result = json.loads(result)
                return [
-                    UserPortfolioRelModel.model_validate(model)
+                    UserPortfolioRelModel.model_validate(json.loads(model))
                     for model in result
                ]
           
@@ -50,7 +50,7 @@ class UserPortfolioRepository(
           ]
           await redis_session.set(
                name=redis_key,
-               value=json.dumps([model.model_dump() for model in result]),
+               value=json.dumps([model.model_dump_json() for model in result]),
                ex=1000
           )
           return result

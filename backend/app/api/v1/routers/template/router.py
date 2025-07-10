@@ -18,14 +18,17 @@ template_router = APIRouter(
 )
 
 
-@template_router.get(path="/profile")
+@template_router.get(
+     path="/profile", 
+     response_class=HTMLResponse
+)
 async def profile(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      service: Annotated[TemplateService, Depends(get_template_service)],
      uuid: Annotated[tuple[str, str | None] | None, Depends(valide_token)],
      request: Request
-) -> HTMLResponse:
+):
      if uuid is None:
           return templates.TemplateResponse(
                request=request,

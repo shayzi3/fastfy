@@ -43,7 +43,7 @@ class SkinService:
           query: str,
           steam: bool,
           offset: int
-     ) -> list[SkinModel] | list[dict[str, Any]] | AbstractResponse:
+     ) -> list[SkinModel] | AbstractResponse:
           if steam is False:
                result = await self.skin_repository.search_skin(
                     session=async_session,
@@ -75,6 +75,8 @@ class SkinService:
                redis_key=f"skin_price_history:{skin_name}",
                skin_name=skin_name
           )
+          if result is None:
+               return SkinNotFoundError
           return result
           
           

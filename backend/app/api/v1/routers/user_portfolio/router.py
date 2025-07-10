@@ -2,11 +2,25 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, BackgroundTasks
 from pydantic import UUID4
 
+from app.responses import (
+     isresponse,
+     router_responses,
+     PortfolioSkinSoonCreate,
+     ArgumentError,
+     PortfolioSkinCreateSuccess,
+     SkinPortfolioAlreadyExists,
+     PortfolioEmpty,
+     SkinNotFoundError,
+     SkinChangeSuccess,
+     SkinNotExists,
+     SkinDeleteSuccess,
+     TokenError,
+     HttpError
+)
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import get_redis_session, RedisPool
 from app.api.v1.routers.dependency import current_user
 from app.schemas import TokenPayload, UserPortfolioRelModel
-from app.responses import isresponse, PortfolioSkinSoonCreate, ArgumentError
 from .schema import CreateUpdateSkin
 from .service import get_user_portfolio_service, UserPortfolioService
 
@@ -19,14 +33,21 @@ user_portfolio_router = APIRouter(
 
 
 
-@user_portfolio_router.get("/portfolio")
+@user_portfolio_router.get(
+     path="/portfolio", 
+     response_model=list[UserPortfolioRelModel],
+     responses=router_responses(
+          TokenError,
+          PortfolioEmpty
+     )
+)
 async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      current_user: Annotated[TokenPayload, Depends(current_user)],
      service: Annotated[UserPortfolioService,Depends(get_user_portfolio_service)],
      uuid: UUID4 | None = None
-) -> list[UserPortfolioRelModel]:
+):
      result = await service.get_portfolio(
           async_session=async_session,
           redis_session=redis_session,
@@ -38,7 +59,17 @@ async def get_portfolio(
           
      
      
-@user_portfolio_router.post("/portfolio")
+@user_portfolio_router.post(
+     path="/portfolio",
+     responses=router_responses(
+          TokenError,
+          SkinPortfolioAlreadyExists,
+          PortfolioSkinCreateSuccess,
+          PortfolioSkinSoonCreate,
+          HttpError,
+          SkinNotFoundError
+     )
+)
 async def post_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
@@ -71,7 +102,14 @@ async def post_portfolio(
      
      
      
-@user_portfolio_router.patch("/portfolio")
+@user_portfolio_router.patch(
+     path="/portfolio",
+     responses=router_responses(
+          TokenError,
+          SkinNotFoundError,
+          SkinChangeSuccess
+     )
+)
 async def patch_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
@@ -99,7 +137,14 @@ async def patch_portfolio(
      
      
      
-@user_portfolio_router.delete("/portfolio")
+@user_portfolio_router.delete(
+     path="/portfolio",
+     responses=router_responses(
+          TokenError,
+          SkinNotExists,
+          SkinDeleteSuccess
+     )
+)
 async def delete_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],

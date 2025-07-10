@@ -85,11 +85,12 @@ class HttpSteamClient:
           redis_session: RedisPool,
           query: str,
           offset: int,
-     ) -> list[dict[str, Any]] | AbstractResponse:
+     ) -> list[SkinModel] | AbstractResponse:
           key = f"search:{query}:offset={offset}"
           skins = await redis_session.get(key)
           if skins is not None:
                skins = json.loads(skins)
+               return [SkinModel.model_validate(skin) for skin in skins]
           
           url = (
                "https://steamcommunity.com/market/search/render/"
@@ -117,12 +118,12 @@ class HttpSteamClient:
                               name=item.get("asset_description").get("market_hash_name"),
                               avatar=self.icon_url + item.get("asset_description").get("icon_url"),
                               price=float(item.get("sell_price_text")[1:].replace(",", ""))
-                         ).model_dump()
+                         )
                          for item in results
                     ]
                     await redis_session.set(
                          name=key,
-                         value=json.dumps(skins),
+                         value=json.dumps([skin.model_dump() for skin in skins]),
                          ex=1000
                     )
           return skins
@@ -142,6 +143,9 @@ class HttpSteamClient:
                                    return SkinNotFoundError
                               data = await response.json()
                               item = data["data"]["item"]
+                              
+                              if not item:
+                                   return SkinNotFoundError
                               break
                     except:
                          continue

@@ -2,9 +2,9 @@ import uvicorn
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
+from app.responses import rate_limit_exceeded
 from app.api.v1.routers import include_routers
 from app.core.slow_api import limiter
 from app.tasks.update_prices import UpdatePricesTasks
@@ -25,7 +25,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="FastFy", lifespan=lifespan)
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded)
 include_routers(app)
 
 

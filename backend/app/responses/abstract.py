@@ -16,3 +16,8 @@ class AbstractResponse(Protocol):
      @classmethod
      def exec(cls) -> HTTPException:
           raise NotImplementedError
+     
+     
+     @classmethod
+     def schema(cls) -> dict[int, dict]:
+          raise NotImplementedError

@@ -2,10 +2,16 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.responses import (
+     isresponse,
+     router_responses,
+     SkinNotFoundError,
+     HttpError,
+     TokenError
+)
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import RedisPool, get_redis_session
 from app.api.v1.routers.dependency import current_user
-from app.responses import ArgumentError, isresponse
 from app.schemas import SkinModel, SkinHistoryTimePartModel
 from ..dependency import current_user
 from .service import SkinService, get_skin_service
@@ -19,7 +25,14 @@ skin_router = APIRouter(
 
 
 
-@skin_router.get("/skin", response_model=SkinModel)
+@skin_router.get(
+     path="/skin", 
+     response_model=SkinModel,
+     responses=router_responses(
+          SkinNotFoundError,
+          TokenError
+     )
+)
 async def get_skin(
      service: Annotated[SkinService, Depends(get_skin_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
@@ -38,7 +51,15 @@ async def get_skin(
      
           
      
-@skin_router.get("/skin/search", response_model=list[SkinModel])
+@skin_router.get(
+     path="/skin/search", 
+     response_model=list[SkinModel],
+     responses=router_responses(
+          HttpError,
+          SkinNotFoundError,
+          TokenError
+     )
+)
 async def search_skin(
      service: Annotated[SkinService, Depends(get_skin_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
@@ -60,7 +81,14 @@ async def search_skin(
      
      
      
-@skin_router.get("/skin/history", response_model=SkinHistoryTimePartModel)
+@skin_router.get(
+     path="/skin/history", 
+     response_model=SkinHistoryTimePartModel,
+     responses=router_responses(
+          SkinNotFoundError,
+          TokenError
+     )
+)
 async def skin_history(
      service: Annotated[SkinService, Depends(get_skin_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
@@ -72,4 +100,6 @@ async def skin_history(
           redis_session=redis_session,
           skin_name=skin_name
      )
+     if isresponse(result):
+          return result.response()
      return result
