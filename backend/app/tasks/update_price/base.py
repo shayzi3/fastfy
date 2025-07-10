@@ -18,7 +18,7 @@ class BaseUpdatePricesTasks:
           self.skin_history_repository = SkinPriceHistoryRepository
 
 
-     async def _update_skin(
+     async def _get_price_volume_skin(
           self,
           skin: Skins, 
           timer: int = 0
@@ -29,14 +29,14 @@ class BaseUpdatePricesTasks:
                await self._update_skin(skin, timer + 2)
           
           price, volume = result
-          await self._update_skin_in_database(
+          await self._update_price_volume_skin(
                skin=skin,
                price=price,
                volume=volume
           )
           
           
-     async def _update_skin_in_database(
+     async def _update_price_volume_skin(
           self, 
           skin: Skins, 
           price: float,
@@ -67,12 +67,12 @@ class BaseUpdatePricesTasks:
                await pool.close()
           
           
-     async def update_all_skins(
+     async def start(
           self, 
           mode: UpdateMode
      ) -> None:
           gather_funcs = []
-          skins = await self.skin_repository.read_all_task(mode)
+          skins = await self.skin_repository.read_all_task_update_price(mode)
           for skin in skins:
-               gather_funcs.append(self._update_skin(skin))
+               gather_funcs.append(self._get_price_volume_skin(skin))
           await asyncio.gather(*gather_funcs)

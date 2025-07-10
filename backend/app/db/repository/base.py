@@ -4,8 +4,8 @@ from typing import Any, Generic, TypeVar
 from pydantic import BaseModel
 from sqlalchemy import insert, delete, update, select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.session import AsyncSession
 from app.infrastracture.redis import RedisPool
 
 
@@ -131,7 +131,6 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
           
           if (redis_session is not None) and (delete_redis_values):
                await redis_session.delete(*delete_redis_values)
-          return True if result else False
-               
+          return True if result else False               
                
                

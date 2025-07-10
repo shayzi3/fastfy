@@ -1,4 +1,5 @@
 import json
+
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -57,7 +58,7 @@ class UserPortfolioRepository(
           
           
      @classmethod
-     async def read_all_task(cls) -> list[UsersPortfolio]:
+     async def read_all_task_notify(cls) -> list[UsersPortfolio]:
           async with Session.session() as async_session:
                sttm = (
                     select(UsersPortfolio).

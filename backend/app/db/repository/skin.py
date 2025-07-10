@@ -26,7 +26,7 @@ class SkinRepository(BaseRepository[SkinModel, None]):
      
      
      @classmethod
-     async def read_all_task(
+     async def read_all_task_update_price(
           cls,
           mode: UpdateMode
      ) -> list[Skins]:

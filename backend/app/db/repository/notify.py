@@ -29,7 +29,7 @@ class NotifyRepository(BaseRepository[UserNotifyModel, None]):
                     return [
                          UserNotifyModel.model_validate(json.loads(model)) for model in data
                     ]
-                    
+                
           sttm = select(UsersNotify).filter_by(**read_args)
           result = await session.execute(sttm)
           result = result.scalars().all()

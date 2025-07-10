@@ -2,6 +2,8 @@ import asyncio
 import uuid
 import json
 
+from datetime import timedelta
+
 from app.db.models.models import Users
 from app.db.repository import (
      UserPortfolioRepository,
@@ -22,8 +24,8 @@ class BaseNotifyTask:
           self.notify_repository = NotifyRepository
           
      
-     async def explore_skins(self, mode: str) -> None:
-          all_skin_at_users = await self.portfolio_repository.read_all_task()
+     async def start(self, time: timedelta) -> None:
+          all_skin_at_users = await self.portfolio_repository.read_all_task_notify()
           if not all_skin_at_users:
                return
           
@@ -35,7 +37,7 @@ class BaseNotifyTask:
                
           gather_funcs = []
           for skin_name, users in sort_users_by_skins.items():
-               gather_funcs.append(self._explore_skin_price(skin_name, users, mode))
+               gather_funcs.append(self._explore_skin_price(skin_name, users, time))
           await asyncio.gather(*gather_funcs)
           
           
@@ -43,13 +45,12 @@ class BaseNotifyTask:
           self,
           skin_name: str,
           users_at_skin: list[Users],
-          mode: str
+          time: timedelta
      ) -> None:
-          history = await self.skin_history_repository.filter_timestamp_task(
+          history = await self.skin_history_repository.filter_timestamp_task_notify(
                skin_name=skin_name,
-               time_mode=mode
+               time=[time]
           )
-          
           notify = None
           if history and len(history) >= 2:
                month_percent = round(((history[-1]["price"] - history[0]["price"]) / history[0]["price"]) * 100, 2)
