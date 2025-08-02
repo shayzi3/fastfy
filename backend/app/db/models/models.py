@@ -10,7 +10,7 @@ from app.schemas import (
      SkinPriceHistoryModel,
      UserPortfolioModel,
      UserPortfolioRelModel,
-     UserNotifyModel
+     UserNotifyModel,
 )
 from app.schemas.enums import UpdateMode
 

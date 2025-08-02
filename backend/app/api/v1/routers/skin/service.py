@@ -1,13 +1,11 @@
-from typing import Any
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastracture.redis import RedisPool
 from app.infrastracture.https.steam import HttpSteamClient
 from app.db.repository import SkinPriceHistoryRepository, SkinRepository
 from app.responses.abstract import AbstractResponse
-from app.responses import SkinNotFoundError
-from app.schemas import SkinModel, SkinHistoryTimePartModel
+from app.responses import SkinNotFoundError, OffsetError
+from app.schemas import SkinModel, SkinHistoryTimePartModel, SkinsPage
 
 
 
@@ -41,26 +39,20 @@ class SkinService:
           async_session: AsyncSession,
           redis_session: RedisPool,
           query: str,
-          steam: bool,
           offset: int
-     ) -> list[SkinModel] | AbstractResponse:
-          if steam is False:
-               result = await self.skin_repository.search_skin(
-                    session=async_session,
-                    redis_session=redis_session,
-                    query=query,
-                    offset=offset,
-               )
-               if result is None:
-                    return SkinNotFoundError
-               return result
-          else:
-               result = await self.steam_client.search_steam_skins(
-                    redis_session=redis_session,
-                    query=query,
-                    offset=offset
-               )
-               return result
+     ) -> SkinsPage | AbstractResponse:
+          if offset % 10 != 0:
+               return OffsetError
+          
+          result = await self.skin_repository.search_skin(
+               session=async_session,
+               redis_session=redis_session,
+               query=query,
+               offset=offset
+          )
+          if not result.skins:
+               return SkinNotFoundError
+          return result
           
           
      async def skin_history(

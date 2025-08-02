@@ -9,7 +9,8 @@ from app.responses import (
      TokenError,
      UserNotFoundError,
      UserUpdateSuccess,
-     HttpError
+     HttpError,
+     SteamInventoryBlocked
 )
 from app.db.session import AsyncSession, get_async_session
 from app.infrastracture.redis import RedisPool, get_redis_session
@@ -86,6 +87,7 @@ async def patch_skin_percent_user(
           TokenError,
           HttpError,
           UserNotFoundError,
+          SteamInventoryBlocked
      )
 )
 async def get_steam_inventory(

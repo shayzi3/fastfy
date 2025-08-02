@@ -9,5 +9,6 @@ from .schema import (
      UserPortfolioModel,
      SteamItem,
      UserPortfolioRelModel,
-     UserNotifyModel
+     UserNotifyModel,
+     SkinsPage,
 )

@@ -8,7 +8,7 @@ from typing import Any
 from app.core import my_config
 from app.infrastracture.redis import RedisPool
 from app.responses.abstract import AbstractResponse
-from app.responses import HttpError, SkinNotFoundError
+from app.responses import HttpError, SkinNotFoundError, SteamInventoryBlocked
 from app.schemas import SteamItem, SkinModel
 
 
@@ -50,7 +50,10 @@ class HttpSteamClient:
                for _ in range(3):
                     try:
                          async with session.get(url) as response:
-                              # errors
+                              if response.status in [401, 403]:
+                                   # Profile incognito, invetory incognito, inventory empty, User unauthorized
+                                   return SteamInventoryBlocked
+                              
                               data = await response.json()
                               break
                     except:
@@ -78,55 +81,6 @@ class HttpSteamClient:
                               )
                          )
                return inventory
-               
-               
-     async def search_steam_skins(
-          self,
-          redis_session: RedisPool,
-          query: str,
-          offset: int,
-     ) -> list[SkinModel] | AbstractResponse:
-          key = f"search:{query}:offset={offset}"
-          skins = await redis_session.get(key)
-          if skins is not None:
-               skins = json.loads(skins)
-               return [SkinModel.model_validate(skin) for skin in skins]
-          
-          url = (
-               "https://steamcommunity.com/market/search/render/"
-               f"?query={query}&start={offset}&count=10&search_descriptions=0"
-               "&sort_column=default&sort_dir=desc&appid=730&norender=1"
-          )
-          if skins is None:
-               async with aiohttp.ClientSession() as session:
-                    for _ in range(3):
-                         try:
-                              async with session.get(url) as response:
-                                   data = await response.json()
-                                   break
-                         except:
-                              continue
-                    else:
-                         return HttpError
-                    
-                    results: list[dict[str, Any]] = data.get("results") 
-                    if not results:
-                         return SkinNotFoundError
-                    
-                    skins = [
-                         SkinModel(
-                              name=item.get("asset_description").get("market_hash_name"),
-                              avatar=self.icon_url + item.get("asset_description").get("icon_url"),
-                              price=float(item.get("sell_price_text")[1:].replace(",", ""))
-                         )
-                         for item in results
-                    ]
-                    await redis_session.set(
-                         name=key,
-                         value=json.dumps([skin.model_dump() for skin in skins]),
-                         ex=1000
-                    )
-          return skins
      
      
      async def skin_exists(

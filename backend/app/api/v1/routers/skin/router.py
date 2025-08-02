@@ -1,18 +1,19 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.responses import (
      isresponse,
      router_responses,
      SkinNotFoundError,
      HttpError,
-     TokenError
+     TokenError,
+     OffsetError
 )
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import RedisPool, get_redis_session
 from app.api.v1.routers.dependency import current_user
-from app.schemas import SkinModel, SkinHistoryTimePartModel
+from app.schemas import SkinModel, SkinHistoryTimePartModel, SkinsPage
 from ..dependency import current_user
 from .service import SkinService, get_skin_service
 
@@ -53,11 +54,12 @@ async def get_skin(
      
 @skin_router.get(
      path="/skin/search", 
-     response_model=list[SkinModel],
+     response_model=SkinsPage,
      responses=router_responses(
           HttpError,
           SkinNotFoundError,
-          TokenError
+          TokenError,
+          OffsetError
      )
 )
 async def search_skin(
@@ -65,14 +67,12 @@ async def search_skin(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      query: str,
-     steam: bool,
-     offset: int = 0
+     offset: int = Query(ge=0)
 ):
      result = await service.search_skin(
           async_session=async_session,
           redis_session=redis_session,
           query=query,
-          steam=steam,
           offset=offset
      )
      if isresponse(result):

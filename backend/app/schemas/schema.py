@@ -1,7 +1,10 @@
+import json
+
+from math import ceil
 from uuid import UUID
 from typing import  Any
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from .enums import UpdateMode
 
@@ -103,6 +106,26 @@ class SkinHistoryTimePartModel(BaseModel):
      month: list["SkinHistoryModel"]
      day: list["SkinHistoryModel"]
      
+     
+     
+class SkinsPage(BaseModel):
+     pages: int
+     current_page: int
+     skins: list[SkinModel] | str
+     
+     def model_post_init(self, _: Any):
+          self.offset = (
+               1 if self.offset == 0
+               else (self.offset // 10) + 1
+          )
+          self.pages = ceil(self.pages / 10)
+          
+          if isinstance(self.skins, str):
+               models = json.loads(self.skins)
+               self.skins = [
+                    SkinModel.model_validate(json.loads(model))
+                    for model in models
+               ]     
           
           
 class TokenPayload(BaseModel):
@@ -116,4 +139,8 @@ class SteamItem(BaseModel):
      name: str
      avatar: str
      quantity: int
+     
+     
+     
+
      

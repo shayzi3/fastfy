@@ -10,7 +10,9 @@ from .error import (
      PortfolioEmpty,
      SkinNotExists,
      NotifyEmpty,
-     RequestTimeoutError
+     RequestTimeoutError,
+     OffsetError,
+     SteamInventoryBlocked
 )
 from .success import (
      TelegramProcessSuccess,

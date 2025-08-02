@@ -26,7 +26,7 @@ async def lifespan(_: FastAPI):
      
      
 
-app = FastAPI(title="FastFy", lifespan=lifespan)
+app = FastAPI(title="FastFy")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded)
 include_routers(app)

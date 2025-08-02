@@ -73,3 +73,12 @@ class RequestTimeoutError(BaseResponse):
      description = "Превышен лимит запросов."
      status_code = 429
      
+     
+class OffsetError(BaseResponse):
+     detail = "Параметр offset должен делиться на 10 без остатка."
+     status_code = 403
+     
+     
+class SteamInventoryBlocked(BaseResponse):
+     detail = "Инвентарь заблокирован."
+     status_code = 400
