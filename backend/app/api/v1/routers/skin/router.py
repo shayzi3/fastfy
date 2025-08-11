@@ -34,7 +34,8 @@ skin_router = APIRouter(
           AuthError,
           SecretTokenError,
           ServerError
-     )
+     ),
+     summary="Получение данных скина."
 )
 async def get_skin(
      service: Annotated[SkinService, Depends(get_skin_service)],
@@ -64,7 +65,8 @@ async def get_skin(
           AuthError,
           SecretTokenError,
           ServerError
-     )
+     ),
+     summary="Поиск скинов по названию."
 )
 async def search_skin(
      service: Annotated[SkinService, Depends(get_skin_service)],
@@ -93,7 +95,8 @@ async def search_skin(
           AuthError,
           SecretTokenError,
           ServerError
-     )
+     ),
+     summary="Получение истории изменения цены скина."
 )
 async def skin_history(
      service: Annotated[SkinService, Depends(get_skin_service)],

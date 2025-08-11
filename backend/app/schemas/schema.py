@@ -143,12 +143,7 @@ class SkinsPage(BaseModel):
                          for model in self.skins
                     ]   
                
-class TokenPayload(BaseModel):
-     uuid: str
-     iat: datetime
-     exp: datetime
-     
-     
+
 class SteamItem(BaseModel):
      name: str
      avatar: str     

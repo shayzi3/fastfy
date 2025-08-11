@@ -37,16 +37,13 @@ class SecretTokenError(BaseResponse):
      status_code = 400
      
      
-     
 class UserNotFoundError(BaseResponse):
      description = "Запрашивемый пользователь не найден."
-     detail = "Запрашивемый пользователь не найден."
      status_code = 404     
      
      
 class SkinNotFoundError(BaseResponse):
      description = "Скин не найден."
-     detail = "Скин не найден."
      status_code = 404
      
      
@@ -61,7 +58,6 @@ class PortfolioEmpty(BaseResponse):
      status_code = 400
      
      
-     
 class SkinNotExists(BaseResponse):
      description = "Скин не существует."
      status_code = 400
@@ -73,10 +69,11 @@ class NotifyEmpty(BaseResponse):
      
      
 class OffsetError(BaseResponse):
-     detail = "Параметр offset должен делиться на 10 без остатка."
+     description = "Параметр offset должен делиться на 5 без остатка."
      status_code = 403
      
      
 class SteamInventoryBlocked(BaseResponse):
+     description = "Невозможно получить скины пользователя."
      detail = "Невозможно получить скины пользователя."
      status_code = 400

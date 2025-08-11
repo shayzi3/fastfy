@@ -32,6 +32,7 @@ auth_router = APIRouter(
 @auth_router.get(
      path="/auth/steam/login", 
      response_class=RedirectResponse,
+     summary="Перенаправление на страницу входа через Steam аккаунт."
 )
 async def steam_redirect(
      service: Annotated[AuthService, Depends(get_auth_service)]
@@ -48,7 +49,8 @@ async def steam_redirect(
           HttpError,
           SteamLoginError,
           ServerError
-     )
+     ),
+     summary="Сюда происходит перенаправление после входа в Steam аккаунт."
 )
 async def steam_processing(
      request: Request,
@@ -81,7 +83,8 @@ async def steam_processing(
           SecretTokenError,
           ServerError
      ),
-     dependencies=[Depends(valide_secret_bot_token)]
+     dependencies=[Depends(valide_secret_bot_token)],
+     summary="Создание текущего аккаунта."
 )
 async def telegram_processing(
      code: str,

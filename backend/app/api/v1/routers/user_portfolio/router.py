@@ -37,7 +37,8 @@ user_portfolio_router = APIRouter(
           AuthError,
           ServerError,
           SecretTokenError
-     )
+     ),
+     summary="Полчуние портфолио текущего аккаунта."
 )
 async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
@@ -65,7 +66,8 @@ async def get_portfolio(
           AuthError,
           ServerError,
           SecretTokenError
-     )
+     ),
+     summary="Создание нового предмета в портфолио текущего аккаунта."
 )
 async def post_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
@@ -99,7 +101,8 @@ async def post_portfolio(
           AuthError,
           ServerError,
           SecretTokenError
-     )
+     ),
+     summary="Удаление скина из портфолио текущего аккаунта."
 )
 async def delete_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],

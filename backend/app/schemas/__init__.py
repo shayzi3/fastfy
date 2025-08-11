@@ -1,6 +1,5 @@
 from .schema import (
      UserModel,
-     TokenPayload,
      SkinModel,
      SkinPriceHistoryModel,
      SkinHistoryModel,

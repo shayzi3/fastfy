@@ -34,7 +34,7 @@ class BaseResponse(AbstractResponse):
                     "content": {
                          "application/json": {
                               "example": {
-                                   cls.__name__: {"detail": cls.detail}
+                                   cls.__name__: {"detail": cls.detail if cls.detail else cls.__name__}
                               }
                          }
                     }
@@ -43,7 +43,7 @@ class BaseResponse(AbstractResponse):
           
      @classmethod
      def dublicate(cls) -> dict[str, dict[str, str]]:
-          return {cls.__name__: {"detail": cls.__name__}}   
+          return {cls.__name__: {"detail": cls.detail if cls.detail else cls.__name__}}   
      
           
      

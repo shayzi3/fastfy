@@ -32,6 +32,10 @@ notification_router = APIRouter(
           AuthError,
           ServerError,
           SecretTokenError
+     ),
+     summary=(
+          "Получение непрочитанных уведомлений всех пользователей, "
+          "у которых зафиксированно изменение цены на скин."
      )
 )
 async def get_notify_new(

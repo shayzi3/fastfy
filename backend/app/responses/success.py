@@ -12,22 +12,14 @@ class PortfolioSkinCreateSuccess(BaseResponse):
      description = "Скин в портфолио создан успешно."
      
      
-class PortfolioSkinSoonCreate(BaseResponse):
-     description = "Скин в портфолии скоро будет добавлен."
-     status_code = 202
-     
-     
 class SkinDeleteSuccess(BaseResponse):
      description = "Скин удалён успешно."
      
      
 class SkinChangeSuccess(BaseResponse):
-     description = "Данные скины успешно изменены"
-     
-     
-class NotifyUpdateSuccess(BaseResponse):
-     description = "Уведомление создано успешно."
+     description = "Данные скины успешно изменены."
      
      
 class UserUpdateSuccess(BaseResponse):
-     description = "Данные пользователя успешно обновлены."
+     description = "Данные успешно обновлены."
+     detail = "Данные успешно обновлены."

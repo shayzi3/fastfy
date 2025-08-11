@@ -37,7 +37,8 @@ user_router = APIRouter(
           AuthError,
           SecretTokenError,
           ServerError
-     )
+     ),
+     summary="Получения данных текущего аккаунта."
 )
 async def get_user(
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
@@ -64,13 +65,14 @@ async def get_user(
           SecretTokenError,
           AuthError,
           ServerError
-     )
+     ),
+     summary="Изменение процента у текущего аккаунта."
 )
 async def patch_skin_percent_user(
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
      service: Annotated[UserService, Depends(get_user_service)],
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
-     skin_percent: int = Query(ge=5),
+     skin_percent: int = Query(ge=0, le=100),
 ):
      result = await service.patch_skin_percent_user(
           async_session=async_session,
@@ -92,7 +94,8 @@ async def patch_skin_percent_user(
           SecretTokenError,
           AuthError,
           ServerError
-     )
+     ),
+     summary="Получение Steam инвентаря текущего аккаунта."
 )
 async def get_steam_inventory(
      service: Annotated[UserService, Depends(get_user_service)],
