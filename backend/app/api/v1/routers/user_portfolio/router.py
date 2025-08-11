@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends, BackgroundTasks, Query
 
 from app.responses import (
      isresponse,
@@ -11,11 +11,12 @@ from app.responses import (
      SkinDeleteSuccess,
      AuthError,
      SecretTokenError,
-     ServerError
+     ServerError,
+     OffsetError
 )
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import get_redis_session, RedisPool
-from app.schemas import UserSkinRelModel
+from app.schemas import UserSkinRelModel, SkinsPage
 from .service import get_user_portfolio_service, UserPortfolioService
 from ..dependency import valide_secret_bot_token, current_user_uuid
 
@@ -31,12 +32,13 @@ user_portfolio_router = APIRouter(
 
 @user_portfolio_router.get(
      path="/portfolio", 
-     response_model=list[UserSkinRelModel],
+     response_model=SkinsPage,
      responses=router_responses(
           PortfolioEmpty,
           AuthError,
           ServerError,
-          SecretTokenError
+          SecretTokenError,
+          OffsetError
      ),
      summary="Полчуние портфолио текущего аккаунта."
 )
@@ -44,12 +46,14 @@ async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      service: Annotated[UserPortfolioService,Depends(get_user_portfolio_service)],
-     current_user_uuid: Annotated[str, Depends(current_user_uuid)]
+     current_user_uuid: Annotated[str, Depends(current_user_uuid)],
+     offset: int = Query(ge=0)
 ):
      result = await service.get_portfolio(
           async_session=async_session,
           redis_session=redis_session,
-          user_uuid=current_user_uuid
+          user_uuid=current_user_uuid,
+          offset=offset
      )
      if isresponse(result):
           return result.response()

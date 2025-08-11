@@ -4,13 +4,14 @@ from app.infrastracture.https.steam import HttpSteamClient
 from app.db.session import AsyncSession
 from app.responses.abstract import AbstractResponse
 from app.infrastracture.redis import RedisPool
-from app.schemas import  UserSkinRelModel
+from app.schemas import  UserSkinRelModel, SkinsPage
 from app.responses import (
      PortfolioSkinCreateSuccess, 
      SkinPortfolioAlreadyExists,
      PortfolioEmpty,
      SkinNotExists,
      SkinDeleteSuccess,
+     OffsetError
 )
 from app.db.repository import (
      UserSkinRepository, 
@@ -35,17 +36,22 @@ class UserPortfolioService:
           self,
           async_session: AsyncSession,
           redis_session: RedisPool,
-          user_uuid: str
-     ) -> list[UserSkinRelModel] | AbstractResponse:
-          skins = await self.portfolio_repository.read_all(
+          user_uuid: str,
+          offset: int
+     ) -> SkinsPage | AbstractResponse:
+          if offset % 5 != 0:
+               return OffsetError
+               
+          skins = await self.portfolio_repository.read_paginate(
                session=async_session,
                redis_session=redis_session,
-               redis_key=f"portfolio:{user_uuid}",
-               uuid=user_uuid
+               user_uuid=user_uuid,
+               offset=offset
           )
-          if not skins:
+          if not skins.skins:
                return PortfolioEmpty
           return skins
+          
      
      
      async def delete_portfolio(
