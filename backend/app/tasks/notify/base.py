@@ -6,9 +6,9 @@ from datetime import timedelta
 
 from app.db.models.models import Users
 from app.db.repository import (
-     UserPortfolioRepository,
+     UserSkinRepository,
      SkinPriceHistoryRepository,
-     NotifyRepository
+     UserNotifyRepository
 )
 from app.infrastracture.redis import RedisPool
 from app.db.session import Session
@@ -19,9 +19,9 @@ from .schema import NotifyData
 
 class BaseNotifyTask:
      def __init__(self):
-          self.portfolio_repository = UserPortfolioRepository
+          self.portfolio_repository = UserSkinRepository
           self.skin_history_repository = SkinPriceHistoryRepository
-          self.notify_repository = NotifyRepository
+          self.notify_repository = UserNotifyRepository
           
      
      async def start(self, time: timedelta) -> None:

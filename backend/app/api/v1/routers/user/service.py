@@ -2,8 +2,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastracture.redis import RedisPool
 from app.db.repository import UserRepository
-from app.schemas import UserModel, SteamItem
-from app.responses import UserNotFoundError, UserUpdateSuccess
+from app.schemas import UserModel, SkinsPage, SteamItem
+from app.responses import UserNotFoundError, UserUpdateSuccess, OffsetError, isresponse, SkinNotFoundError
 from app.responses.abstract import AbstractResponse
 from app.infrastracture.https.steam import HttpSteamClient
 
@@ -18,13 +18,13 @@ class UserService:
           self, 
           async_session: AsyncSession,
           redis_session: RedisPool,
-          uuid: str
+          user_uuid: str
      ) -> UserModel | AbstractResponse:
           user = await self.user_repository.read(
                session=async_session,
                redis_session=redis_session,
-               redis_key=f"user:{uuid}",
-               uuid=uuid,
+               redis_key=f"user:{user_uuid}",
+               uuid=user_uuid
           )
           if user is None:
                return UserNotFoundError
@@ -34,15 +34,12 @@ class UserService:
      async def patch_skin_percent_user(
           self,
           async_session: AsyncSession,
-          redis_session: RedisPool,
-          uuid: str,
+          user_uuid: str,
           skin_percent: int
      ) -> AbstractResponse:
           user_update = await self.user_repository.update(
                session=async_session,
-               where={"uuid": uuid},
-               redis_session=redis_session,
-               delete_redis_values=[f"user:{uuid}"],
+               where={"uuid": user_uuid},
                skin_percent=skin_percent
           )
           if user_update is True:
@@ -54,20 +51,32 @@ class UserService:
           self, 
           async_session: AsyncSession,
           redis_session: RedisPool,
-          uuid: str
-     ) -> list[SteamItem] | AbstractResponse:
+          user_uuid: str,
+          offset: int
+     ) -> SkinsPage | AbstractResponse:
+          if offset % 5 != 0:
+               return OffsetError
+          
           user = await self.user_repository.read(
                session=async_session,
                redis_session=redis_session,
-               redis_key=f"user:{uuid}",
-               uuid=uuid
+               redis_key=f"user:{user_uuid}",
+               uuid=user_uuid
           )
           if user is None:
                return UserNotFoundError
           
-          return await self.http_steam_client.get_steam_inventory(
-               steamid=user.steam_id
+          result = await self.http_steam_client.get_steam_inventory(
+               steamid=user.steam_id,
+               redis_session=redis_session,
+               offset=offset
           )
+          if isresponse(result):
+               return result
+          
+          if not result.skins:
+               return SkinNotFoundError
+          return result
           
      
      

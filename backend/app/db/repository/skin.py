@@ -1,17 +1,19 @@
 import json
 
-from sqlalchemy import select, func
-from app.db.session import AsyncSession, Session
+from sqlalchemy import select, func, and_
+from sqlalchemy.orm import selectinload
+from app.db.session import AsyncSession
 from app.infrastracture.redis import RedisPool
 from app.schemas import SkinModel, SkinsPage
 from app.db.models import Skins
-from app.schemas.enums import UpdateMode
 
 from .base import BaseRepository
 
 
 
-class SkinRepository(BaseRepository[SkinModel, None]):
+class SkinRepository(
+     BaseRepository[SkinModel, None]
+):
      model = Skins
      
      
@@ -25,22 +27,28 @@ class SkinRepository(BaseRepository[SkinModel, None]):
      ) -> SkinsPage:
           value = await redis_session.get(f"{query}~{offset}")
           if value:
-               parts = value.split("~~")
+               data = json.loads(value)
                return SkinsPage(
-                    pages=int(parts[-1]),
+                    skins=data[:1],
                     current_page=offset,
-                    skins=parts[0]
+                    pages=int(data[-1]),
+                    skin_model_obj=SkinModel
                )
                
+          where_params = [
+               Skins.name.ilike(f"%{query_part}%") 
+               for query_part in query.split()
+          ]
+          
           sttm_skins = (
                select(Skins).
-               where(Skins.name.ilike(f"%{query}%")).
-               limit(10).
+               where(*where_params).
+               limit(5).
                offset(offset)
           )
           sttm_count_skins = (
                select(func.count(Skins.name)).
-               where(Skins.name.ilike(f"%{query}%"))
+               where(*where_params)
           )
           result_skins = await session.execute(sttm_skins)
           result_skins = result_skins.scalars().all()
@@ -53,30 +61,20 @@ class SkinRepository(BaseRepository[SkinModel, None]):
                for model in result_skins
           ]
           if pd_models:
+               dump_models = [
+                    model.model_dump_json()
+                    for model in pd_models
+               ]
+               dump_models.append(result_count)
+               
                await redis_session.set(
                     name=f"{query}~{offset}",
-                    value=json.dumps(
-                         [pd_model.model_dump_json() for pd_model in pd_models]
-                    ) + f"~~{result_count}",
-                    ex=30
+                    value=json.dumps(dump_models),
+                    ex=120
                )
           return SkinsPage(
                pages=result_count,
                current_page=offset,
-               skins=pd_models
+               skins=pd_models,
+               skin_model_obj=SkinModel
           )
-     
-     
-     @classmethod
-     async def read_all_task_update_price(
-          cls,
-          mode: UpdateMode
-     ) -> list[Skins]:
-          async with Session.session() as session:
-               sttm = (
-                    select(Skins).
-                    where(Skins.update_mode == mode)
-               )
-               result = await session.execute(sttm)
-               result = result.scalars().all()
-          return result

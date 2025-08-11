@@ -3,13 +3,9 @@ from .base import BaseResponse
 
 
 
-class TelegramProcessSuccess(BaseResponse):
-     description = "Телеграм аккаунт привязан успешно."
-     
-     
 class TelegramLoginSuccess(BaseResponse):
-     detail = "link to Telegram bot"
-     description = "Ссылка на телеграм бота по которой должен перейти рользователь."
+     detail = "Телеграмм акааунт привязан успешно."
+     description = "Телеграмм аккаунт привязан успешно."
           
      
 class PortfolioSkinCreateSuccess(BaseResponse):

@@ -1,15 +1,12 @@
-import uuid
-import aiohttp
 import json
+import aiohttp
 
-from datetime import datetime
-from typing import Any
 
-from app.core import my_config
 from app.infrastracture.redis import RedisPool
+from app.core import my_config
 from app.responses.abstract import AbstractResponse
-from app.responses import HttpError, SkinNotFoundError, SteamInventoryBlocked
-from app.schemas import SteamItem, SkinModel
+from app.responses import HttpError, SteamInventoryBlocked
+from app.schemas import SteamItem, SkinsPage
 
 
 
@@ -42,10 +39,24 @@ class HttpSteamClient:
                     return (players.get("personaname"), players.get("avatarmedium"))
                return HttpError
                
+           
+     async def get_steam_inventory(
+          self, 
+          steamid: int, 
+          redis_session: RedisPool,
+          offset: int
+     ) -> SkinsPage | AbstractResponse:
+          skins = await redis_session.get(f"steam_inventory:{steamid}")
+          if skins is not None:
+               models = json.loads(skins)
+               return SkinsPage(
+                    pages=len(models),
+                    current_page=offset,
+                    skins=models[offset:5 + offset],
+                    skin_model_obj=SteamItem
+               )
                
-     async def get_steam_inventory(self, steamid: int) -> list[SteamItem] | AbstractResponse:
           url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
-          
           async with aiohttp.ClientSession() as session:
                for _ in range(3):
                     try:
@@ -61,95 +72,30 @@ class HttpSteamClient:
                else:
                     return HttpError
                
-               assets = data.get("assets")
                descriptions = data.get("descriptions")
-               
-               quantity_skins = {}
-               for item in assets:
-                    if item.get("classid") not in quantity_skins.keys():
-                         quantity_skins[item.get("classid")] = 0
-                    quantity_skins[item.get("classid")] += 1
-                    
-               inventory = []
+               inventory = set()
                for inventory_item in descriptions:
                     if inventory_item.get("marketable") == 1:
-                         inventory.append(
-                              SteamItem(
-                                   name=inventory_item.get("market_hash_name"),
-                                   avatar=self.icon_url + inventory_item.get("icon_url"),
-                                   quantity=quantity_skins.get(inventory_item.get("classid")),
+                         inventory.add(
+                              (
+                                   inventory_item.get("market_hash_name"),
+                                   self.icon_url + inventory_item.get("icon_url")
                               )
                          )
-               return inventory
-     
-     
-     async def skin_exists(
-          self,
-          skin_name: str
-     ) -> AbstractResponse | SkinModel:
-          url = f"https://steamfolio.com/Item/GetReactModel?name={skin_name.replace('&', '%26')}"
-          
-          async with aiohttp.ClientSession() as session:
-               for _ in range(3):
-                    try:
-                         async with session.get(url) as response:
-                              if response.status == 400:
-                                   return SkinNotFoundError
-                              data = await response.json()
-                              item = data["data"]["item"]
-                              
-                              if not item:
-                                   return SkinNotFoundError
-                              break
-                    except:
-                         continue
-               else:
-                    return HttpError
-               return SkinModel(
-                    name=item.get("marketHashName"),
-                    avatar=item.get("image"),
-                    price=round(item.get("safePrice"), 2)
-               )
-               
-               
-     async def skin_price_history(
-          self,
-          skin_name: str
-     ) -> list[dict[str, Any]]:
-          async with aiohttp.ClientSession() as session:
-               url = f"https://steamfolio.com/api/Graph/itemChart?name={skin_name.replace('&', '%26')}"
-               for _ in range(3):
-                    try:
-                         async with session.get(url) as response:
-                              json_data = await response.json()
-                              data = json_data["data"]["all"]["values"]
-                              volume = json_data["data"]["all"]["volumes"]
-                              break
-                    except:
-                         continue
-               else:
-                    return HttpError
-               
-          
-          price_history = []
-          for index, part in enumerate(data):
-               time = part["time"]
-               if isinstance(time, int):
-                    time = datetime.fromtimestamp(time)
                          
-               elif isinstance(time, str):
-                    time = datetime.fromisoformat(time)
-                    
-               price_history.append(
-                    {
-                         "item_id": uuid.uuid4(),
-                         "skin_name": skin_name,
-                         "price": round(float(part["value"]), 2),
-                         "volume": volume[index]["value"],
-                         "timestamp": time
-                    }
+          skins = [SteamItem(name=name, avatar=image) for name, image in inventory]
+          if skins:
+               await redis_session.set(
+                    name=f"steam_inventory:{steamid}",
+                    value=json.dumps([skin.model_dump_json() for skin in skins]),
+                    ex=1200
                )
-          return price_history
+          return SkinsPage(
+               pages=len(skins),
+               current_page=offset,
+               skins=skins[offset:5 + offset],
+               skin_model_obj=SteamItem
+          )
      
      
      async def get_skin_price(self, skin_name: str) -> tuple[float, int]:

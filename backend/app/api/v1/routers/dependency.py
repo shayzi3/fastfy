@@ -1,19 +1,25 @@
-from fastapi import Request
+from typing import Annotated
+from fastapi import Depends, Request
 
-from app.core.security import jwt_decode
-from app.responses import TokenError, isresponse
+from app.core.config import my_config
+from app.infrastracture.redis import RedisPool, get_redis_session
+from app.responses import AuthError, SecretTokenError
 from app.responses.abstract import AbstractResponse
-from app.schemas import TokenPayload
+from app.schemas import UserModel
 
 
 
-async def current_user(
-     request: Request
-) -> AbstractResponse | TokenPayload:
-     token = request.cookies.get("token")
-     if token is not None:
-          payload = await jwt_decode(token)
-          if isresponse(payload):
-               raise payload.exec()
-          return payload
-     raise TokenError.exec()
+async def current_user_uuid(
+     telegram_id: int,
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)]
+) -> AbstractResponse | UserModel:
+     user_uuid = await redis_session.get(str(telegram_id))
+     if user_uuid is not None:
+         return user_uuid
+     raise AuthError.exec()
+
+
+async def valide_secret_bot_token(request: Request) -> None:
+     secret_bot_token = request.headers.get("Secret-Bot-Token")
+     if secret_bot_token != my_config.secret_bot_token:
+          raise SecretTokenError.exec()

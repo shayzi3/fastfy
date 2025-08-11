@@ -7,8 +7,10 @@ class TelegramData(BaseModel):
      telegram_username: str
      
      
-     
 class SteamLoginUser(BaseModel):
      uuid: str
      steam_name: str
      steam_avatar: str
+     
+     
+     

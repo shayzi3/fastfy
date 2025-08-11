@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from redis.asyncio import Redis
 
 
@@ -8,10 +9,9 @@ class RedisPool(Redis):
           
      
      
-     
 async def get_redis_session():
      async with RedisPool() as pool:
           try:
                yield pool
           finally:
-               await pool.close()
+               await pool.aclose()

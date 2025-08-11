@@ -1,3 +1,4 @@
+from datetime import timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastracture.redis import RedisPool
@@ -27,6 +28,7 @@ class SkinService:
                session=async_session,
                redis_session=redis_session,
                redis_key=f"skin:{skin_name}",
+               selectload=True,
                name=skin_name
           )
           if result is None:
@@ -41,7 +43,7 @@ class SkinService:
           query: str,
           offset: int
      ) -> SkinsPage | AbstractResponse:
-          if offset % 10 != 0:
+          if offset % 5 != 0:
                return OffsetError
           
           result = await self.skin_repository.search_skin(
@@ -65,11 +67,17 @@ class SkinService:
                session=async_session,
                redis_session=redis_session,
                redis_key=f"skin_price_history:{skin_name}",
+               timestamps=[
+                    (timedelta(), "all"),
+                    (timedelta(days=365), "year"),
+                    (timedelta(days=30), "month"),
+                    (timedelta(days=1), "day")
+               ],
                skin_name=skin_name
           )
-          if result is None:
+          if not result:
                return SkinNotFoundError
-          return result
+          return SkinHistoryTimePartModel(**result)
           
           
           

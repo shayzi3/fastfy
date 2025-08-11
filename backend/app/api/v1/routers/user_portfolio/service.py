@@ -1,37 +1,33 @@
 import uuid
 
-from pydantic import UUID4
-
 from app.infrastracture.https.steam import HttpSteamClient
 from app.db.session import AsyncSession
 from app.responses.abstract import AbstractResponse
 from app.infrastracture.redis import RedisPool
-from app.schemas import SkinModel, UserPortfolioRelModel
+from app.schemas import  UserSkinRelModel
 from app.responses import (
      PortfolioSkinCreateSuccess, 
      SkinPortfolioAlreadyExists,
      PortfolioEmpty,
      SkinNotExists,
      SkinDeleteSuccess,
-     SkinChangeSuccess,
-     SkinNotFoundError
 )
 from app.db.repository import (
-     UserPortfolioRepository, 
+     UserSkinRepository, 
      SkinRepository, 
      SkinPriceHistoryRepository,
-     NotifyRepository
+     UserNotifyRepository,
+     SkinPriceInfoRepository
 )
-from .schema import CreateUpdateSkin 
-
 
 
 class UserPortfolioService:
      def __init__(self):
-          self.portfolio_repository = UserPortfolioRepository
+          self.portfolio_repository = UserSkinRepository
           self.skin_repository = SkinRepository
           self.skin_history_repository = SkinPriceHistoryRepository
-          self.notify_repository = NotifyRepository
+          self.skin_price_repository = SkinPriceInfoRepository
+          self.notify_repository = UserNotifyRepository
           self.steam_client = HttpSteamClient()
           
           
@@ -40,14 +36,14 @@ class UserPortfolioService:
           async_session: AsyncSession,
           redis_session: RedisPool,
           user_uuid: str
-     ) -> list[UserPortfolioRelModel] | AbstractResponse:
+     ) -> list[UserSkinRelModel] | AbstractResponse:
           skins = await self.portfolio_repository.read_all(
                session=async_session,
                redis_session=redis_session,
                redis_key=f"portfolio:{user_uuid}",
-               user_uuid=user_uuid
+               uuid=user_uuid
           )
-          if skins is None:
+          if not skins:
                return PortfolioEmpty
           return skins
      
@@ -55,155 +51,57 @@ class UserPortfolioService:
      async def delete_portfolio(
           self,
           async_session: AsyncSession,
-          redis_session: RedisPool,
           user_uuid: str,
-          skin_name: str | None,
-          item_id: UUID4 | None
+          skin_name: str,
      ) -> AbstractResponse:
-          delete_args = {
-               "skin_name": skin_name,
-               "user_uuid": user_uuid
-          } if skin_name is not None else {
-               "item_id": item_id
-          }
-          
           result = await self.portfolio_repository.delete(
                session=async_session,
-               redis_session=redis_session,
-               delete_redis_values=[
-                    f"portfolio:{user_uuid}", 
-                    f"portfolio_skin:{skin_name}@{user_uuid}"
-               ],
-               **delete_args
+               user_uuid=user_uuid,
+               skin_name=skin_name
           )
           if result is False:
                return SkinNotExists
           return SkinDeleteSuccess
-     
-     
-     async def patch_portfolio(
-          self,
-          async_session: AsyncSession,
-          redis_session: RedisPool,
-          user_uuid: str,
-          skin_data: CreateUpdateSkin,
-          skin_name: str | None,
-          item_id: UUID4 | None
-     ) -> AbstractResponse:
-          update_where = {
-               "skin_name": skin_name,
-               "user_uuid": user_uuid
-          } if skin_name is not None else {
-               "item_id": item_id
-          }
-          
-          skin_update = await self.portfolio_repository.update(
-               session=async_session,
-               where=update_where,
-               redis_session=redis_session,
-               delete_redis_values=[
-                    f"portfolio:{user_uuid}", 
-                    f"portfolio_skin:{skin_name}@{user_uuid}"
-               ],
-               **skin_data.non_nullable()
-          )
-          if skin_update is False:
-               return SkinNotFoundError
-          return SkinChangeSuccess
           
           
      async def post_portfolio(
           self,
           async_session: AsyncSession,
-          redis_session: RedisPool,
-          user_uuid: str,
-          skin_data: CreateUpdateSkin,
-          skin_name: str
-     ) -> AbstractResponse | SkinModel:
-          skin_exists =  await self.skin_repository.read(
-               session=async_session,
-               redis_session=redis_session,
-               redis_key=f"skin:{skin_name}",
-               name=skin_name
-          )
-          if skin_exists is not None:
-               skin_exists_in_portfolio = await self.portfolio_repository.read(
-                    session=async_session,
-                    redis_session=redis_session,
-                    redis_key=f"portfolio_skin:{skin_name}@{user_uuid}",
-                    skin_name=skin_name,
-                    user_uuid=user_uuid
-               )
-               if skin_exists_in_portfolio is None:
-                    await self.portfolio_repository.create(
-                         session=async_session,
-                         redis_session=redis_session,
-                         delete_redis_values=[f"portfolio:{user_uuid}"],
-                         data={
-                              "item_id": uuid.uuid4(),
-                              "user_uuid": user_uuid,
-                              "skin_name": skin_name,
-                              **skin_data.non_nullable()
-                         }
-                    )
-                    return PortfolioSkinCreateSuccess
-               return SkinPortfolioAlreadyExists
-          else:
-               return await self.steam_client.skin_exists(skin_name=skin_name)
-               
-               
-     async def _post_portfolio_create_skin(
-          self, 
-          async_session: AsyncSession,
-          redis_session: RedisPool,
-          skin: SkinModel,
-          skin_data: CreateUpdateSkin,
+          skin_name: str,
           user_uuid: str
-     ) -> None:
-          try:
-               await self.skin_repository.create(
-                    session=async_session,
-                    data=skin.model_dump()
-               )
-               skin_history = await self.steam_client.skin_price_history(
-                    skin_name=skin.name
-               )
-               await self.skin_history_repository.create(
-                    session=async_session,
-                    data=skin_history
-               )
+     ) -> AbstractResponse:
+          skin_exists_in_portfolio = await self.portfolio_repository.read(
+               session=async_session,
+               skin_name=skin_name,
+               user_uuid=user_uuid
+          )
+          if skin_exists_in_portfolio is None:
                await self.portfolio_repository.create(
                     session=async_session,
-                    redis_session=redis_session,
-                    delete_redis_values=[f"portfolio:{user_uuid}"],
-                    data={
-                         "item_id": uuid.uuid4(),
-                         "user_uuid": user_uuid,
-                         "skin_name": skin.name,
-                         **skin_data.non_nullable()
-                    }
+                    uuid=uuid.uuid4(),
+                    user_uuid=user_uuid,
+                    skin_name=skin_name
                )
-               await self.notify_repository.create(
+               return PortfolioSkinCreateSuccess
+          return SkinPortfolioAlreadyExists
+     
+     
+     async def _after_post_portfolio(
+          self,
+          async_session: AsyncSession,
+          skin_name: str
+     ) -> None:
+          skin_exists = await self.skin_price_repository.read(
+               session=async_session,
+               skin_name=skin_name
+          )
+          if skin_exists is None:
+               await self.skin_price_repository.create(
                     session=async_session,
-                    redis_session=redis_session,
-                    delete_redis_values=[f"notify_history:{user_uuid}"],
-                    data={
-                         "notify_id": uuid.uuid4(),
-                         "user_uuid": user_uuid,
-                         "text": f"Предмет {skin.name} добавлен успешно."
-                    }
+                    skin_name=skin_name
                )
-          except:
-               await self.notify_repository.create(
-                    session=async_session,
-                    redis_session=redis_session,
-                    delete_redis_values=[f"notify_history:{user_uuid}"],
-                    data={
-                         "notify_id": uuid.uuid4(),
-                         "user_uuid": user_uuid,
-                         "text": f"Ошибка при добавлении предмета {skin.name}. Попробуйте ещё раз позже."
-                    }
-               )
+     
+     
           
      
      

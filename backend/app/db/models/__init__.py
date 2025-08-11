@@ -3,5 +3,6 @@ from .models import (
      Users,
      Skins,
      SkinsPriceHistory,
-     UsersPortfolio
+     UsersSkins,
+     SkinsPriceInfo
 )

@@ -6,22 +6,22 @@ from app.responses import (
      isresponse,
      router_responses,
      SkinNotFoundError,
-     HttpError,
-     TokenError,
-     OffsetError
+     OffsetError,
+     AuthError,
+     SecretTokenError,
+     ServerError
 )
 from app.db.session import get_async_session, AsyncSession
 from app.infrastracture.redis import RedisPool, get_redis_session
-from app.api.v1.routers.dependency import current_user
 from app.schemas import SkinModel, SkinHistoryTimePartModel, SkinsPage
-from ..dependency import current_user
+from ..dependency import valide_secret_bot_token
 from .service import SkinService, get_skin_service
 
 
 skin_router = APIRouter(
      prefix="/api/v1",
-     tags=["Skin"],
-     dependencies=[Depends(current_user)]
+     tags=["Skin", "Bot"],
+     dependencies=[Depends(valide_secret_bot_token)]
 )
 
 
@@ -31,7 +31,9 @@ skin_router = APIRouter(
      response_model=SkinModel,
      responses=router_responses(
           SkinNotFoundError,
-          TokenError
+          AuthError,
+          SecretTokenError,
+          ServerError
      )
 )
 async def get_skin(
@@ -55,11 +57,13 @@ async def get_skin(
 @skin_router.get(
      path="/skin/search", 
      response_model=SkinsPage,
+     response_model_exclude={"skin_model_obj"},
      responses=router_responses(
-          HttpError,
           SkinNotFoundError,
-          TokenError,
-          OffsetError
+          OffsetError,
+          AuthError,
+          SecretTokenError,
+          ServerError
      )
 )
 async def search_skin(
@@ -86,7 +90,9 @@ async def search_skin(
      response_model=SkinHistoryTimePartModel,
      responses=router_responses(
           SkinNotFoundError,
-          TokenError
+          AuthError,
+          SecretTokenError,
+          ServerError
      )
 )
 async def skin_history(

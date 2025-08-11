@@ -3,46 +3,51 @@ from .base import BaseResponse
 
 
 class SteamLoginError(BaseResponse):
-     description = "Произошла ошибка при авторизации через Steam"
-     status_code = 403
+     description = "Произошла ошибка при авторизации через Steam."
+     detail = "Произошла ошибка при авторизации через Steam."
+     status_code = 400
      
 
 class HttpError(BaseResponse):
-     description = "Произошла ошибка при отправке запроса внешнему сервису."
-     detail = "TryLater"
+     description = "Повторите попытку позже."
+     detail = "Повторите попытку позже."
+     status_code = 403
+     
+     
+class TelegramLoginError(BaseResponse):
+     description = "Недействительный код."
+     detail = "Недействительный код."
+     status_code = 400
+     
+     
+class ServerError(BaseResponse):
+     description = "Ошибка на стороне сервера."
+     detail = "Ошибка на стороне сервера."
      status_code = 500
      
      
-     
-class TokenError(BaseResponse):
-     description = "Ошибка авторизации."
+class AuthError(BaseResponse):
+     description = "Нужно пройти повторную авторизацию."
      status_code = 401
      
      
-     
-class TelegramProcessError(BaseResponse):
-     description = "Ошибка привязки Telegram аккаунта. Ссылка устарела."
-     detail = "OldLink"
+class SecretTokenError(BaseResponse):
+     description = "Недействительный секретный код."
+     detail = "Недействительный секретный код."
      status_code = 400
      
      
      
 class UserNotFoundError(BaseResponse):
-     description = "Пользователь не найден."
-     status_code = 404
-     
-     
-     
-class ArgumentError(BaseResponse):
-     description = "В запросе не хватает аргументов."
-     status_code = 403
-     
+     description = "Запрашивемый пользователь не найден."
+     detail = "Запрашивемый пользователь не найден."
+     status_code = 404     
      
      
 class SkinNotFoundError(BaseResponse):
      description = "Скин не найден."
+     detail = "Скин не найден."
      status_code = 404
-     
      
      
 class SkinPortfolioAlreadyExists(BaseResponse):
@@ -62,16 +67,9 @@ class SkinNotExists(BaseResponse):
      status_code = 400
      
      
-     
 class NotifyEmpty(BaseResponse):
      description = "Уведомления пользователя не найдены."
      status_code = 404
-     
-     
-class RequestTimeoutError(BaseResponse):
-     detail = "RequestTimeoutError: time"
-     description = "Превышен лимит запросов."
-     status_code = 429
      
      
 class OffsetError(BaseResponse):
@@ -80,5 +78,5 @@ class OffsetError(BaseResponse):
      
      
 class SteamInventoryBlocked(BaseResponse):
-     detail = "Инвентарь заблокирован."
+     detail = "Невозможно получить скины пользователя."
      status_code = 400

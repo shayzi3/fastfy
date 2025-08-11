@@ -21,3 +21,8 @@ class AbstractResponse(Protocol):
      @classmethod
      def schema(cls) -> dict[int, dict]:
           raise NotImplementedError
+     
+     
+     @classmethod
+     def dublicate(cls) -> dict[str, dict[str, str]]:
+          raise NotImplementedError

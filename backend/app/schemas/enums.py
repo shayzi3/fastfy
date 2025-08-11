@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class UpdateMode(Enum):
-     HIGH = "high"
-     MEDIUM_WELL = "medium_well"
-     MEDIUM = "medium"
-     LOW = "low"
+     HIGH = auto()
+     MEDIUM_WELL = auto()
+     MEDIUM = auto()
+     LOW = auto()
      
      
      @classmethod
@@ -19,5 +19,9 @@ class UpdateMode(Enum):
           return cls.LOW
      
      
-     def __str__(self):
-          return self.value
+     
+class NotifyType(Enum):
+     INFO = auto()
+     SKIN = auto()
+     
+     

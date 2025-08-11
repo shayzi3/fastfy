@@ -28,48 +28,90 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
           redis_key: str | None = None,
           **read_args
      ) -> PYDANTIC_MODEL | PYDANTIC_MODELRel | None:
-          result = None
+          pydantic_model = cls.model.pydantic_model
+          if selectload is True:
+               pydantic_model = cls.model.pydantic_rel_model
+          
           if (redis_key is not None) and (redis_session is not None):
                result = await redis_session.get(redis_key)
                if result is not None:
-                    result = json.loads(result)
+                    return pydantic_model.model_validate(
+                         json.loads(result)
+                    )
                
-          if result is None:
-               sttm = select(cls.model).filter_by(**read_args)
-               if selectload is True:
-                    sttm = sttm.options(selectinload(cls.model.selectinload()))
-                    
-               result = await session.execute(sttm)
-               result = result.scalar()
-               if result is None:
-                    return None
-          
-          return_model = cls.model.pydantic_model
+          sttm = select(cls.model).filter_by(**read_args)
           if selectload is True:
-               return_model = cls.model.pydantic_rel_model
+               sttm = sttm.options(*cls.model.selectinload())
+                    
+          result = await session.execute(sttm)
+          result = result.scalar()
+          if result is None:
+               return None
           
-          pydantic_model = return_model.model_validate(result, from_attributes=True)
+          pydantic_model = pydantic_model.model_validate(result, from_attributes=True)
           if (redis_key is not None) and (redis_session is not None):
                await redis_session.set(
                     name=redis_key,
                     value=pydantic_model.model_dump_json(),
-                    ex=1000
+                    ex=60
                )
           return pydantic_model
+     
+     
+     @classmethod
+     async def read_all(
+          cls,
+          session: AsyncSession,
+          redis_session: RedisPool | None = None,
+          selectload: bool = False,
+          redis_key: str | None = None,
+          **read_all_args
+     ) -> list[PYDANTIC_MODEL] | list[PYDANTIC_MODELRel]:
+          pydantic_model = cls.model.pydantic_model
+          if selectload is True:
+               pydantic_model = cls.model.pydantic_rel_model
+          
+          if (redis_key is not None) and (redis_session is not None):
+               value = await redis_session.get(redis_key)
+               if value is not None:
+                    values = json.loads(value)
+                    return [
+                         pydantic_model.model_validate(json.loads(obj)) for obj in values
+                    ]
+          sttm = (
+               select(cls.model).
+               filter_by(**read_all_args).
+               order_by(cls.model.order_by())
+          )
+          if selectload is True:
+               sttm = sttm.options(*cls.model.selectinload())
+               
+          result = await session.execute(sttm)
+          result = result.scalars().all()
+               
+          models = [
+               pydantic_model.model_validate(obj, from_attributes=True)
+               for obj in result
+          ]
+          if models:
+               if (redis_key is not None) and (redis_session is not None):
+                    await redis_session.set(
+                         name=redis_key,
+                         value=json.dumps(
+                              [pymodel.model_dump_json() for pymodel in models]
+                         ),
+                         ex=60
+                    )
+          return models
      
      
      @classmethod
      async def create(
           cls,
           session: AsyncSession,
-          redis_session: RedisPool | None = None,
-          delete_redis_values: list[str] = [],
-          data: list[dict] | dict = [], # many data for insert
+          data: list[dict] = [], # many data for insert
           **insert_args
      ) -> Any:
-          if (redis_session is not None) and (delete_redis_values):
-               await redis_session.delete(*delete_redis_values)
-               
           if not data:
                sttm = (
                     insert(cls.model).
@@ -93,10 +135,8 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
           cls,
           session: AsyncSession,
           where: dict[str, Any],
-          redis_session: RedisPool | None = None,
-          delete_redis_values: list[str] = [],
           **update_args
-     ) -> bool:
+     ) -> Any:
           sttm = (
                update(cls.model).
                filter_by(**where).
@@ -104,33 +144,25 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
                returning(cls.model.returning())
           )
           result = await session.execute(sttm)
-          result = result.scalar()
           await session.commit()
           
-          if (redis_session is not None) and (delete_redis_values):
-               await redis_session.delete(*delete_redis_values)
-          return True if result else False
-               
-               
+          return result.scalar()
+     
+     
      @classmethod
      async def delete(
           cls,
           session: AsyncSession,
-          redis_session: RedisPool | None = None,
-          delete_redis_values: list[str] = [],
           **delete_where
-     ) -> bool:
+     ) -> Any:
           sttm = (
                delete(cls.model).
                filter_by(**delete_where).
                returning(cls.model.returning())
           )
           result = await session.execute(sttm)
-          result = result.scalar()
           await session.commit()
           
-          if (redis_session is not None) and (delete_redis_values):
-               await redis_session.delete(*delete_redis_values)
-          return True if result else False               
+          return result.scalar()   
                
                

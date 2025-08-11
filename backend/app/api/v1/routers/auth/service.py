@@ -1,26 +1,23 @@
-from typing import Any
 import uuid
+
+from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from steam_openid import SteamOpenID
 
 from app.core import my_config
+from app.core.utils import id_with_symbols
 from app.responses.abstract import AbstractResponse
-from app.db.repository import UserRepository, NotifyRepository
+from app.db.repository import UserRepository, UserNotifyRepository
 from app.infrastracture.https.steam import HttpSteamClient
 from app.infrastracture.redis import RedisPool
 from app.responses import (
      SteamLoginError, 
      isresponse,
-     TelegramProcessError,
-     TelegramProcessSuccess
+     TelegramLoginSuccess,
+     TelegramLoginError
 )
-from app.core.utils import (
-     generate_payload_deeplink,
-     generate_processid,
-     async_generate_id
-)
-from .schema import SteamLoginUser
+from .schema import TelegramData
 
 
 
@@ -33,10 +30,10 @@ class AuthService:
           )
           self.steam_http_client = HttpSteamClient()
           self.user_repository = UserRepository
-          self.notify_repository = NotifyRepository
+          self.notify_repository = UserNotifyRepository
           
           
-     async def steam_redirest(self) -> str:
+     async def steam_login(self) -> str:
           return self.openid.get_redirect_url()
      
      
@@ -44,8 +41,8 @@ class AuthService:
           self, 
           query_params: Any,
           async_session: AsyncSession,
-          redis_session: RedisPool
-     ) -> AbstractResponse | SteamLoginUser:
+          redis_pool: RedisPool
+     ) -> AbstractResponse | str:
           steamid = self.openid.validate_results(query_params)
           if steamid is None:
                return SteamLoginError
@@ -61,81 +58,46 @@ class AuthService:
                     return steamdata
                
                steam_name, steam_avatar = steamdata
-               uuid_ = await self.user_repository.create(
+               await self.user_repository.create(
                     session=async_session,
                     uuid=uuid.uuid4(),
                     steam_id=steamid,
                     steam_name=steam_name,
                     steam_avatar=steam_avatar
                )
-          session = await async_generate_id()
-          await redis_session.set(
-               name=f"session:{session}",
-               value=str(uuid_) if exists is None else exists.uuid,
+          id = await id_with_symbols()
+          await redis_pool.set(
+               name=id,
+               value=steamid,
                ex=120
           )
-          return session
-          
+          return id
      
-     async def telegram_login(
-          self, 
-          user_uuid: str, 
-          redis_session: RedisPool
-     ) -> str:
-          payload_deeplink = await generate_payload_deeplink()
-          processid = await generate_processid()
-          
-          async with redis_session.pipeline() as pool:
-               await pool.set(
-                    name=payload_deeplink,
-                    value=processid,
-                    ex=180
-               )
-               await pool.set(
-                    name=processid,
-                    value=user_uuid,
-                    ex=180
-               )
-               await pool.execute()
-               
-          deeplink = my_config.bot_deep_link + payload_deeplink
-          return deeplink
-          
-          
+     
      async def telegram_processing(
           self,
-          async_session: AsyncSession,
-          redis_session: RedisPool,
-          processid: str,
-          telegram_id: int,
-          telegram_username: str
-     ):
-          user_uuid = await redis_session.get(processid)
-          if user_uuid is not None:
-               await redis_session.delete(processid)
-               await self.user_repository.update(
-                    session=async_session,
-                    redis_session=redis_session,
-                    delete_redis_values=[f"user:{user_uuid}", f"user_rel:{user_uuid}"],
-                    where={"uuid": user_uuid},
-                    telegram_id=telegram_id,
-                    telegram_username=telegram_username
-               )
-               await self.notify_repository.create(
-                    session=async_session,
-                    redis_session=redis_session,
-                    delete_redis_values=[f"notify_history:{user_uuid}"],
-                    data={
-                         "notify_id": uuid.uuid4(),
-                         "user_uuid": user_uuid,
-                         "text": f"Телеграм аккаунт {telegram_username} привязан успешно."
-                    }
-               )
-               return TelegramProcessSuccess
-          return TelegramProcessError
+          code: str,
+          data: TelegramData,
+          session: AsyncSession,
+          redis_session: RedisPool
+     ) -> AbstractResponse:
+          steam_id = await redis_session.get(code)
+          if steam_id is not None:
+               await redis_session.delete(code)
                
+               user_uuid = await self.user_repository.update(
+                    session=session,
+                    where={"steam_id": int(steam_id)},
+                    **data.model_dump()
+               )
+               if user_uuid:
+                    await redis_session.set(
+                         name=str(data.telegram_id),
+                         value=str(user_uuid)
+                    )
+               return TelegramLoginSuccess
+          return TelegramLoginError
           
-               
           
      
      

@@ -5,10 +5,11 @@ from .schema import (
      SkinPriceHistoryModel,
      SkinHistoryModel,
      SkinHistoryTimePartModel,
-     UserRelModel,
-     UserPortfolioModel,
      SteamItem,
-     UserPortfolioRelModel,
      UserNotifyModel,
      SkinsPage,
+     SkinPriceInfoModel,
+     UserSkinModel,
+     UserSkinRelModel,
+     UserNotifyRelModel
 )
