@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
 from app.core import my_config
@@ -17,3 +18,8 @@ async def get_async_session():
                raise ex
           finally:
                await async_session.close()
+               
+               
+               
+session_asynccontext = asynccontextmanager(get_async_session)
+               

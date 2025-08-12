@@ -10,5 +10,6 @@ from .schema import (
      SkinPriceInfoModel,
      UserSkinModel,
      UserSkinRelModel,
-     UserNotifyRelModel
+     UserNotifyRelModel,
+     SkinPriceVolume
 )

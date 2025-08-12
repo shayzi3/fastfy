@@ -146,7 +146,18 @@ class SkinsPage(BaseModel):
 
 class SteamItem(BaseModel):
      name: str
-     avatar: str     
+     avatar: str
+     
+     
+     
+class SkinPriceVolume(BaseModel):
+     price: str | float
+     volume: str | int
+     
+     
+     def model_post_init(self, _: Any):
+          self.volume = int(self.volume.replace(",", "")) # 1,456 -> 1456
+          self.price = float(self.price.split()[0].replace(",", ".")) # 1249,50 руб -> 1249.50
      
      
 

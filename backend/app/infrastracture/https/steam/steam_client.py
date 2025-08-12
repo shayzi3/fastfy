@@ -1,12 +1,14 @@
 import json
-import aiohttp
+import httpx
+import asyncio
 
+from fake_useragent import UserAgent
 
 from app.infrastracture.redis import RedisPool
 from app.core import my_config
 from app.responses.abstract import AbstractResponse
 from app.responses import HttpError, SteamInventoryBlocked
-from app.schemas import SteamItem, SkinsPage
+from app.schemas import SteamItem, SkinsPage, SkinPriceVolume
 
 
 
@@ -14,24 +16,45 @@ from app.schemas import SteamItem, SkinsPage
 class HttpSteamClient:
      def __init__(self):
           self.api_key = my_config.steam_api_key
+          self.ua = UserAgent(platforms=["desktop"])
           self.icon_url = "https://community.akamai.steamstatic.com/economy/image/"
+          
+          
+     def headers(self) -> dict[str, str]:
+          return {
+               "User-Agent": self.ua.random,
+               "Accept": "*/*",
+               "Accept-Encoding": "gzip, deflate, br",
+               "Connection": "keep-alive"
+          }
      
      
-     async def get_steam_profile(self, steamids: int) -> tuple[str, str] | AbstractResponse:
+     async def get_steam_profile(
+          self, 
+          steam_id: int, 
+          time: int = 0,
+          mode: str = "request"
+     ) -> tuple[str, str] | AbstractResponse:
+          await asyncio.sleep(time)
+          
           url = (
-               "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/" +
-               f"?key={self.api_key}&steamids={steamids}"
+               "https://api.steampowered.com/"
+               "ISteamUser/GetPlayerSummaries/v0002/"
+               f"?key={self.api_key}&steamids={steam_id}"
           )
-          async with aiohttp.ClientSession() as session:
-               for _ in range(3):
-                    try:
-                         async with session.get(url) as response:
-                              data = await response.json()
-                              break
-                    except:
-                         continue
-               else:
-                    return HttpError
+          async with httpx.AsyncClient(headers=self.headers()) as session:
+               try:
+                    response = await session.get(url)
+                    data = await response.json()
+               except:
+                    if mode == "request":
+                         return await self.get_steam_profile(
+                              steam_id=steam_id,
+                              time=5,
+                              mode="reload"
+                         )
+                    else:
+                         return HttpError
                
                response = data.get("response")
                if "players" in response and response.get("players"):
@@ -44,7 +67,9 @@ class HttpSteamClient:
           self, 
           steamid: int, 
           redis_session: RedisPool,
-          offset: int
+          offset: int,
+          time: int = 0,
+          mode: str = "request"
      ) -> SkinsPage | AbstractResponse:
           skins = await redis_session.get(f"steam_inventory:{steamid}")
           if skins is not None:
@@ -56,21 +81,28 @@ class HttpSteamClient:
                     skin_model_obj=SteamItem
                )
                
+          await asyncio.sleep(time)
+               
           url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
-          async with aiohttp.ClientSession() as session:
-               for _ in range(3):
-                    try:
-                         async with session.get(url) as response:
-                              if response.status in [401, 403]:
-                                   # Profile incognito, invetory incognito, inventory empty, User unauthorized
-                                   return SteamInventoryBlocked
-                              
-                              data = await response.json()
-                              break
-                    except:
-                         continue
-               else:
-                    return HttpError
+          async with httpx.AsyncClient(headers=self.headers()) as session:
+               try:
+                    response = await session.get(url)
+                    if response.status in [401, 403]:
+                         # Profile incognito, invetory incognito, inventory empty, User unauthorized
+                         return SteamInventoryBlocked
+                         
+                    data = await response.json()
+               except:
+                    if mode == "request":
+                         return await self.get_steam_inventory(
+                              steamid=steamid,
+                              redis_session=redis_session,
+                              offset=offset,
+                              mode="reload",
+                              time=5
+                         )
+                    else:
+                         return HttpError
                
                descriptions = data.get("descriptions")
                inventory = set()
@@ -88,7 +120,7 @@ class HttpSteamClient:
                await redis_session.set(
                     name=f"steam_inventory:{steamid}",
                     value=json.dumps([skin.model_dump_json() for skin in skins]),
-                    ex=1200
+                    ex=7200
                )
           return SkinsPage(
                pages=len(skins),
@@ -98,16 +130,30 @@ class HttpSteamClient:
           )
      
      
-     async def get_skin_price(self, skin_name: str) -> tuple[float, int]:
+     async def get_skin_price(
+          self, 
+          skin_name: str, 
+          time: int = 0
+     ) -> SkinPriceVolume | AbstractResponse:
+          if time >= 60:
+               time = 0
+          
+          await asyncio.sleep(time)
+          
           url = (
                "https://steamcommunity.com/market/"
-               f"priceoverview/?currency=1&appid=730&market_hash_name={skin_name.replace('&', '%26')}"
+               "priceoverview/?currency=5&appid=730"
+               f"&market_hash_name={skin_name.replace('&', '%26')}"
           )
-          async with aiohttp.ClientSession() as session:
-               async with session.get(url) as response:
-                    if response.status != 200:
-                         return HttpError
+          async with httpx.AsyncClient(headers=self.headers()) as session:
+               try:
+                    response = await session.get(url)
                     data = await response.json()
+               except:
+                    return await self.get_skin_price(
+                         skin_name=skin_name,
+                         time=time + 2
+                    )
                     
           price = data.get("lowest_price")
           if price is None:
@@ -118,9 +164,8 @@ class HttpSteamClient:
           volume = data.get("volume")
           if volume is None:
                return HttpError
+          return SkinPriceVolume(price=price, volume=volume)
           
-          # price = $0.50, volume = '101,456'
-          return (float(price[1:])), int(volume.replace(",", ""))
                
                
                
