@@ -52,9 +52,10 @@ class UserService:
           async_session: AsyncSession,
           redis_session: RedisPool,
           user_uuid: str,
-          offset: int
+          offset: int,
+          limit: int
      ) -> SkinsPage | AbstractResponse:
-          if offset % 5 != 0:
+          if offset % limit != 0:
                return OffsetError
           
           user = await self.user_repository.read(
@@ -69,7 +70,8 @@ class UserService:
           result = await self.http_steam_client.get_steam_inventory(
                steamid=user.steam_id,
                redis_session=redis_session,
-               offset=offset
+               offset=offset,
+               limit=limit
           )
           if isresponse(result):
                return result

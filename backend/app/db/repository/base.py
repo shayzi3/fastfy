@@ -80,9 +80,11 @@ class BaseRepository(Generic[PYDANTIC_MODEL, PYDANTIC_MODELRel]):
                     ]
           sttm = (
                select(cls.model).
-               filter_by(**read_all_args).
                order_by(cls.model.order_by())
           )
+          if read_all_args:
+               sttm = sttm.filter_by(**read_all_args)
+               
           if selectload is True:
                sttm = sttm.options(*cls.model.selectinload())
                

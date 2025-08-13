@@ -23,16 +23,18 @@ class SkinRepository(
           session: AsyncSession,
           redis_session: RedisPool,
           query: str,
-          offset: int
+          offset: int,
+          limit: int
      ) -> SkinsPage:
-          value = await redis_session.get(f"{query}~{offset}")
+          value = await redis_session.get(f"{query}~{offset}~{limit}")
           if value:
                data = json.loads(value)
                return SkinsPage(
-                    skins=data[:1],
+                    skins=data[:-1],
                     current_page=offset,
                     pages=int(data[-1]),
-                    skin_model_obj=SkinModel
+                    skin_model_obj=SkinModel,
+                    skins_on_page=limit
                )
                
           where_params = [
@@ -43,7 +45,7 @@ class SkinRepository(
           sttm_skins = (
                select(Skins).
                where(*where_params).
-               limit(5).
+               limit(limit).
                offset(offset)
           )
           sttm_count_skins = (
@@ -68,7 +70,7 @@ class SkinRepository(
                dump_models.append(result_count)
                
                await redis_session.set(
-                    name=f"{query}~{offset}",
+                    name=f"{query}~{offset}~{limit}",
                     value=json.dumps(dump_models),
                     ex=120
                )
@@ -76,5 +78,6 @@ class SkinRepository(
                pages=result_count,
                current_page=offset,
                skins=pd_models,
-               skin_model_obj=SkinModel
+               skin_model_obj=SkinModel,
+               skins_on_page=limit
           )

@@ -37,16 +37,18 @@ class UserPortfolioService:
           async_session: AsyncSession,
           redis_session: RedisPool,
           user_uuid: str,
-          offset: int
+          offset: int,
+          limit: int
      ) -> SkinsPage | AbstractResponse:
-          if offset % 5 != 0:
+          if offset % limit != 0:
                return OffsetError
                
           skins = await self.portfolio_repository.read_paginate(
                session=async_session,
                redis_session=redis_session,
                user_uuid=user_uuid,
-               offset=offset
+               offset=offset,
+               limit=limit
           )
           if not skins.skins:
                return PortfolioEmpty

@@ -23,22 +23,24 @@ class UserSkinRepository(
           session: AsyncSession,
           redis_session: RedisPool,
           user_uuid: str,
-          offset: int
+          offset: int,
+          limit: int
      ) -> SkinsPage:
-          value = await redis_session.get(f"user_portfolio:{user_uuid}~{offset}")
+          value = await redis_session.get(f"user_portfolio:{user_uuid}~{offset}~{limit}")
           if value is not None:
                models = json.loads(value)
                return SkinsPage(
                     pages=int(models[-1]),
                     current_page=offset,
-                    skins=models[:1],
-                    skin_model_obj=UserSkinRelModel
+                    skins=models[:-1],
+                    skin_model_obj=UserSkinRelModel,
+                    skins_on_page=limit
                )
                
           sttm_models = (
                select(UsersSkins).
                filter_by(user_uuid=user_uuid).
-               limit(5).
+               limit(limit).
                offset(offset).
                options(*UsersSkins.selectinload())
           )
@@ -61,7 +63,7 @@ class UserSkinRepository(
                dump_models.append(result_pages)
                
                await redis_session.set(
-                    name=f"user_portfolio:{user_uuid}~{offset}",
+                    name=f"user_portfolio:{user_uuid}~{offset}~{limit}",
                     value=json.dumps(dump_models),
                     ex=120
                )
@@ -69,7 +71,8 @@ class UserSkinRepository(
                pages=result_pages,
                current_page=offset,
                skins=models,
-               skin_model_obj=UserSkinRelModel
+               skin_model_obj=UserSkinRelModel,
+               skins_on_page=limit
           )
      
      

@@ -29,18 +29,20 @@ class SkinPriceHistoryRepository(
      async def filter_timestamp(
           cls, 
           session: AsyncSession,
-          redis_session: RedisPool,
-          redis_key: str,
+          
           timestamps: list[tuple[timedelta, str]],
+          redis_session: RedisPool | None = None,
+          redis_key: str | None = None,
           **where_args
-     ) -> dict[str, Any]:
-          redis_result = await redis_session.get(redis_key)
-          if redis_result:
-               data = json.loads(redis_result)
-               return {
-                    key: [SkinHistoryModel.model_validate(json.loads(obj)) for obj in value]
-                    for key, value in data.items()
-               }
+     ) -> dict[str, list[SkinHistoryModel]]:
+          if (redis_session is not None) and (redis_key is not None):
+               redis_result = await redis_session.get(redis_key)
+               if redis_result:
+                    data = json.loads(redis_result)
+                    return {
+                         key: [SkinHistoryModel.model_validate(json.loads(obj)) for obj in value]
+                         for key, value in data.items()
+                    }
                
           sttm = (
                select(
@@ -74,13 +76,14 @@ class SkinPriceHistoryRepository(
                     if skin[3:][index] is True:
                          sort_by_labels[label].append(price_history_obj)
                
-          dumping_to_json = {
-               key: [model.model_dump_json() for model in value]
-               for key, value in sort_by_labels.items()
-          }
-          await redis_session.set(
-               name=redis_key,
-               value=json.dumps(dumping_to_json),
-               ex=120
-          )
+          if (redis_session is not None) and (redis_key is not None):
+               dumping_to_json = {
+                    key: [model.model_dump_json() for model in value]
+                    for key, value in sort_by_labels.items()
+               }
+               await redis_session.set(
+                    name=redis_key,
+                    value=json.dumps(dumping_to_json),
+                    ex=120
+               )
           return sort_by_labels

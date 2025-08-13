@@ -84,25 +84,26 @@ class UpdateNotifyBase:
           last_skin_price: float | None,
           last_update: str
      ) -> None:
-          async with session_asynccontext() as async_session:
-               users_skins = await UserSkinRepository.read_all(
-                    session=async_session,
-                    selectload=True,
-                    skin_name=skin_name
-               )
-               if users_skins and last_skin_price is not None:
-                    await asyncio.gather(
-                         *[
-                              self._user_notify_process(
-                                   user_skin=user_skin,
-                                   skin_name=skin_name,
-                                   new_skin_price=new_skin_price,
-                                   time_update=time_update,
-                                   last_skin_price=last_skin_price,
-                                   last_update=last_update
-                              ) for user_skin in users_skins
-                         ]
+          if last_skin_price is not None:
+               async with session_asynccontext() as async_session:
+                    users_skins = await UserSkinRepository.read_all(
+                         session=async_session,
+                         selectload=True,
+                         skin_name=skin_name
                     )
+                    if users_skins:
+                         await asyncio.gather(
+                              *[
+                                   self._user_notify_process(
+                                        user_skin=user_skin,
+                                        skin_name=skin_name,
+                                        new_skin_price=new_skin_price,
+                                        time_update=time_update,
+                                        last_skin_price=last_skin_price,
+                                        last_update=last_update
+                                   ) for user_skin in users_skins
+                              ]
+                         )
                     
                     
      async def _user_notify_process(

@@ -86,7 +86,6 @@ async def patch_skin_percent_user(
 @user_router.get(
      path="/user/SteamInventory", 
      response_model=SkinsPage,
-     response_model_exclude={"skin_model_obj"},
      responses=router_responses(
           HttpError,
           SteamInventoryBlocked,
@@ -102,13 +101,15 @@ async def get_steam_inventory(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
-     offset: int = Query(ge=0)
+     offset: int = Query(ge=0),
+     limit: int = Query(ge=1, le=50)
 ):
      result = await service.get_user_steam_inventory(
           async_session=async_session,
           redis_session=redis_session,
           user_uuid=current_user_uuid,
-          offset=offset
+          offset=offset,
+          limit=limit
      )
      if isresponse(result):
           return result.response()

@@ -6,7 +6,7 @@ from math import ceil
 from uuid import UUID
 from typing import  Any
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .enums import UpdateMode, NotifyType
 
@@ -37,10 +37,11 @@ class SkinModel(BaseModel):
      
      
      def model_post_init(self, _: Any):
-          self.image = (
-               "https://community.fastly.steamstatic.com"
-               "/economy/image/" + self.image
-          )
+          if "steamstatic" not in self.image:
+               self.image = (
+                    "https://community.fastly.steamstatic.com"
+                    "/economy/image/" + self.image
+               )
 
 
      
@@ -126,15 +127,13 @@ class SkinsPage(BaseModel):
      pages: int
      current_page: int
      skins: list[Any]
-     skin_model_obj: Any # parent class BaseModel
+     skin_model_obj: Any = Field(exclude=True) # parent class BaseModel
+     skins_on_page: int = Field(default=5, exclude=True)
      
      
      def model_post_init(self, _: Any):
-          self.current_page = (
-               1 if self.current_page == 0
-               else (self.current_page // 5) + 1
-          )
-          self.pages = ceil(self.pages / 5)
+          self.current_page = (self.current_page // self.skins_on_page) + 1
+          self.pages = ceil(self.pages / self.skins_on_page)
           
           if len(self.skins) > 0:
                if isinstance(self.skins[0], str):

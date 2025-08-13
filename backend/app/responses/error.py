@@ -69,7 +69,7 @@ class NotifyEmpty(BaseResponse):
      
      
 class OffsetError(BaseResponse):
-     description = "Параметр offset должен делиться на 5 без остатка."
+     description = "Параметр offset должен делиться на limit без остатка."
      status_code = 403
      
      

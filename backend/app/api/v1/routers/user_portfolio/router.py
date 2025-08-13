@@ -40,20 +40,22 @@ user_portfolio_router = APIRouter(
           SecretTokenError,
           OffsetError
      ),
-     summary="Полчуние портфолио текущего аккаунта."
+     summary="Получение портфолио текущего аккаунта."
 )
 async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      service: Annotated[UserPortfolioService,Depends(get_user_portfolio_service)],
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
-     offset: int = Query(ge=0)
+     offset: int = Query(ge=0),
+     limit: int = Query(ge=1, le=50)
 ):
      result = await service.get_portfolio(
           async_session=async_session,
           redis_session=redis_session,
           user_uuid=current_user_uuid,
-          offset=offset
+          offset=offset,
+          limit=limit
      )
      if isresponse(result):
           return result.response()

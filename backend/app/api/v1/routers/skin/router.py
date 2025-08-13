@@ -58,7 +58,6 @@ async def get_skin(
 @skin_router.get(
      path="/skin/search", 
      response_model=SkinsPage,
-     response_model_exclude={"skin_model_obj"},
      responses=router_responses(
           SkinNotFoundError,
           OffsetError,
@@ -73,13 +72,15 @@ async def search_skin(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      query: str,
-     offset: int = Query(ge=0)
+     offset: int = Query(ge=0),
+     limit: int = Query(ge=1, le=50)
 ):
      result = await service.search_skin(
           async_session=async_session,
           redis_session=redis_session,
           query=query,
-          offset=offset
+          offset=offset,
+          limit=limit
      )
      if isresponse(result):
           return result.response()

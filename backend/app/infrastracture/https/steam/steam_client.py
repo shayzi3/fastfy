@@ -68,6 +68,7 @@ class HttpSteamClient:
           steamid: int, 
           redis_session: RedisPool,
           offset: int,
+          limit: int,
           time: int = 0,
           mode: str = "request"
      ) -> SkinsPage | AbstractResponse:
@@ -77,8 +78,9 @@ class HttpSteamClient:
                return SkinsPage(
                     pages=len(models),
                     current_page=offset,
-                    skins=models[offset:5 + offset],
-                    skin_model_obj=SteamItem
+                    skins=models[offset:limit + offset],
+                    skin_model_obj=SteamItem,
+                    skins_on_page=limit
                )
                
           await asyncio.sleep(time)
@@ -125,8 +127,9 @@ class HttpSteamClient:
           return SkinsPage(
                pages=len(skins),
                current_page=offset,
-               skins=skins[offset:5 + offset],
-               skin_model_obj=SteamItem
+               skins=skins[offset:limit + offset],
+               skin_model_obj=SteamItem,
+               skins_on_page=limit
           )
      
      

@@ -5,10 +5,11 @@ from datetime import timedelta
 from app.schemas.enums import UpdateMode
 
 from .base import UpdateNotifyBase
+from ..base import AbstarctTask
 
 
 
-class UpdateNotifyTask(UpdateNotifyBase):
+class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
      def __init__(self):
           super().__init__()
           

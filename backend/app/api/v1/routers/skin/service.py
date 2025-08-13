@@ -41,16 +41,18 @@ class SkinService:
           async_session: AsyncSession,
           redis_session: RedisPool,
           query: str,
-          offset: int
+          offset: int,
+          limit: int
      ) -> SkinsPage | AbstractResponse:
-          if offset % 5 != 0:
+          if offset % limit != 0:
                return OffsetError
           
           result = await self.skin_repository.search_skin(
                session=async_session,
                redis_session=redis_session,
                query=query,
-               offset=offset
+               offset=offset,
+               limit=limit
           )
           if not result.skins:
                return SkinNotFoundError
