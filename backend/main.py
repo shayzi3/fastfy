@@ -18,7 +18,8 @@ async def lifespan(_: FastAPI):
           UpdateNotifyTask(),
           UpdatePriceAtDaysTask()
      )
-     
+     yield
+
 
 
 app = FastAPI(
@@ -32,7 +33,8 @@ app = FastAPI(
           "привязан отправленный telegram_id. По ключу telegram_id в Redis "
           "хранится uuid."
      ),
-     version="1.0.0"
+     version="1.0.0",
+     lifespan=lifespan
 )
 include_routers(app)
 

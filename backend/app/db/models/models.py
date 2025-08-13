@@ -2,16 +2,6 @@ from datetime import datetime
 from sqlalchemy import BigInteger, Index, ForeignKey, UUID, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.schemas import (
-     UserModel,
-     SkinModel,
-     SkinPriceInfoModel,
-     SkinPriceHistoryModel,
-     UserSkinRelModel,
-     UserSkinModel,
-     UserNotifyModel,
-     UserNotifyRelModel
-)
 from app.schemas.enums import UpdateMode, NotifyType
 
 from .base import Base
@@ -32,7 +22,6 @@ class Users(UsersMixin, Base):
           Index("idx_steam_id", "steam_id"),
           Index("idx_telegram_id", "telegram_id")
      )
-     pydantic_model = UserModel
      
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      steam_id: Mapped[int] = mapped_column(BigInteger)
@@ -44,10 +33,8 @@ class Users(UsersMixin, Base):
      created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
 
-     
 class Skins(SkinsMixin, Base):
      __tablename__ = "skins"
-     pydantic_model = SkinModel
      
      name: Mapped[str] = mapped_column(primary_key=True)
      image: Mapped[str] = mapped_column()
@@ -64,7 +51,6 @@ class SkinsPriceInfo(SkinsPriceInfoMixin, Base):
           Index("idx_skin_name", "skin_name"),
           Index("idx_update_mode", "update_mode"),
      )
-     pydantic_model = SkinPriceInfoModel
      
      skin_name: Mapped[str] = mapped_column(ForeignKey("skins.name", ondelete="CASCADE"), primary_key=True)
      update_mode: Mapped[UpdateMode] = mapped_column(default=UpdateMode.HIGH)
@@ -82,7 +68,6 @@ class SkinsPriceHistory(SkinsPriceHistoryMixin, Base):
           Index("idx_skin_history_name", "skin_name"),
           Index("idx_skin_history_timestamp", "timestamp")
      )
-     pydantic_model = SkinPriceHistoryModel
      
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      skin_name: Mapped[str] = mapped_column(ForeignKey("skins.name", ondelete="CASCADE"))
@@ -98,8 +83,6 @@ class UsersSkins(UsersSkinsMixin, Base):
           Index("idx_portfolio_user_uuid", "user_uuid"),
           Index("idx_portfolio_skin_name", "skin_name")
      )
-     pydantic_model = UserSkinModel
-     pydantic_rel_model = UserSkinRelModel
      
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
@@ -115,8 +98,6 @@ class UsersNotify(UsersNotifyMixin, Base):
      __table_args__ = (
           Index("idx_notify_user_uuid", "user_uuid"),
      )
-     pydantic_model = UserNotifyModel
-     pydantic_rel_model = UserNotifyRelModel
      
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))

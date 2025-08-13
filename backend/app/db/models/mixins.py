@@ -1,7 +1,22 @@
 from sqlalchemy.orm import selectinload
 
+from app.schemas import (
+     UserModel,
+     SkinModel,
+     SkinPriceInfoModel,
+     SkinPriceHistoryModel,
+     UserSkinRelModel,
+     UserSkinModel,
+     UserNotifyModel,
+     UserNotifyRelModel
+)
+
+
 
 class Mixin:
+     pydantic_model = None
+     pydantic_rel_model = None
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -21,6 +36,8 @@ class Mixin:
 
 
 class UsersMixin(Mixin):
+     pydantic_model = UserModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -36,6 +53,8 @@ class UsersMixin(Mixin):
      
      
 class SkinsMixin(Mixin):
+     pydantic_model = SkinModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -47,11 +66,11 @@ class SkinsMixin(Mixin):
      def order_by(cls):
           return cls.name
      
-     
-     
-     
+
 
 class SkinsPriceInfoMixin(Mixin):
+     pydantic_model = SkinPriceInfoModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -66,6 +85,8 @@ class SkinsPriceInfoMixin(Mixin):
      
      
 class SkinsPriceHistoryMixin(Mixin):
+     pydantic_model = SkinPriceHistoryModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -80,6 +101,9 @@ class SkinsPriceHistoryMixin(Mixin):
      
      
 class UsersSkinsMixin(Mixin):
+     pydantic_model = UserSkinModel
+     pydantic_rel_model = UserSkinRelModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
           
@@ -96,10 +120,13 @@ class UsersSkinsMixin(Mixin):
           return cls.skin_name
      
      
+     
 class UsersNotifyMixin(Mixin):
+     pydantic_model = UserNotifyModel
+     pydantic_rel_model = UserNotifyRelModel
+     
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
-          
           
      @classmethod
      def order_by(cls):
