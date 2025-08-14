@@ -11,11 +11,16 @@ class BaseResponse(AbstractResponse):
      detail = ""
      status_code = 200
           
+          
+     @classmethod
+     def content_detail(cls) -> str:
+          return cls.detail if cls.detail else cls.__name__
+     
      
      @classmethod
      def response(cls) -> JSONResponse:
           return JSONResponse(
-               content={"detail": cls.detail},
+               content={"detail": cls.content_detail()},
                status_code=cls.status_code
           )
           
@@ -23,7 +28,7 @@ class BaseResponse(AbstractResponse):
      def exec(cls) -> HTTPException:
           return HTTPException(
                status_code=cls.status_code,
-               detail=cls.detail
+               detail=cls.content_detail()
           )
           
      @classmethod
@@ -34,7 +39,7 @@ class BaseResponse(AbstractResponse):
                     "content": {
                          "application/json": {
                               "example": {
-                                   cls.__name__: {"detail": cls.detail if cls.detail else cls.__name__}
+                                   cls.__name__: {"detail": cls.content_detail()}
                               }
                          }
                     }
@@ -43,14 +48,12 @@ class BaseResponse(AbstractResponse):
           
      @classmethod
      def dublicate(cls) -> dict[str, dict[str, str]]:
-          return {cls.__name__: {"detail": cls.detail if cls.detail else cls.__name__}}   
+          return {cls.__name__: {"detail": cls.content_detail()}}   
      
           
      
 def isresponse(obj: type) -> bool:
      return isinstance(obj, type) and AbstractResponse in obj.mro()
-
-
 
 
 def router_responses(*values: AbstractResponse) -> dict[int, dict]:
@@ -65,7 +68,8 @@ def router_responses(*values: AbstractResponse) -> dict[int, dict]:
                     ["example"]
                     .update(resp.dublicate())
                )
-          responses.update(schema)
+          else:
+               responses.update(schema)
      return responses
 
 
