@@ -29,7 +29,6 @@ class SkinPriceHistoryRepository(
      async def filter_timestamp(
           cls, 
           session: AsyncSession,
-          
           timestamps: list[tuple[timedelta, str]],
           redis_session: RedisPool | None = None,
           redis_key: str | None = None,

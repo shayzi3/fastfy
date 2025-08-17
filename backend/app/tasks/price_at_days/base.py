@@ -2,6 +2,7 @@ import asyncio
 
 from datetime import timedelta
 
+from app.logger import logger
 from app.schemas import SkinPriceInfoModel
 from app.db.session import session_asynccontext
 from app.db.repository import (
@@ -15,6 +16,8 @@ class UpdatePriceAtDaysBase:
      
      
      async def _process(self) -> None:
+          logger.task_price_at_days.info("START PROCESS")
+          
           async with session_asynccontext() as async_session:
                skins = await SkinPriceInfoRepository.read_all(
                     session=async_session
@@ -32,6 +35,8 @@ class UpdatePriceAtDaysBase:
           self,
           skin: SkinPriceInfoModel
      ) -> None:
+          logger.task_price_at_days.info(f"START PROCESS FOR SKIN {skin.skin_name}")
+          
           async with session_asynccontext() as async_session:
                skin_price_history = await SkinPriceHistoryRepository.filter_timestamp(
                     session=async_session,
@@ -75,5 +80,6 @@ class UpdatePriceAtDaysBase:
                          where={"skin_name": skin.skin_name},
                          **update_data_at_skin
                     )
+                    logger.task_price_at_days.info(f"SAVE DATA AT SKIN {skin.skin_name}")
                     
                

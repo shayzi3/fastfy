@@ -3,7 +3,11 @@ import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from app.api.v1.routers import include_routers, include_exception_handlers
+from app.api.v1 import (
+     include_routers, 
+     include_exception_handlers,
+     include_middleware
+)
 from app.tasks import (
      run_tasks,
      UpdateNotifyTask,
@@ -38,6 +42,7 @@ app = FastAPI(
 )
 include_routers(app)
 include_exception_handlers(app)
+include_middleware(app)
 
 
 

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import RedirectResponse, HTMLResponse
 
 from app.responses import (
@@ -88,7 +88,7 @@ async def steam_processing(
 )
 async def telegram_processing(
      code: str,
-     data: TelegramData,
+     data: Annotated[TelegramData, Form()],
      session: Annotated[AsyncSession, Depends(get_async_session)],
      redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      service: Annotated[AuthService, Depends(get_auth_service)]

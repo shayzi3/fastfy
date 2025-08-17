@@ -3,7 +3,6 @@ import json
 from typing import Any, Generic, TypeVar
 from pydantic import BaseModel
 from sqlalchemy import insert, delete, update, select
-from sqlalchemy.orm import selectinload
 
 from app.db.session import AsyncSession
 from app.infrastracture.redis import RedisPool

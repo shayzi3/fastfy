@@ -31,10 +31,7 @@ class NotificationService:
           async_session: AsyncSession,
           notifies: list[UserNotifyModel]
      ) -> None:
-          update_notify = []
-          for nt in notifies:
-               update_notify.append(nt.uuid)
-               
+          update_notify = [nt.uuid for nt in notifies]
           await self.notify_repository.update_all(
                session=async_session,
                data=update_notify

@@ -14,6 +14,7 @@ from app.db.repository import (
      UserSkinRepository
 )
 from app.responses import isresponse
+from app.logger import logger
 
 
 
@@ -23,6 +24,8 @@ class UpdateNotifyBase:
      
      
      async def _process(self, mode: UpdateMode) -> None:
+          logger.task_update_notify.info(f"START PROCESS. MODE: {mode}")
+          
           async with session_asynccontext() as async_session:
                skins = await SkinPriceInfoRepository.read_all(
                     session=async_session,
@@ -33,11 +36,13 @@ class UpdateNotifyBase:
                     
                     
      async def _skin_process(self, skin: SkinPriceInfoModel) -> None:
+          logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} START")
+          
           new_skin_price = await self.steam_http_client.get_skin_price(
                skin_name=skin.skin_name
           )
           if isresponse(new_skin_price):
-               return
+               return logger.task_update_notify.info(f"ERROR GET PRICE FOR SKIN {skin.skin_name}")
           
           time_update = datetime.now()
           update_mode = UpdateMode.filter_mode(
@@ -66,6 +71,7 @@ class UpdateNotifyBase:
                          }
                     ]
                )
+               logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} SUCCESS")
                
           await self._notify_process(
                skin_name=skin.skin_name,
@@ -84,6 +90,10 @@ class UpdateNotifyBase:
           last_skin_price: float | None,
           last_update: str
      ) -> None:
+          logger.task_update_notify.info(
+               f"NOTIFY FOR SKIN {skin_name} START: {last_skin_price is not None}"
+          )
+          
           if last_skin_price is not None:
                async with session_asynccontext() as async_session:
                     users_skins = await UserSkinRepository.read_all(
@@ -118,7 +128,11 @@ class UpdateNotifyBase:
           skin_change_percent = ((new_skin_price - last_skin_price) / last_skin_price) * 100
           price_mode = "поднялась" if skin_change_percent > 0 else "опустилась"
           
-          if user_skin.user.skin_percent >= skin_change_percent:
+          if (
+               (skin_change_percent >= user_skin.user.skin_percent) 
+               or
+               (skin_change_percent*-1 >= user_skin.user.skin_percent)
+          ):
                async with session_asynccontext() as async_session:
                     await UserNotifyRepository.create(
                          session=async_session,
@@ -127,13 +141,15 @@ class UpdateNotifyBase:
                                    "uuid": uuid.uuid4(),
                                    "user_uuid": user_skin.user.uuid,
                                    "text": (
-                                        f"С {last_update} и до {time_update} цена на предмет {skin_name} "
-                                        f"{price_mode} на {skin_change_percent}%"
+                                        
                                    ),
                                    "notify_type": NotifyType.SKIN
                               }
                          ]
                     )
+               logger.task_update_notify.info(
+                    f"NEW NOTIFY WITH SKIN {skin_name} FOR USER {user_skin.user.uuid}"
+               )
           
           
           

@@ -2,6 +2,8 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
+from app.responses import ServerError
+
 
 
 async def exception_validation_error(
@@ -17,3 +19,8 @@ async def exception_validation_error(
           status_code=422
      )
      
+     
+async def exception_server_error(
+     request: Request
+) -> JSONResponse:
+     return ServerError.response()

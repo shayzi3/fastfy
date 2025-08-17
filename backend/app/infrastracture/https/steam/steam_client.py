@@ -9,6 +9,7 @@ from app.core import my_config
 from app.responses.abstract import AbstractResponse
 from app.responses import HttpError, SteamInventoryBlocked
 from app.schemas import SteamItem, SkinsPage, SkinPriceVolume
+from app.logger import logger
 
 
 
@@ -46,7 +47,7 @@ class HttpSteamClient:
                try:
                     response = await session.get(url)
                     data = await response.json()
-               except:
+               except Exception as ex:
                     if mode == "request":
                          return await self.get_steam_profile(
                               steam_id=steam_id,
@@ -54,12 +55,18 @@ class HttpSteamClient:
                               mode="reload"
                          )
                     else:
+                         logger.http_steam.error(
+                              msg=f"{response.status_code} {response.text}", 
+                              exc_info=True
+                         )
                          return HttpError
                
-               response = data.get("response")
-               if "players" in response and response.get("players"):
-                    players = response.get("players")[0]
+               response_data = data.get("response")
+               if "players" in response_data and response_data.get("players"):
+                    players = response_data.get("players")[0]
                     return (players.get("personaname"), players.get("avatarmedium"))
+               
+               logger.http_steam.error(msg=f"{response.status_code} {response.text}")
                return HttpError
                
            
@@ -94,7 +101,7 @@ class HttpSteamClient:
                          return SteamInventoryBlocked
                          
                     data = await response.json()
-               except:
+               except Exception as ex:
                     if mode == "request":
                          return await self.get_steam_inventory(
                               steamid=steamid,
@@ -104,6 +111,10 @@ class HttpSteamClient:
                               time=5
                          )
                     else:
+                         logger.http_steam.error(
+                              msg=f"{response.status_code} {response.text}", 
+                              exc_info=True
+                         )
                          return HttpError
                
                descriptions = data.get("descriptions")
@@ -162,10 +173,12 @@ class HttpSteamClient:
           if price is None:
                price = data.get("median_price")
                if price is None:
+                    logger.http_steam.error(msg=f"{response.status_code} {response.text}")
                     return HttpError
           
           volume = data.get("volume")
           if volume is None:
+               logger.http_steam.error(msg=f"{response.status_code} {response.text}")
                return HttpError
           return SkinPriceVolume(price=price, volume=volume)
           
