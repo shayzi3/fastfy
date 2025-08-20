@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+from typing import Generic, TypeVar
+
 from math import ceil
 from uuid import UUID
 from typing import  Any
@@ -11,7 +13,7 @@ from pydantic import BaseModel, Field
 from .enums import UpdateMode, NotifyType
 
 
-
+SKIN_ON_PAGE = TypeVar("SKIN_ON_PAGE", bound=BaseModel)
 
 
 
@@ -83,7 +85,7 @@ class UserSkinModel(BaseModel):
          
 class UserSkinRelModel(UserSkinModel):
      skin: SkinModel
-     user: UserModel
+     user: UserModel = Field(exclude=True)
          
          
          
@@ -123,12 +125,12 @@ class SkinHistoryTimePartModel(BaseModel):
 
      
      
-class SkinsPage(BaseModel):
+class SkinsPage(BaseModel, Generic[SKIN_ON_PAGE]):
      pages: int
-     current_page: int
-     skins: list[Any]
-     skin_model_obj: Any = Field(exclude=True) # parent class BaseModel
-     skins_on_page: int = Field(default=5, exclude=True)
+     current_page: int # offset
+     skins: list[SKIN_ON_PAGE]
+     skin_model_obj: SKIN_ON_PAGE = Field(exclude=True) # parent class BaseModel
+     skins_on_page: int = Field(default=5, exclude=True) # limit
      
      
      def model_post_init(self, _: Any):

@@ -24,5 +24,5 @@ class AbstractResponse(Protocol):
      
      
      @classmethod
-     def dublicate(cls) -> dict[str, dict[str, str]]:
+     def content_detail(cls) -> str:
           raise NotImplementedError

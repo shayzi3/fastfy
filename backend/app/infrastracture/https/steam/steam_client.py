@@ -16,7 +16,6 @@ from app.logger import logger
 
 class HttpSteamClient:
      def __init__(self):
-          self.api_key = my_config.steam_api_key
           self.ua = UserAgent(platforms=["desktop"])
           self.icon_url = "https://community.akamai.steamstatic.com/economy/image/"
           
@@ -38,14 +37,17 @@ class HttpSteamClient:
      ) -> tuple[str, str] | AbstractResponse:
           await asyncio.sleep(time)
           
-          url = (
-               "https://api.steampowered.com/"
-               "ISteamUser/GetPlayerSummaries/v0002/"
-               f"?key={self.api_key}&steamids={steam_id}"
-          )
-          async with httpx.AsyncClient(headers=self.headers()) as session:
+          url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
+          async with httpx.AsyncClient() as session:
                try:
-                    response = await session.get(url)
+                    response = await session.get(
+                         url=url,
+                         params={
+                              "key": my_config.steam_api_key,
+                              "steamids": steam_id
+                         },
+                         headers=self.headers()
+                    )
                     data = await response.json()
                except Exception as ex:
                     if mode == "request":
@@ -69,7 +71,7 @@ class HttpSteamClient:
                logger.http_steam.error(msg=f"{response.status_code} {response.text}")
                return HttpError
                
-           
+          
      async def get_steam_inventory(
           self, 
           steamid: int, 
@@ -93,26 +95,27 @@ class HttpSteamClient:
           await asyncio.sleep(time)
                
           url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
-          async with httpx.AsyncClient(headers=self.headers()) as session:
+          async with httpx.AsyncClient() as session:
                try:
-                    response = await session.get(url)
-                    if response.status in [401, 403]:
+                    response = await session.get(url=url, headers=self.headers())
+                    if response.status_code in [401, 403]:
                          # Profile incognito, invetory incognito, inventory empty, User unauthorized
                          return SteamInventoryBlocked
                          
-                    data = await response.json()
+                    data = response.json()
                except Exception as ex:
                     if mode == "request":
                          return await self.get_steam_inventory(
                               steamid=steamid,
                               redis_session=redis_session,
                               offset=offset,
+                              limit=limit,
                               mode="reload",
                               time=5
                          )
                     else:
                          logger.http_steam.error(
-                              msg=f"{response.status_code} {response.text}", 
+                              msg=response.status_code, 
                               exc_info=True
                          )
                          return HttpError
@@ -154,14 +157,18 @@ class HttpSteamClient:
           
           await asyncio.sleep(time)
           
-          url = (
-               "https://steamcommunity.com/market/"
-               "priceoverview/?currency=5&appid=730"
-               f"&market_hash_name={skin_name.replace('&', '%26')}"
-          )
-          async with httpx.AsyncClient(headers=self.headers()) as session:
+          url = "https://steamcommunity.com/market/priceoverview/"
+          async with httpx.AsyncClient() as session:
                try:
-                    response = await session.get(url)
+                    response = await session.get(
+                         url=url,
+                         params={
+                              "currency": 5,
+                              "appid": 730,
+                              "market_hash_name": skin_name
+                         },
+                         headers=self.headers()
+                    )
                     data = await response.json()
                except:
                     return await self.get_skin_price(

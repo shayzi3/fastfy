@@ -1,0 +1,217 @@
+INFO 2025-08-19 09:39:49,706 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=51142) TO http://127.0.0.1:8085/
+INFO 2025-08-19 09:39:49,775 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=51142) TO http://127.0.0.1:8085/favicon.ico
+INFO 2025-08-19 09:39:52,782 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=51142) TO http://127.0.0.1:8085/docs
+INFO 2025-08-19 09:39:53,194 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=51142) TO http://127.0.0.1:8085/openapi.json
+INFO 2025-08-19 09:42:43,953 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=62634) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+INFO 2025-08-19 09:43:52,446 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=61105) TO http://127.0.0.1:8085/api/v1/auth/steam/login
+INFO 2025-08-19 09:43:59,133 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=50807) TO http://127.0.0.1:8085/api/v1/auth/steam/login
+INFO 2025-08-19 09:43:59,695 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=50807) TO http://127.0.0.1:8085/api/v1/auth/steam/login
+INFO 2025-08-19 09:44:48,288 [logs.py (dispatch)] REQUEST FROM Address(host='178.35.95.232', port=0) TO https://4glewt-178-35-95-232.ru.tuna.am/api/v1/auth/steam/processing?janrain_nonce=2025-08-19T06%3A44%3A00ZQB3FUr&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=id_res&openid.op_endpoint=https%3A%2F%2Fsteamcommunity.com%2Fopenid%2Flogin&openid.claimed_id=https%3A%2F%2Fsteamcommunity.com%2Fopenid%2Fid%2F76561199207982533&openid.identity=https%3A%2F%2Fsteamcommunity.com%2Fopenid%2Fid%2F76561199207982533&openid.return_to=https%3A%2F%2F4glewt-178-35-95-232.ru.tuna.am%2Fapi%2Fv1%2Fauth%2Fsteam%2Fprocessing%3Fjanrain_nonce%3D2025-08-19T06%253A44%253A00ZQB3FUr&openid.response_nonce=2025-08-19T06%3A44%3A04ZW8WiVAWqxt6zmfgjjZke2wEPoiU%3D&openid.assoc_handle=1234567890&openid.signed=signed%2Cop_endpoint%2Cclaimed_id%2Cidentity%2Creturn_to%2Cresponse_nonce%2Cassoc_handle&openid.sig=8V6XCGwSD1BbSkjGZnNC0XXQwFM%3D
+INFO 2025-08-19 09:44:49,760 [logs.py (dispatch)] REQUEST FROM Address(host='178.35.95.232', port=0) TO https://4glewt-178-35-95-232.ru.tuna.am/favicon.ico
+INFO 2025-08-19 09:45:44,324 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53514) TO http://127.0.0.1:8085/api/v1/auth/telegram/processing?code=rdPYLkvcel
+INFO 2025-08-19 09:45:48,247 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53514) TO http://127.0.0.1:8085/api/v1/auth/telegram/processing?code=rdPYLkvcel
+INFO 2025-08-19 09:46:38,834 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53525) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+ERROR 2025-08-19 09:46:39,674 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\backend\app\api\v1\routers\user\router.py", line 107, in get_steam_inventory
+    result = await service.get_user_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\backend\app\api\v1\routers\user\service.py", line 70, in get_user_steam_inventory
+    result = await self.http_steam_client.get_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\FastFy\backend\app\infrastracture\https\steam\steam_client.py", line 106, in get_steam_inventory
+    return await self.get_steam_inventory(
+TypeError: HttpSteamClient.get_steam_inventory() missing 1 required positional argument: 'limit'
+INFO 2025-08-19 09:50:48,412 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=62404) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+ERROR 2025-08-19 09:50:49,526 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\router.py", line 107, in get_steam_inventory
+    result = await service.get_user_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\service.py", line 70, in get_user_steam_inventory
+    result = await self.http_steam_client.get_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\infrastracture\https\steam\steam_client.py", line 106, in get_steam_inventory
+    return await self.get_steam_inventory(
+TypeError: HttpSteamClient.get_steam_inventory() missing 1 required positional argument: 'limit'
+INFO 2025-08-19 09:51:29,128 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=62416) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+ERROR 2025-08-19 09:51:29,764 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\router.py", line 107, in get_steam_inventory
+    result = await service.get_user_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\service.py", line 70, in get_user_steam_inventory
+    result = await self.http_steam_client.get_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\infrastracture\https\steam\steam_client.py", line 106, in get_steam_inventory
+    return await self.get_steam_inventory(
+TypeError: HttpSteamClient.get_steam_inventory() missing 1 required positional argument: 'limit'
+INFO 2025-08-19 09:52:58,600 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=62430) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+ERROR 2025-08-19 09:52:59,208 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\router.py", line 107, in get_steam_inventory
+    result = await service.get_user_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user\service.py", line 70, in get_user_steam_inventory
+    result = await self.http_steam_client.get_steam_inventory(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\infrastracture\https\steam\steam_client.py", line 106, in get_steam_inventory
+    return await self.get_steam_inventory(
+TypeError: HttpSteamClient.get_steam_inventory() missing 1 required positional argument: 'limit'
+INFO 2025-08-19 10:03:19,212 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63023) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+INFO 2025-08-19 10:05:24,854 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63038) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=0&limit=10
+INFO 2025-08-19 10:08:57,320 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63054) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=0&limit=10
+INFO 2025-08-19 10:09:43,009 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63064) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=0&limit=10
+INFO 2025-08-19 10:09:53,380 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63068) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=10&limit=10
+INFO 2025-08-19 10:09:57,763 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63068) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=1&limit=10
+INFO 2025-08-19 10:10:06,460 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63072) TO http://127.0.0.1:8085/api/v1/user/SteamInventory?telegram_id=1&offset=0&limit=1
+INFO 2025-08-19 13:50:32,500 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=55215) TO http://127.0.0.1:8085/docs
+INFO 2025-08-19 13:50:32,647 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=55215) TO http://127.0.0.1:8085/openapi.json

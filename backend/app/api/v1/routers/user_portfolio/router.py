@@ -32,7 +32,7 @@ user_portfolio_router = APIRouter(
 
 @user_portfolio_router.get(
      path="/portfolio", 
-     response_model=SkinsPage,
+     response_model=SkinsPage[UserSkinRelModel],
      responses=router_responses(
           PortfolioEmpty,
           AuthError,

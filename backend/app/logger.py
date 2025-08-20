@@ -18,44 +18,36 @@ class BaseLogger(logging.Logger):
           
 class FactoryBaseLogger:
      
-     @property
-     def current_day(self) -> str:
+     def __current_day(self) -> str:
           return datetime.now().strftime("%Y-%m-%d")
      
      
      @property
      def api(self) -> BaseLogger:
           return BaseLogger(
-               name="APP",
-               filename=f"data/logs/app/{self.current_day}.txt"
-          )
-          
-     @property
-     def db(self) -> BaseLogger:
-          return BaseLogger(
-               name="DB",
-               filename=f"data/logs/db/{self.current_day}.txt"
+               name="API",
+               filename=f"data/logs/api/{self.__current_day()}.txt"
           )
           
      @property
      def http_steam(self) -> BaseLogger:
           return BaseLogger(
-               name="HTTP STEAM",
-               filename=f"data/logs/http_steam/{self.current_day}.txt"
+               name="HTTP_STEAM",
+               filename=f"data/logs/http_steam/{self.__current_day()}.txt"
           )
           
      @property
      def task_update_notify(self) -> BaseLogger:
           return BaseLogger(
-               name="TASK UPDATE NOTIFY",
-               filename=f"data/logs/task_update_notify/{self.current_day}.txt"
+               name="TASK_UPDATE_NOTIFY",
+               filename=f"data/logs/task_update_notify/{self.__current_day()}.txt"
           )
           
      @property
      def task_price_at_days(self) -> BaseLogger:
           return BaseLogger(
-               name="TASK PRICE AT DAYS",
-               filename=f"data/logs/task_price_at_days/{self.current_day}.txt"
+               name="TASK_PRICE_AT_DAYS",
+               filename=f"data/logs/task_price_at_days/{self.__current_day()}.txt"
           )
           
           

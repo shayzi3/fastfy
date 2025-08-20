@@ -39,16 +39,12 @@ class BaseResponse(AbstractResponse):
                     "content": {
                          "application/json": {
                               "example": {
-                                   cls.__name__: {"detail": cls.content_detail()}
+                                   "detail": [cls.content_detail()]
                               }
                          }
                     }
                }
-          }  
-          
-     @classmethod
-     def dublicate(cls) -> dict[str, dict[str, str]]:
-          return {cls.__name__: {"detail": cls.content_detail()}}   
+          }
      
           
      
@@ -66,7 +62,8 @@ def router_responses(*values: AbstractResponse) -> dict[int, dict]:
                     ["content"]
                     ["application/json"]
                     ["example"]
-                    .update(resp.dublicate())
+                    ["detail"]
+                    .append(resp.content_detail())
                )
           else:
                responses.update(schema)

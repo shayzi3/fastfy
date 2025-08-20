@@ -15,7 +15,7 @@ from app.responses import (
 )
 from app.db.session import AsyncSession, get_async_session
 from app.infrastracture.redis import RedisPool, get_redis_session
-from app.schemas import UserModel, SkinsPage
+from app.schemas import UserModel, SkinsPage, SteamItem
 from ..dependency import current_user_uuid, valide_secret_bot_token
 from .service import UserService, get_user_service
 
@@ -85,7 +85,7 @@ async def patch_skin_percent_user(
      
 @user_router.get(
      path="/user/SteamInventory", 
-     response_model=SkinsPage,
+     response_model=SkinsPage[SteamItem],
      responses=router_responses(
           HttpError,
           SteamInventoryBlocked,

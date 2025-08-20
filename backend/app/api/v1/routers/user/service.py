@@ -66,12 +66,12 @@ class UserService:
           )
           if user is None:
                return UserNotFoundError
-          
+
           result = await self.http_steam_client.get_steam_inventory(
                steamid=user.steam_id,
                redis_session=redis_session,
                offset=offset,
-               limit=limit
+               limit=limit,
           )
           if isresponse(result):
                return result

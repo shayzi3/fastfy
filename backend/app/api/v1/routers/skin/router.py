@@ -57,7 +57,7 @@ async def get_skin(
      
 @skin_router.get(
      path="/skin/search", 
-     response_model=SkinsPage,
+     response_model=SkinsPage[SkinModel],
      responses=router_responses(
           SkinNotFoundError,
           OffsetError,
