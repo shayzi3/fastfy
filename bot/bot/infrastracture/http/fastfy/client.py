@@ -1,6 +1,6 @@
-from .auth import AuthClient
-from .skin import SkinClient
-from .user import UserClient
+from .clients.auth import AuthClient
+from .clients.skin import SkinClient
+from .clients.user import UserClient
 
 
 
@@ -19,4 +19,4 @@ class FastFyClient:
      
      @property
      def user(self) -> UserClient:
-          return UserClient()     
+          return UserClient()

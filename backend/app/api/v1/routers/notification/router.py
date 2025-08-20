@@ -10,7 +10,7 @@ from app.responses import (
      SecretTokenError
 )
 from app.db.session import AsyncSession, get_async_session
-from app.schemas import UserNotifyModel
+from app.schemas import UserNotifyRelModel
 from app.api.v1.routers.dependency import valide_secret_bot_token
 
 from .service import NotificationService, get_notification_service
@@ -26,7 +26,7 @@ notification_router = APIRouter(
 
 @notification_router.get(
      path="/notify", 
-     response_model=list[UserNotifyModel],
+     response_model=list[UserNotifyRelModel],
      responses=router_responses(
           NotifyEmpty,
           AuthError,

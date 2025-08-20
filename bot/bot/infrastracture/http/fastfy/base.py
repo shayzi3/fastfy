@@ -1,14 +1,9 @@
 import httpx
 
-from typing import Literal, Any, TypeVar
-from pydantic import BaseModel
+from typing import Literal, Any
 
 from bot.core.config import Config
 from bot.schemas.fastfy import ResponseObjectSchema
-
-
-
-M = TypeVar("M", bound=BaseModel)
 
 
 
@@ -31,7 +26,7 @@ class HttpClient:
      
      async def request(
           self,
-          method: Literal["GET", "POST", "PATCH"],
+          method: Literal["GET", "POST", "PATCH", "DELETE"],
           url: str,
           query_arguments: dict[str, Any] = {},
           form_data_arguments: dict[str, Any] = {}

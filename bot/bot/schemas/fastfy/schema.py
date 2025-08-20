@@ -9,7 +9,7 @@ SKINS_ON_PAGE = TypeVar("SKINS_ON_PAGE", bound=BaseModel)
 
 class ResponseObjectSchema(BaseModel):
      status_code: int
-     obj: dict[str, Any]
+     obj: dict[str, Any] | list[dict[str, Any]]
 
 
 class DetailSchema(BaseModel):
@@ -33,7 +33,7 @@ class SkinSchema(BaseModel):
      image: str
      skin_price_info: _SkinPriceInfoSchema | None
      
-     
+
      
 class SkinsOnPageSchema(BaseModel, Generic[SKINS_ON_PAGE]):
      pages: int
@@ -59,4 +59,39 @@ class SkinPriceHistorySchema(BaseModel):
      year: list[_HistortSchema]
      month: list[_HistortSchema]
      day: list[_HistortSchema]
+     
+     
+     
+class UserSchema(BaseModel):
+     uuid: str
+     steam_id: int
+     steam_name: str
+     steam_avatar: str
+     telegram_id: int
+     telegram_username: str
+     skin_percent: int
+     created_at: str
+     
+     
+     
+class SkinSteamInventorySchema(BaseModel):
+     name: str
+     avatar: str
+     
+     
+class UserPortfolioSkinSchema(BaseModel):
+     uuid: str
+     user_uuid: str
+     skin_name: str
+     skin: SkinSchema
+     
+     
+class UserNotifySchema(BaseModel):
+     uuid: str
+     user_uuid: str
+     text: str
+     notify_type: int
+     created_at: str
+     is_read: bool
+     user: UserSchema
      

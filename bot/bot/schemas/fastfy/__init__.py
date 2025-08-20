@@ -6,7 +6,11 @@ from .schema import (
      SkinSchema,
      ResponseObjectSchema,
      SkinsOnPageSchema,
-     SkinPriceHistorySchema
+     SkinPriceHistorySchema,
+     UserSchema,
+     SkinSteamInventorySchema,
+     UserPortfolioSkinSchema,
+     UserNotifySchema
 )
 
 

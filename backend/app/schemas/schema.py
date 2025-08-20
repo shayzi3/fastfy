@@ -103,7 +103,7 @@ class UserNotifyModel(BaseModel):
          
       
          
-class UserNotifyRelModel(BaseModel):
+class UserNotifyRelModel(UserNotifyModel):
      user: UserModel
 
 
