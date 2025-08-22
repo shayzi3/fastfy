@@ -148,7 +148,7 @@ class UpdateNotifyBase:
                          ]
                     )
                logger.task_update_notify.info(
-                    f"NEW NOTIFY WITH SKIN {skin_name} FOR USER {user_skin.user.uuid}"
+                    f"NEW NOTIFY WITH SKIN {skin_name} FOR USER {user_skin.user.uuid} {user_skin.user.telegram_username}"
                )
           
           
