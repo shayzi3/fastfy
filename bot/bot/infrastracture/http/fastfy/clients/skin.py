@@ -4,6 +4,7 @@ from bot.schemas.fastfy import (
      SkinsOnPageSchema,
      SkinPriceHistorySchema
 )
+from bot.logger import logger
 from ..base import HttpClient
 
 
@@ -19,11 +20,13 @@ class SkinClient(HttpClient):
                url=self.url_builder(path="/skin"),
                query_arguments={"skin_name": skin_name}
           )
+          if response.status_code in [422, 500]:
+               logger.fastfy_client.error(msg=f"Get skin error {response.status_code} {response.obj.get("detail")}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+          
           if response.status_code == 404:
                return DetailSchema(detail=f"Скин {skin_name} не найден.")
           
-          if "detail" in response.obj.keys():
-               return DetailSchema.model_validate(response.obj)
           return SkinSchema.model_validate(response.obj)
      
      
@@ -42,12 +45,13 @@ class SkinClient(HttpClient):
                     "query": query
                }
           )
+          if response.status_code in [422, 500]:
+               logger.fastfy_client.error(msg=f"Search skins error {response.status_code} {response.obj.get("detail")}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+          
           if response.status_code == 404:
                return DetailSchema(detail=f"По запросу {query} ничего не найдено.")
           
-          if "detail" in response.obj.keys():
-               return DetailSchema.model_validate(response.obj)
-
           return SkinsOnPageSchema(
                pages=response.obj.get("pages"),
                current_page=response.obj.get("current_page"),
@@ -59,17 +63,19 @@ class SkinClient(HttpClient):
      async def price_history_skin(
           self,
           skin_name: str
-     ) -> DetailSchema | None:
+     ) -> DetailSchema | SkinPriceHistorySchema:
           response = await self.request(
                method="GET",
                url=self.url_builder("/skin/history"),
                query_arguments={"skin_name": skin_name}
           )
+          if response.status_code in [422, 500]:
+               logger.fastfy_client.error(msg=f"Price history skin error {response.status_code} {response.obj.get("detail")}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+          
           if response.status_code == 404:
                return DetailSchema(detail=f"Скин {skin_name} не найден.")
           
-          if "detail" in response.obj.keys():
-               return DetailSchema.model_validate(response.obj)
           return SkinPriceHistorySchema.model_validate(response.obj)
           
                

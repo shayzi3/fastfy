@@ -1,4 +1,6 @@
 from bot.schemas.fastfy import DetailSchema
+
+from bot.logger import logger
 from ..base import HttpClient
 
 
@@ -24,4 +26,11 @@ class AuthClient(HttpClient):
                     "telegram_username": telegram_username
                }
           )
-          return DetailSchema.model_validate(response.obj)
+          if response.status_code == 400:
+               return DetailSchema(detail="Введённый код несуществует!")
+          
+          if response.status_code in [422, 500]:
+               logger.fastfy_client.error(msg=f"Telegram processing error {response.status_code} {response.obj.get("detail")}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+          
+          return DetailSchema(detail="Регистрация прошла успешно.")

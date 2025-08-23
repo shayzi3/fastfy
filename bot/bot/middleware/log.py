@@ -28,6 +28,6 @@ class LogMiddleware(BaseMiddleware):
           try:
                return await handler(event, data)
           except Exception as ex:
-               logger.bot.info(msg=str(ex), exc_info=True)
+               logger.bot.error(msg=str(ex), exc_info=True)
                await AlertMessage.send_alert(msg=f"Error {str(ex)}")
-               return event.answer("Произошла ошибка. Повторите попытку позже.")
+               return await event.answer("Произошла ошибка. Повторите попытку позже.")

@@ -38,5 +38,12 @@ class FactoryBaseLogger:
                filename=f"data/logs/notify_task/{self.__current_day()}.txt"
           )
           
+     @property
+     def fastfy_client(self) -> BaseLogger:
+          return BaseLogger(
+               name="FASTFY CLIENT",
+               filename=f"data/logs/fastfy_client/{self.__current_day()}.txt"
+          )
+          
 
 logger = FactoryBaseLogger()

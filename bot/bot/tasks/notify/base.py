@@ -1,8 +1,9 @@
 import asyncio
 
-from bot.schemas.fastfy import UserNotifySchema, is_detail
-from bot.core.bot import bot
+from bot.schemas.fastfy import UserNotifySchema
 from bot.infrastracture.http.fastfy import FastFyClient
+from bot.core.bot import bot
+from bot.logger import logger
 
 
 
@@ -12,15 +13,15 @@ class BaseNotifyTask:
      
      
      async def _process(self) -> None:
+          logger.notify_task.info("START PROCESS")
+          
           response = await self.__client.user.get_all_users_notifies()
-          if is_detail(response):
-               return
+          if response is None:
+               return logger.notify_task.error("Error when get all users notifies. Watch fastfy_client log")
           
           notifies = []
           for notify in response:
-               notifies.append(
-                    self.__send_notify_process(notify)
-               )
+               notifies.append(self.__send_notify_process(notify))
                
           if notifies:
                await asyncio.gather(*notifies)
