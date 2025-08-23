@@ -20,3 +20,8 @@ class FastFyClient:
      @property
      def user(self) -> UserClient:
           return UserClient()
+     
+     
+     
+async def get_fastfy_client() -> FastFyClient:
+     return FastFyClient()

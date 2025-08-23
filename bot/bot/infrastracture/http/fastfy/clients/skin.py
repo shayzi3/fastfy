@@ -4,6 +4,7 @@ from bot.schemas.fastfy import (
      SkinsOnPageSchema,
      SkinPriceHistorySchema
 )
+from bot.schemas.fastfy.enums import DetailStatus
 from bot.logger import logger
 from ..base import HttpClient
 
@@ -21,11 +22,11 @@ class SkinClient(HttpClient):
                query_arguments={"skin_name": skin_name}
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Get skin error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Get skin error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           if response.status_code == 404:
-               return DetailSchema(detail=f"Скин {skin_name} не найден.")
+               return DetailSchema(detail=f"Скин {skin_name} не найден.", status=DetailStatus.DONE)
           
           return SkinSchema.model_validate(response.obj)
      
@@ -46,11 +47,11 @@ class SkinClient(HttpClient):
                }
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Search skins error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Search skins error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           if response.status_code == 404:
-               return DetailSchema(detail=f"По запросу {query} ничего не найдено.")
+               return DetailSchema(detail=f"По запросу {query} ничего не найдено.", status=DetailStatus.DONE)
           
           return SkinsOnPageSchema(
                pages=response.obj.get("pages"),
@@ -70,11 +71,11 @@ class SkinClient(HttpClient):
                query_arguments={"skin_name": skin_name}
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Price history skin error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Price history skin error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           if response.status_code == 404:
-               return DetailSchema(detail=f"Скин {skin_name} не найден.")
+               return DetailSchema(detail=f"Скин {skin_name} не найден.", status=DetailStatus.DONE)
           
           return SkinPriceHistorySchema.model_validate(response.obj)
           

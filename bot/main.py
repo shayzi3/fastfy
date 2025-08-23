@@ -1,5 +1,7 @@
 import asyncio
 
+from aiogram_tool.depend import setup_depend_tool
+
 from bot.core.bot import bot, dp
 from bot.tasks import NotifyTask, run_tasks
 from bot.handlers import __routers__
@@ -12,6 +14,7 @@ from bot.logger import logger
 async def startup() -> None:
      dp.include_routers(*__routers__)
      include_middleware(dp)
+     setup_depend_tool(dispatcher=dp)
      
      await run_tasks(NotifyTask())
      

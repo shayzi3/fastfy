@@ -1,6 +1,8 @@
 from typing import Any, TypeVar, Generic
 from pydantic import BaseModel
 
+from .enums import DetailStatus
+
 
 
 SKINS_ON_PAGE = TypeVar("SKINS_ON_PAGE", bound=BaseModel)
@@ -14,6 +16,7 @@ class ResponseObjectSchema(BaseModel):
 
 class DetailSchema(BaseModel):
      is_detail: bool = True
+     status: DetailStatus
      detail: str
      
      

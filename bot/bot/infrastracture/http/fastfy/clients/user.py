@@ -6,6 +6,7 @@ from bot.schemas.fastfy import (
      UserPortfolioSkinSchema,
      UserNotifySchema
 )
+from bot.schemas.fastfy.enums import DetailStatus
 from bot.logger import logger
 from ..base import HttpClient
 
@@ -24,9 +25,8 @@ class UserClient(HttpClient):
                query_arguments={"telegram_id": telegram_id}
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Get user error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
-          
+               logger.fastfy_client.error(msg=f"Get user error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           return UserSchema.model_validate(response.obj)
      
      
@@ -44,10 +44,10 @@ class UserClient(HttpClient):
                }
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Change percent user error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Change percent user error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
-          return DetailSchema(detail="Процент успешно обнолён.")
+          return DetailSchema(detail="Процент успешно обнолён.", status=DetailStatus.SUCCESS)
      
      
      async def get_steam_inventory_user(
@@ -66,15 +66,18 @@ class UserClient(HttpClient):
                }
           )
           if response.status_code == 400:
-               return DetailSchema(detail="Скины недоступны.")
+               return DetailSchema(detail="Скины недоступны.", status=DetailStatus.DONE)
           
           elif response.status_code == 403:
-               logger.fastfy_client.error(msg=f"Get steam inventory user error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Steam не вернул ваш инвентарь. Повторите запрос позднее.")
+               logger.fastfy_client.error(msg=f"Get steam inventory user error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(
+                    detail="Steam не вернул ваш инвентарь. Повторите запрос позднее.", 
+                    status=DetailStatus.DONE
+               )
           
           elif response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Get steam inventory user error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Get steam inventory user error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           return SkinsOnPageSchema(
                pages=response.obj.get("pages"),
@@ -99,11 +102,11 @@ class UserClient(HttpClient):
                }
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Get user portfolio error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Get user portfolio error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           elif response.status_code == 400:
-               return DetailSchema(detail="Портфолио пустое.")
+               return DetailSchema(detail="Портфолио пустое.", status=DetailStatus.DONE)
           
           return SkinsOnPageSchema(
                pages=response.obj.get("pages"),
@@ -126,14 +129,14 @@ class UserClient(HttpClient):
                }
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Create skin at user portfolio error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Create skin at user portfolio error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           elif response.status_code == 400:
-               return DetailSchema(detail="Этот скин уже есть в вашем портфолио.")
+               return DetailSchema(detail="Этот скин уже есть в вашем портфолио.", status=DetailStatus.DONE)
           
           elif response.status_code == 200:
-               return DetailSchema(detail="Скин добавлен в портфолио.")
+               return DetailSchema(detail="Скин добавлен в портфолио.", status=DetailStatus.SUCCESS)
           
           
      async def delete_skin_at_user_portfolio(
@@ -150,14 +153,14 @@ class UserClient(HttpClient):
                }
           )
           if response.status_code in [422, 500]:
-               logger.fastfy_client.error(msg=f"Delete skin at user portfolio error {response.status_code} {response.obj.get("detail")}")
-               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.")
+               logger.fastfy_client.error(msg=f"Delete skin at user portfolio error {response.status_code} {response.obj.get('detail')}")
+               return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           elif response.status_code == 400:
-               return DetailSchema(detail="Этот скин отсутствует в портфолио.")
+               return DetailSchema(detail="Этот скин отсутствует в портфолио.", status=DetailStatus.DONE)
           
           elif response.status_code == 200:
-               return DetailSchema(detail="Скин удалён.")
+               return DetailSchema(detail="Скин удалён.", status=DetailStatus.SUCCESS)
           
      
      async def get_all_users_notifies(self) -> None | list[UserNotifySchema]:
@@ -169,7 +172,7 @@ class UserClient(HttpClient):
                return []
           
           elif response.status_code in [500, 400]:
-               logger.fastfy_client.error(msg=f"Get all users notifies error {response.status_code} {response.obj.get("detail")}")
+               logger.fastfy_client.error(msg=f"Get all users notifies error {response.status_code} {response.obj.get('detail')}")
                return None
           
           return [UserNotifySchema.model_validate(notify_obj) for notify_obj in response.obj]
