@@ -43,7 +43,7 @@ class SkinService:
           query: str,
           offset: int,
           limit: int
-     ) -> SkinsPage | AbstractResponse:
+     ) -> SkinsPage[SkinModel] | AbstractResponse:
           if offset % limit != 0:
                return OffsetError
           

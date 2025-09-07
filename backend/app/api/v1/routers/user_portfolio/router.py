@@ -77,7 +77,6 @@ async def get_portfolio(
 )
 async def post_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
-     redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      service: Annotated[UserPortfolioService, Depends(get_user_portfolio_service)],
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
      background_tasks: BackgroundTasks,
@@ -85,7 +84,6 @@ async def post_portfolio(
 ):
      result = await service.post_portfolio(
           async_session=async_session,
-          redis_session=redis_session,
           skin_name=skin_name,
           user_uuid=current_user_uuid
      )

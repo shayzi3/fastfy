@@ -42,7 +42,7 @@ class UserService:
                where={"uuid": user_uuid},
                skin_percent=skin_percent
           )
-          if user_update is True:
+          if user_update:
                return UserUpdateSuccess
           return UserNotFoundError
      

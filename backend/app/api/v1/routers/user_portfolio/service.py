@@ -39,7 +39,7 @@ class UserPortfolioService:
           user_uuid: str,
           offset: int,
           limit: int
-     ) -> SkinsPage | AbstractResponse:
+     ) -> SkinsPage[UserSkinRelModel] | AbstractResponse:
           if offset % limit != 0:
                return OffsetError
                
@@ -86,7 +86,7 @@ class UserPortfolioService:
           if skin_exists_in_portfolio is None:
                await self.portfolio_repository.create(
                     session=async_session,
-                    uuid=uuid.uuid4(),
+                    uuid=str(uuid.uuid4()),
                     user_uuid=user_uuid,
                     skin_name=skin_name
                )

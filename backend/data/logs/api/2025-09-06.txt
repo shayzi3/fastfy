@@ -1,0 +1,784 @@
+INFO 2025-09-06 12:18:41,781 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58181) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:18:47,688 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58187) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+ERROR 2025-09-06 12:18:47,797 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\skin\router.py", line 78, in search_skin
+    result = await service.search_skin(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\skin\service.py", line 50, in search_skin
+    result = await self.skin_repository.search_skin(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\skin.py", line 32, in search_skin
+    return SkinsPage(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 5 validation errors for SkinsPage
+skins.0
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.1
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.2
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.3
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.4
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+INFO 2025-09-06 12:19:36,201 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58205) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+ERROR 2025-09-06 12:19:36,259 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\skin\router.py", line 78, in search_skin
+    result = await service.search_skin(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\skin\service.py", line 50, in search_skin
+    result = await self.skin_repository.search_skin(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\skin.py", line 32, in search_skin
+    return SkinsPage(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 5 validation errors for SkinsPage
+skins.0
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.1
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.2
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.3
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.4
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"name":"AK-47 | Leet Mu..."skin_price_info":null}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+INFO 2025-09-06 12:19:52,192 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58209) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:20:42,087 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58224) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:27:45,822 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49239) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:27:49,210 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49239) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:27:50,829 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49239) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:27:52,153 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49239) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:27:54,216 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49239) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:28:52,792 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=59979) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:28:54,459 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=59979) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:34:41,676 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53652) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:34:44,155 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53652) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:35:20,838 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:35:22,413 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:35:26,111 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:35:30,333 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=5&limit=5
+INFO 2025-09-06 12:35:32,157 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=5&limit=5
+INFO 2025-09-06 12:35:36,227 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53665) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=10&limit=5
+INFO 2025-09-06 12:36:29,212 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53687) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:37:15,408 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=53696) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:37:54,311 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=60999) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:38:58,545 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=61022) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 12:39:07,816 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=61028) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:42:29,449 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=56717) TO http://127.0.0.1:8085/api/v1/skin/search?query=Lee&offset=0&limit=5
+INFO 2025-09-06 12:42:33,555 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=56717) TO http://127.0.0.1:8085/api/v1/skin/search?query=Lee&offset=0&limit=5
+INFO 2025-09-06 12:42:34,871 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=56717) TO http://127.0.0.1:8085/api/v1/skin/search?query=Lee&offset=0&limit=5
+INFO 2025-09-06 12:42:41,502 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49672) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 12:43:15,376 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49681) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 12:46:20,336 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=49708) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 12:47:06,115 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=56300) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 15:00:31,782 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=63743) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 15:09:36,839 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58417) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 15:15:46,172 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=56583) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 15:53:12,116 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58922) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 16:06:24,175 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=58767) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 18:50:22,028 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=57095) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 18:50:23,976 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=57095) TO http://127.0.0.1:8085/api/v1/skin/search?query=M4A4&offset=0&limit=5
+INFO 2025-09-06 18:50:33,690 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=57102) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-06 18:50:42,750 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=57107) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=5&limit=5
+INFO 2025-09-06 18:50:48,153 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=57110) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=10&limit=5
+INFO 2025-09-06 18:53:02,859 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 18:53:08,968 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 18:53:09,337 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 18:54:11,252 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 18:54:19,968 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 18:54:20,305 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 19:00:28,808 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:00:33,482 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:00:33,840 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 19:02:55,887 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:03:00,481 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:03:00,768 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 19:04:30,420 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:04:34,514 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:04:34,857 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 19:07:07,791 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:07:12,352 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:07:12,714 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 19:07:40,901 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:07:45,699 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:07:46,025 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=M4a4
+INFO 2025-09-06 19:08:35,300 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:08:39,719 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 19:08:40,030 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://imwnii-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=AK-47
+INFO 2025-09-06 22:15:25,670 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:15:34,446 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:15:34,889 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Jaguar
+INFO 2025-09-06 22:16:08,456 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:16:13,113 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:16:13,532 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Jaguar
+INFO 2025-09-06 22:16:17,083 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:16:17,502 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:16:22,811 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:16:36,570 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:16:37,011 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:17:13,233 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=59798) TO http://127.0.0.1:8085/api/v1/skin/search?query=Jaguar&offset=0&limit=5
+INFO 2025-09-06 22:17:20,565 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=59803) TO http://127.0.0.1:8085/api/v1/skin/search?query=Jaguar&offset=5&limit=5
+INFO 2025-09-06 22:17:26,542 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=59806) TO http://127.0.0.1:8085/api/v1/skin/search?query=Jaguar&offset=10&limit=5
+INFO 2025-09-06 22:18:09,750 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:18:13,826 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:18:14,226 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Cortex
+INFO 2025-09-06 22:18:19,262 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:18:19,664 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Cortex
+INFO 2025-09-06 22:18:25,808 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:38,283 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:42,696 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:43,119 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Jaguar
+INFO 2025-09-06 22:19:47,007 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:47,425 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:19:49,401 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:49,804 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=10&limit=5&query=Jaguar
+INFO 2025-09-06 22:19:54,322 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:19:55,001 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:00,299 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:00,719 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:03,915 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:07,713 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:09,834 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:10,161 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:12,092 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:12,395 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=10&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:14,439 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:14,791 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=15&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:36,679 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:37,056 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Jaguar
+INFO 2025-09-06 22:20:38,881 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:20:39,294 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Jaguar
+INFO 2025-09-06 22:21:49,747 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:21:57,665 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:21:58,110 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 22:22:00,497 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:22:00,886 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Factory+New%29
+ERROR 2025-09-06 22:22:00,980 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 86, in post_portfolio
+    result = await service.post_portfolio(
+TypeError: UserPortfolioService.post_portfolio() got an unexpected keyword argument 'redis_session'
+INFO 2025-09-06 22:23:29,196 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:23:29,610 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Factory+New%29
+INFO 2025-09-06 22:28:16,511 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:28:17,176 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Factory+New%29
+INFO 2025-09-06 22:28:23,815 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:28:24,151 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Minimal+Wear%29
+INFO 2025-09-06 22:28:29,419 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:28:29,741 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Minimal+Wear%29
+INFO 2025-09-06 22:35:52,452 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:35:52,871 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29%29%29
+ERROR 2025-09-06 22:35:52,930 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 545, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+  File "asyncpg\\protocol\\protocol.pyx", line 206, in bind_execute
+asyncpg.exceptions.ForeignKeyViolationError: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 85, in post_portfolio
+    result = await service.post_portfolio(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\service.py", line 87, in post_portfolio
+    await self.portfolio_repository.create(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\base.py", line 126, in create
+    result = await session.execute(sttm)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1294, in orm_execute_statement
+    result = conn.execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1415, in execute
+    return meth(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1842, in _execute_context
+    return self._exec_single_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1982, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+[SQL: INSERT INTO users_skins (uuid, user_uuid, skin_name) VALUES ($1::UUID, $2::UUID, $3::VARCHAR) RETURNING users_skins.uuid]
+[parameters: (UUID('a86e83f0-2449-4049-8bce-e4b21a717a1a'), '231ecbfa-a171-430c-962a-0c32d4afdbb5', 'AK-47 | Leet Museo (Well-Worn)))')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+INFO 2025-09-06 22:37:44,334 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:37:44,771 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29%29%29
+ERROR 2025-09-06 22:37:44,818 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 545, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+  File "asyncpg\\protocol\\protocol.pyx", line 206, in bind_execute
+asyncpg.exceptions.ForeignKeyViolationError: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 85, in post_portfolio
+    result = await service.post_portfolio(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\service.py", line 87, in post_portfolio
+    await self.portfolio_repository.create(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\base.py", line 126, in create
+    result = await session.execute(sttm)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1294, in orm_execute_statement
+    result = conn.execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1415, in execute
+    return meth(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1842, in _execute_context
+    return self._exec_single_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1982, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+[SQL: INSERT INTO users_skins (uuid, user_uuid, skin_name) VALUES ($1::UUID, $2::UUID, $3::VARCHAR) RETURNING users_skins.uuid]
+[parameters: ('8cb9dd56-0152-4542-83c1-169f30385268', '231ecbfa-a171-430c-962a-0c32d4afdbb5', 'AK-47 | Leet Museo (Well-Worn)))')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+INFO 2025-09-06 22:39:45,174 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:39:45,636 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29%29%29
+ERROR 2025-09-06 22:39:45,713 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 545, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+  File "asyncpg\\protocol\\protocol.pyx", line 206, in bind_execute
+asyncpg.exceptions.ForeignKeyViolationError: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 85, in post_portfolio
+    result = await service.post_portfolio(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\service.py", line 87, in post_portfolio
+    await self.portfolio_repository.create(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\base.py", line 126, in create
+    result = await session.execute(sttm)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1294, in orm_execute_statement
+    result = conn.execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1415, in execute
+    return meth(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1842, in _execute_context
+    return self._exec_single_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1982, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn)))) отсутствует в таблице "skins".
+[SQL: INSERT INTO users_skins (uuid, user_uuid, skin_name) VALUES ($1::UUID, $2::UUID, $3::VARCHAR) RETURNING users_skins.uuid]
+[parameters: ('9f6bc619-d3ce-4e67-9bdd-dff5e8987b66', '231ecbfa-a171-430c-962a-0c32d4afdbb5', 'AK-47 | Leet Museo (Well-Worn)))')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+INFO 2025-09-06 22:39:55,326 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:39:59,325 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:39:59,708 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 22:40:02,013 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:40:02,424 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29%29
+ERROR 2025-09-06 22:40:02,529 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 545, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 267, in __bind_execute
+    data, status, _ = await self.__do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\asyncpg\prepared_stmt.py", line 256, in __do_execute
+    return await executor(protocol)
+  File "asyncpg\\protocol\\protocol.pyx", line 206, in bind_execute
+asyncpg.exceptions.ForeignKeyViolationError: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn))) отсутствует в таблице "skins".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 85, in post_portfolio
+    result = await service.post_portfolio(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\service.py", line 87, in post_portfolio
+    await self.portfolio_repository.create(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\base.py", line 126, in create
+    result = await session.execute(sttm)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1294, in orm_execute_statement
+    result = conn.execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1415, in execute
+    return meth(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1842, in _execute_context
+    return self._exec_single_context(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1982, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1963, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\engine\default.py", line 943, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 580, in execute
+    self._adapt_connection.await_(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 558, in _prepare_and_execute
+    self._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 508, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 792, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: INSERT или UPDATE в таблице "users_skins" нарушает ограничение внешнего ключа "users_skins_skin_name_fkey"
+DETAIL:  Ключ (skin_name)=(AK-47 | Leet Museo (Well-Worn))) отсутствует в таблице "skins".
+[SQL: INSERT INTO users_skins (uuid, user_uuid, skin_name) VALUES ($1::UUID, $2::UUID, $3::VARCHAR) RETURNING users_skins.uuid]
+[parameters: ('321ca6a4-ed4f-4226-b640-c55a471ff44c', '231ecbfa-a171-430c-962a-0c32d4afdbb5', 'AK-47 | Leet Museo (Well-Worn))')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+INFO 2025-09-06 22:41:29,165 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:41:34,213 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:41:34,773 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-06 22:41:37,274 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-06 22:41:37,654 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://g863a9-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29

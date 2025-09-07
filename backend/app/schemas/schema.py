@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import json
-
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Type, Literal
+from typing_extensions import Self
 
 from math import ceil
 from uuid import UUID
@@ -10,7 +9,6 @@ from typing import  Any
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-from .enums import UpdateMode, NotifyType
 
 
 SKIN_ON_PAGE = TypeVar("SKIN_ON_PAGE", bound=BaseModel)
@@ -49,7 +47,7 @@ class SkinModel(BaseModel):
      
 class SkinPriceInfoModel(BaseModel):
      skin_name: str
-     update_mode: UpdateMode
+     update_mode: Literal["HIGH", "MEDIUM_WELL", "MEDIUM", "LOW"]
      last_update: datetime | None = None
      price: float | None = None
      price_last_1_day: float | None = None
@@ -93,7 +91,7 @@ class UserNotifyModel(BaseModel):
      uuid: UUID | str
      user_uuid: UUID | str
      text: str
-     notify_type: NotifyType
+     notify_type: Literal["SKIN", "INFO"]
      created_at: datetime
      is_read: bool
      
@@ -124,25 +122,19 @@ class SkinHistoryTimePartModel(BaseModel):
      
 
      
-     
+
 class SkinsPage(BaseModel, Generic[SKIN_ON_PAGE]):
      pages: int
      current_page: int # offset
      skins: list[SKIN_ON_PAGE]
-     skin_model_obj: SKIN_ON_PAGE = Field(exclude=True) # parent class BaseModel
-     skins_on_page: int = Field(default=5, exclude=True) # limit
+     skins_on_page: int = Field(exclude=True, default=5) # limit
      
-     
-     def model_post_init(self, _: Any):
+     def serialize_pages(self) -> Self:
           self.current_page = (self.current_page // self.skins_on_page) + 1
-          self.pages = ceil(self.pages / self.skins_on_page)
+          self.pages = ceil(self.pages / self.skins_on_page)   
+          return self
+     
           
-          if len(self.skins) > 0:
-               if isinstance(self.skins[0], str):
-                    self.skins = [
-                         self.skin_model_obj.model_validate(json.loads(model))
-                         for model in self.skins
-                    ]   
                
 
 class SteamItem(BaseModel):

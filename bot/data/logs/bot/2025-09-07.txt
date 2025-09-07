@@ -1,0 +1,208 @@
+INFO 2025-09-07 12:03:58,014 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:04:02,108 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:04:30,169 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+INFO 2025-09-07 12:04:34,627 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:04:37,795 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:04:41,148 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK empty_button
+INFO 2025-09-07 12:04:43,675 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:04:47,287 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_skin_search
+INFO 2025-09-07 12:04:59,949 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_skin_search
+INFO 2025-09-07 12:05:07,655 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:05:12,487 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:07:34,322 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:07:38,155 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+ERROR 2025-09-07 12:07:39,168 [log.py (__call__)] 5 validation errors for SkinsOnPageSchema
+skin_price_info.update_mode
+  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='HIGH', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/int_parsing
+skin_price_info.price
+  Input should be a valid number [type=float_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.11/v/float_type
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 64, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\states\user\router.py", line 62, in skins_search
+    response = await client.skin.search_skins(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\infrastracture\http\fastfy\clients\skin.py", line 56, in search_skins
+    return SkinsOnPageSchema(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 5 validation errors for SkinsOnPageSchema
+skin_price_info.update_mode
+  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='HIGH', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/int_parsing
+skin_price_info.price
+  Input should be a valid number [type=float_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.11/v/float_type
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+INFO 2025-09-07 12:08:06,302 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:09:51,853 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:10:11,444 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:10:15,983 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+ERROR 2025-09-07 12:10:17,040 [log.py (__call__)] 4 validation errors for SkinsOnPageSchema
+skin_price_info.price
+  Input should be a valid number [type=float_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.11/v/float_type
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 64, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\states\user\router.py", line 62, in skins_search
+    response = await client.skin.search_skins(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\infrastracture\http\fastfy\clients\skin.py", line 56, in search_skins
+    return SkinsOnPageSchema(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for SkinsOnPageSchema
+skin_price_info.price
+  Input should be a valid number [type=float_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.11/v/float_type
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+INFO 2025-09-07 12:11:06,265 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:11:11,669 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:11:17,998 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:11:21,750 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+ERROR 2025-09-07 12:11:22,763 [log.py (__call__)] 3 validation errors for SkinsOnPageSchema
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 64, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\states\user\router.py", line 62, in skins_search
+    response = await client.skin.search_skins(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\infrastracture\http\fastfy\clients\skin.py", line 56, in search_skins
+    return SkinsOnPageSchema(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for SkinsOnPageSchema
+skin_price_info.price_at_1_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_30_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+skin_price_info.price_at_365_day
+  Field required [type=missing, input_value={'skin_name': 'AK-47 | Le...ice_last_365_day': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+INFO 2025-09-07 12:11:52,044 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:13:38,626 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:13:42,395 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:13:46,296 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+INFO 2025-09-07 12:13:49,881 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:13:53,045 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:14:00,012 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK search
+INFO 2025-09-07 12:14:03,187 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+INFO 2025-09-07 12:14:12,402 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK skins_search
+INFO 2025-09-07 12:14:16,393 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:14:19,671 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_skin_search
+INFO 2025-09-07 12:14:25,099 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_skin_search
+INFO 2025-09-07 12:14:28,550 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_skin_search
+INFO 2025-09-07 12:14:42,636 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:39:00,766 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:39:28,721 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+ERROR 2025-09-07 12:39:29,876 [log.py (__call__)] 'UserPortfolioSkinSchema' object has no attribute 'name'
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 64, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\slash_commands\user\router.py", line 78, in portfolio
+    reply_markup=paginate_buttons(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\utils\buttons\inline\user\buttons.py", line 41, in paginate_buttons
+    compress_name = CompressName.compress(skin.name, "to")
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'UserPortfolioSkinSchema' object has no attribute 'name'
+INFO 2025-09-07 12:40:22,805 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:46:29,295 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:46:53,913 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+ERROR 2025-09-07 12:46:55,020 [log.py (__call__)] 'UserPortfolioSkinSchema' object has no attribute 'replace'
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 64, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\slash_commands\user\router.py", line 78, in portfolio
+    reply_markup=paginate_buttons(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\utils\buttons\inline\user\buttons.py", line 42, in paginate_buttons
+    compress_name = CompressName.compress(skin, "to")
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\utils\compress.py", line 33, in compress
+    skin_name = skin_name.replace(ptr, prt_value)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'UserPortfolioSkinSchema' object has no attribute 'replace'
+INFO 2025-09-07 12:47:06,068 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:47:25,331 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:47:34,360 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 12:47:43,663 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 12:55:15,815 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 12:55:22,325 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 12:55:35,381 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_portfolio_skin
+INFO 2025-09-07 12:55:40,049 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_portfolio_skin
+INFO 2025-09-07 12:55:47,021 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_portfolio_skin

@@ -53,7 +53,7 @@ class SkinsPriceInfo(SkinsPriceInfoMixin, Base):
      )
      
      skin_name: Mapped[str] = mapped_column(ForeignKey("skins.name", ondelete="CASCADE"), primary_key=True)
-     update_mode: Mapped[UpdateMode] = mapped_column(default=UpdateMode.HIGH)
+     update_mode: Mapped[str] = mapped_column(default=UpdateMode.HIGH)
      last_update: Mapped[datetime] = mapped_column(nullable=True)
      price: Mapped[float] = mapped_column(nullable=True)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True)
@@ -102,7 +102,7 @@ class UsersNotify(UsersNotifyMixin, Base):
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      user_uuid: Mapped[str] = mapped_column(UUID(), ForeignKey("users.uuid", ondelete="CASCADE"))
      text: Mapped[str] = mapped_column()
-     notify_type: Mapped[NotifyType] = mapped_column()
+     notify_type: Mapped[str] = mapped_column(default=NotifyType.SKIN)
      created_at: Mapped[datetime] = mapped_column(server_default=func.now())
      is_read: Mapped[bool] = mapped_column(default=False)
      

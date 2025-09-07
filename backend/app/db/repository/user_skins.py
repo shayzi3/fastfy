@@ -25,17 +25,19 @@ class UserSkinRepository(
           user_uuid: str,
           offset: int,
           limit: int
-     ) -> SkinsPage:
+     ) -> SkinsPage[UserSkinModel]:
           value = await redis_session.get(f"user_portfolio:{user_uuid}~{offset}~{limit}")
           if value is not None:
-               models = json.loads(value)
+               data = json.loads(value)
                return SkinsPage(
-                    pages=int(models[-1]),
+                    pages=int(data[-1]),
                     current_page=offset,
-                    skins=models[:-1],
-                    skin_model_obj=UserSkinRelModel,
+                    skins=[
+                         UserSkinRelModel.model_validate(json.loads(model))
+                         for model in data[:-1]
+                    ],
                     skins_on_page=limit
-               )
+               ).serialize_pages()
                
           sttm_models = (
                select(UsersSkins).
@@ -71,9 +73,8 @@ class UserSkinRepository(
                pages=result_pages,
                current_page=offset,
                skins=models,
-               skin_model_obj=UserSkinRelModel,
                skins_on_page=limit
-          )
+          ).serialize_pages()
      
      
      

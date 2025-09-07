@@ -1,0 +1,174 @@
+INFO 2025-09-06 12:18:38,299 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:18:38,299 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:18:38,299 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:18:38,299 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:18:38,299 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:19:28,101 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:19:28,102 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:19:28,102 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:19:28,102 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:19:28,110 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:20:31,658 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:20:31,658 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:20:31,658 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:20:31,666 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:20:31,666 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:27:43,023 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:27:43,023 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:27:43,023 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:27:43,030 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:27:43,030 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:28:44,956 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:28:44,956 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:28:44,956 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:28:44,956 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:28:44,956 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:34:35,315 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:34:35,315 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:34:35,315 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:34:35,315 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:34:35,315 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:35:14,187 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:35:14,187 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:35:14,187 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:35:14,187 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:35:14,187 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:36:18,523 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:36:18,526 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:36:18,526 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:36:18,526 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:36:18,526 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:37:09,026 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:37:09,026 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:37:09,029 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:37:09,030 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:37:09,032 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:38:40,484 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:38:40,490 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:38:40,490 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:38:40,490 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:38:40,490 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:42:23,982 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:42:23,990 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:42:23,990 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:42:23,992 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:42:23,992 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:43:09,502 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:43:09,506 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:43:09,506 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:43:09,506 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:43:09,506 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:46:02,107 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:46:02,107 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:46:02,107 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:46:02,107 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:46:02,107 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 12:46:54,671 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 12:46:54,671 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 12:46:54,671 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 12:46:54,671 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 12:46:54,671 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 14:59:57,075 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 14:59:57,081 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 14:59:57,081 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 14:59:57,081 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 14:59:57,081 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 15:09:27,566 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 15:09:27,566 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 15:09:27,566 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 15:09:27,566 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 15:09:27,575 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 15:15:42,484 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 15:15:42,484 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 15:15:42,484 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 15:15:42,484 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 15:15:42,484 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 15:21:49,253 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 15:21:49,253 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 15:21:49,253 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 15:21:49,253 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 15:21:49,253 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 15:53:03,508 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 15:53:03,510 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 15:53:03,513 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 15:53:03,513 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 15:53:03,513 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 16:06:21,299 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 16:06:21,306 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 16:06:21,307 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 16:06:21,307 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 16:06:21,307 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 17:21:36,957 [base.py (_process)] START PROCESS. MODE: UpdateMode.HIGH
+INFO 2025-09-06 18:45:38,481 [base.py (_process)] START PROCESS. MODE: UpdateMode.MEDIUM_WELL
+INFO 2025-09-06 18:50:13,550 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 18:50:13,551 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 18:50:13,551 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 18:50:13,551 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 18:50:13,551 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 18:51:29,664 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 18:51:29,665 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 18:51:29,666 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 18:51:29,667 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 18:51:29,667 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 18:52:37,031 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 18:52:37,032 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 18:52:37,033 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 18:52:37,034 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 18:52:37,034 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 19:00:24,725 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 19:00:24,726 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 19:00:24,727 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 19:00:24,728 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 19:00:24,728 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 19:02:43,823 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 19:02:43,825 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 19:02:43,825 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 19:02:43,825 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 19:02:43,826 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 19:08:27,681 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 19:08:27,682 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 19:08:27,683 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 19:08:27,683 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 19:08:27,683 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 21:47:03,608 [base.py (_process)] START PROCESS. MODE: UpdateMode.HIGH
+INFO 2025-09-06 21:47:03,614 [base.py (_process)] START PROCESS. MODE: UpdateMode.MEDIUM_WELL
+INFO 2025-09-06 22:15:18,629 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:15:18,634 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:15:18,634 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:15:18,634 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:15:18,634 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:19:26,322 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:19:26,326 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:19:26,326 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:19:26,328 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:19:26,328 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:23:23,411 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:23:23,418 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:23:23,418 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:23:23,420 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:23:23,420 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:28:02,036 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:28:02,036 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:28:02,036 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:28:02,036 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:28:02,036 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:35:13,920 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:35:13,920 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:35:13,920 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:35:13,920 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:35:13,920 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:37:39,070 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:37:39,070 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:37:39,070 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:37:39,070 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:37:39,070 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:39:41,129 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:39:41,129 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:39:41,129 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:39:41,142 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:39:41,142 [task.py (run_every_four_hour)] 4 HOUR START
+INFO 2025-09-06 22:41:16,020 [task.py (run)] TASK UPDATE NOTIFY START
+INFO 2025-09-06 22:41:16,020 [task.py (run_every_one_hour)] 1 HOUR START
+INFO 2025-09-06 22:41:16,020 [task.py (run_every_two_hour)] 2 HOUR START
+INFO 2025-09-06 22:41:16,020 [task.py (run_every_three_hour)] 3 HOUR START
+INFO 2025-09-06 22:41:16,020 [task.py (run_every_four_hour)] 4 HOUR START

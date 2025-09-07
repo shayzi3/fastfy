@@ -12,7 +12,7 @@ class LogMiddleware(BaseHTTPMiddleware):
           logger.api.info(f"REQUEST FROM {request.client} TO {request.url}")
           
           try:
-               return await call_next(request)    
+               return await call_next(request)
           except Exception as ex:
                logger.api.error(msg="error", exc_info=True)
                return await exception_server_error(request)

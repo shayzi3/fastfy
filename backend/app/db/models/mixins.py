@@ -76,7 +76,7 @@ class SkinsPriceInfoMixin(Mixin):
           
      @classmethod
      def returning(cls):
-          return cls.uuid
+          return cls.skin_name
      
      @classmethod
      def order_by(cls):

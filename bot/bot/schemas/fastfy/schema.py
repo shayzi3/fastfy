@@ -1,5 +1,5 @@
-from typing import Any, TypeVar, Generic
-from pydantic import BaseModel
+from typing import Any, TypeVar, Generic, Type
+from pydantic import BaseModel, model_validator
 
 from .enums import DetailStatus
 
@@ -22,12 +22,12 @@ class DetailSchema(BaseModel):
      
 class _SkinPriceInfoSchema(BaseModel):
      skin_name: str
-     update_mode: int
+     update_mode: str
      last_update: str
-     price: float
-     price_at_1_day: float
-     price_at_30_day: float
-     price_at_365_day: float
+     price: float | None
+     price_last_1_day: float | None
+     price_last_30_day: float | None
+     price_last_365_day: float | None
      
 
      
@@ -42,13 +42,16 @@ class SkinsOnPageSchema(BaseModel, Generic[SKINS_ON_PAGE]):
      pages: int
      current_page: int
      skins: list[SKINS_ON_PAGE]
-     skin_model: SKINS_ON_PAGE
+     skin_model: Type[BaseModel]
      
-     def model_post_init(self, _: Any):
-          self.skins = [
-               self.skin_model.model_validate(json_model)
-               for json_model in self.skins
+     @model_validator(mode="before")
+     def validator(data: dict[str, Any]) -> dict[str, Any]:
+          skin_model: Type[BaseModel] = data["skin_model"]
+          data["skins"] = [
+               skin_model.model_validate(skin_data)
+               for skin_data in data["skins"]
           ]
+          return data
           
           
 class _HistortSchema(BaseModel):
@@ -76,6 +79,15 @@ class UserSchema(BaseModel):
      created_at: str
      
      
+     def profile_text(self) -> str:
+          return (
+               f"Steam ID: {self.steam_id}"
+               f"\nSteam Name: {self.steam_name}"
+               f"\nTelegram ID: {self.telegram_id}"
+               f"\nTelegram username: {self.telegram_username}"
+               f"\nПроцент: {self.skin_percent}"
+          )
+     
      
 class SkinSteamInventorySchema(BaseModel):
      name: str
@@ -93,7 +105,7 @@ class UserNotifySchema(BaseModel):
      uuid: str
      user_uuid: str
      text: str
-     notify_type: int
+     notify_type: str
      created_at: str
      is_read: bool
      user: UserSchema

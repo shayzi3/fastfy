@@ -1,5 +1,0 @@
-INFO 2025-08-22 17:43:50,780 [task.py (run)] TASK UPDATE NOTIFY START
-INFO 2025-08-22 17:43:50,780 [task.py (run_every_one_hour)] 1 HOUR START
-INFO 2025-08-22 17:43:50,788 [task.py (run_every_two_hour)] 2 HOUR START
-INFO 2025-08-22 17:43:50,790 [task.py (run_every_three_hour)] 3 HOUR START
-INFO 2025-08-22 17:43:50,790 [task.py (run_every_four_hour)] 4 HOUR START

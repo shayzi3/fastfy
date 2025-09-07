@@ -1,6 +1,7 @@
 import asyncio
 
 from aiogram_tool.depend import setup_depend_tool
+from aiogram.types import BotCommand
 
 from bot.core.bot import bot, dp
 from bot.tasks import NotifyTask, run_tasks
@@ -18,6 +19,16 @@ async def startup() -> None:
      
      await run_tasks(NotifyTask())
      
+     await bot.set_my_commands(
+          commands=[
+               BotCommand(command="/start", description="Приветственное сообщение"),
+               BotCommand(command="/account", description="Смена аккаунта"),
+               BotCommand(command="/profile", description="Текущие данные акканута"),
+               BotCommand(command="/clear", description="Очистка событий"),
+               BotCommand(command="/portfolio", description="Скины текущего акканута"),
+               BotCommand(command="/search", description="Поиск скинов")
+          ]
+     )
      logger.bot.info("BOT STARTED")
      
      

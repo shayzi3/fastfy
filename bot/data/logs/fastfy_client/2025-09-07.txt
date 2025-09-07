@@ -1,0 +1,1 @@
+ERROR 2025-09-07 12:47:35,413 [user.py (get_user_portfolio)] Get user portfolio error 500 Ошибка на стороне сервера.

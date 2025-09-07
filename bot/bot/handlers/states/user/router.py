@@ -5,8 +5,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram_tool.depend import Depend
 
 from bot.schemas.fastfy.enums import DetailStatus
+from bot.schemas.fastfy import is_detail
 from bot.infrastracture.http.fastfy import get_fastfy_client, FastFyClient
-from bot.utils.filters.user.state import LoginState
+from bot.utils.filters.user.state import LoginState, UserPercentState, SearchState
+from bot.utils.buttons.inline.user import paginate_buttons
 
 
 state_user_router = Router(name="state_user_router")
@@ -28,6 +30,54 @@ async def login_state_code(
           await state.clear()
           
      await message.answer(text=response.detail)
+     
+     
+@state_user_router.message(UserPercentState.percent)
+async def user_change_percent(
+     message: Message,
+     state: FSMContext,
+     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
+):
+     if not message.text.isdigit():
+          return await message.answer("Это не число!")
+     
+     percent = int(message.text)
+     if percent <= 0 or percent > 100:
+          return await message.answer("Число должно быть от 1 до 100!")
+     
+     response = await client.user.change_percent_user(
+          telegram_id=message.from_user.id,
+          percent=percent
+     )
+     await message.answer(text=response.detail)
+     await state.clear()
+     
+     
+@state_user_router.message(SearchState.query)
+async def skins_search(
+     message: Message,
+     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
+):
+     response = await client.skin.search_skins(
+          offset=0,
+          limit=5,
+          query=message.text
+     )
+     if is_detail(response):
+          return await message.answer(text=response.detail)
+     
+     await message.answer(
+          text=f"Результат по запросу: {message.text}",
+          reply_markup=paginate_buttons(
+               skins=response,
+               query=message.text,
+               paginate_component="skin_search"
+          )
+     )
+     
+     
+     
+        
      
      
      

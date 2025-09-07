@@ -1,0 +1,117 @@
+INFO 2025-09-07 12:04:02,557 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:30,423 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:30,840 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:04:34,837 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:35,285 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:04:38,058 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:38,513 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=10&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:04:41,505 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:43,967 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:44,470 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:04:47,640 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:04:48,092 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29
+INFO 2025-09-07 12:05:00,233 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:05:00,641 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=AK-47+%7C+Leet+Museo+%28Well-Worn%29
+INFO 2025-09-07 12:05:07,896 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:05:08,564 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:05:12,715 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:05:13,277 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:05:37,766 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=65319) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=10&limit=5
+INFO 2025-09-07 12:05:42,555 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=65319) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-07 12:07:09,587 [logs.py (dispatch)] REQUEST FROM Address(host='127.0.0.1', port=50180) TO http://127.0.0.1:8085/api/v1/skin/search?query=Leet%20Museo&offset=0&limit=5
+INFO 2025-09-07 12:07:34,688 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:07:38,474 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:07:38,961 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:10:12,050 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:10:16,238 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:10:16,653 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:11:18,304 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:11:22,109 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:11:22,576 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:13:42,817 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:13:46,575 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:13:47,011 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:13:50,102 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:13:50,545 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:13:53,522 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:13:53,948 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Leet+Museo
+INFO 2025-09-07 12:14:00,285 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:03,424 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:04,007 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Horixon
+INFO 2025-09-07 12:14:12,669 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:13,126 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=0&limit=5&query=Horizon
+INFO 2025-09-07 12:14:16,639 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:17,061 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/skin/search?offset=5&limit=5&query=Horizon
+INFO 2025-09-07 12:14:19,927 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:25,354 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:25,750 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=Horizon+Case
+INFO 2025-09-07 12:14:28,772 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:14:29,196 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://suidk1-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&skin_name=Horizon+Case
+INFO 2025-09-07 12:39:29,251 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:39:29,684 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&offset=0&limit=5
+INFO 2025-09-07 12:46:54,342 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:46:54,875 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&offset=0&limit=5
+INFO 2025-09-07 12:47:34,777 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:47:35,224 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&offset=0&limit=5
+ERROR 2025-09-07 12:47:35,337 [logs.py (dispatch)] error
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 148, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\anyio\streams\memory.py", line 126, in receive
+    raise EndOfStream from None
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\middleware\logs.py", line 15, in dispatch
+    return await call_next(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 156, in call_next
+    raise app_exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\base.py", line 141, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\router.py", line 53, in get_portfolio
+    result = await service.get_portfolio(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\api\v1\routers\user_portfolio\service.py", line 46, in get_portfolio
+    skins = await self.portfolio_repository.read_paginate(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\backend\app\db\repository\user_skins.py", line 32, in read_paginate
+    return SkinsPage(
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\pydantic\main.py", line 253, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 2 validation errors for SkinsPage
+skins.0
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"uuid":"f34f88d3-d4fa-4...e_last_365_day":null}}}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+skins.1
+  Input should be a valid dictionary or instance of BaseModel [type=model_type, input_value='{"uuid":"2798c066-2483-4...e_last_365_day":null}}}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+INFO 2025-09-07 12:55:22,692 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:55:23,172 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&offset=0&limit=5
+INFO 2025-09-07 12:55:35,802 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:55:40,283 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183
+INFO 2025-09-07 12:55:40,752 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user/portfolio?telegram_id=2054556183&offset=5&limit=5
+INFO 2025-09-07 12:55:47,304 [logs.py (dispatch)] REQUEST FROM Address(host='176.15.166.195', port=0) TO https://v2dlob-176-15-166-195.ru.tuna.am/api/v1/user?telegram_id=2054556183

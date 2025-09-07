@@ -23,7 +23,7 @@ class UpdateNotifyBase:
           self.steam_http_client = HttpSteamClient()
      
      
-     async def _process(self, mode: UpdateMode) -> None:
+     async def _process(self, mode: str) -> None:
           logger.task_update_notify.info(f"START PROCESS. MODE: {mode}")
           
           async with session_asynccontext() as async_session:

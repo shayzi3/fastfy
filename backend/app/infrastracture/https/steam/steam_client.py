@@ -80,17 +80,19 @@ class HttpSteamClient:
           limit: int,
           time: int = 0,
           mode: str = "request"
-     ) -> SkinsPage | AbstractResponse:
+     ) -> SkinsPage[SteamItem] | AbstractResponse:
           skins = await redis_session.get(f"steam_inventory:{steamid}")
           if skins is not None:
-               models = json.loads(skins)
+               data = json.loads(skins)
                return SkinsPage(
-                    pages=len(models),
+                    pages=len(data),
                     current_page=offset,
-                    skins=models[offset:limit + offset],
-                    skin_model_obj=SteamItem,
+                    skins=[
+                         SteamItem.model_validate(json.loads(model))
+                         for model in data[offset:limit + offset]
+                    ],
                     skins_on_page=limit
-               )
+               ).serialize_pages()
                
           await asyncio.sleep(time)
                
@@ -142,9 +144,8 @@ class HttpSteamClient:
                pages=len(skins),
                current_page=offset,
                skins=skins[offset:limit + offset],
-               skin_model_obj=SteamItem,
                skins_on_page=limit
-          )
+          ).serialize_pages()
      
      
      async def get_skin_price(

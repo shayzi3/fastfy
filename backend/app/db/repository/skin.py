@@ -25,17 +25,19 @@ class SkinRepository(
           query: str,
           offset: int,
           limit: int
-     ) -> SkinsPage:
+     ) -> SkinsPage[SkinModel]:
           value = await redis_session.get(f"{query}~{offset}~{limit}")
           if value:
                data = json.loads(value)
                return SkinsPage(
-                    skins=data[:-1],
+                    skins=[
+                         SkinModel.model_validate(json.loads(model))
+                         for model in data[:-1]
+                    ],
                     current_page=offset,
                     pages=int(data[-1]),
-                    skin_model_obj=SkinModel,
-                    skins_on_page=limit
-               )
+                    skins_on_page=limit,
+               ).serialize_pages()
                
           where_params = [
                Skins.name.ilike(f"%{query_part}%") 
@@ -78,6 +80,5 @@ class SkinRepository(
                pages=result_count,
                current_page=offset,
                skins=pd_models,
-               skin_model_obj=SkinModel,
-               skins_on_page=limit
-          )
+               skins_on_page=limit,
+          ).serialize_pages()
