@@ -83,8 +83,7 @@ class UserSkinModel(BaseModel):
          
 class UserSkinRelModel(UserSkinModel):
      skin: SkinModel
-     user: UserModel = Field(exclude=True)
-         
+     user: UserModel
          
          
 class UserNotifyModel(BaseModel):

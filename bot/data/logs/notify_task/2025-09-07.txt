@@ -14,3 +14,39 @@ INFO 2025-09-07 12:47:24,849 [task.py (run)] RUN NOTIFY TASK
 INFO 2025-09-07 12:47:24,863 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
 INFO 2025-09-07 12:55:15,141 [task.py (run)] RUN NOTIFY TASK
 INFO 2025-09-07 12:55:15,141 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 22:55:27,811 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 22:55:27,854 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 22:56:47,907 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 22:56:47,907 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 22:58:14,758 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 22:58:14,760 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:01:23,280 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:01:23,280 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:03:08,636 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:03:08,638 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:07:37,322 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:07:37,359 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:08:46,816 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:08:46,816 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:09:51,499 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:09:51,500 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:14:51,540 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:14:51,542 [base.py (_process)] START PROCESS
+ERROR 2025-09-07 23:14:51,919 [base.py (_process)] Error when get all users notifies. Watch fastfy_client log
+INFO 2025-09-07 23:19:51,598 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:19:51,599 [base.py (_process)] START PROCESS
+INFO 2025-09-07 23:24:51,653 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:24:51,655 [base.py (_process)] START PROCESS
+INFO 2025-09-07 23:32:15,406 [task.py (run)] RUN NOTIFY TASK
+INFO 2025-09-07 23:32:15,408 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:37:15,468 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:37:15,472 [base.py (_process)] START PROCESS
+ERROR 2025-09-07 23:37:15,844 [base.py (_process)] Error when get all users notifies. Watch fastfy_client log
+INFO 2025-09-07 23:42:15,502 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:42:15,502 [base.py (_process)] START PROCESS
+ERROR 2025-09-07 23:42:16,037 [base.py (_process)] Error when get all users notifies. Watch fastfy_client log
+INFO 2025-09-07 23:47:15,536 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:47:15,536 [base.py (_process)] START PROCESS
+INFO 2025-09-07 23:52:15,576 [task.py (run_every_five_minutes)] RUN EVERY FIVE MINUTES START
+INFO 2025-09-07 23:52:15,576 [base.py (_process)] START PROCESS
+ERROR 2025-09-07 23:52:16,248 [base.py (_process)] Error when get all users notifies. Watch fastfy_client log

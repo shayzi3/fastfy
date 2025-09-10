@@ -1,6 +1,6 @@
 from typing import Annotated
 from aiogram.types import Message
-from aiogram import Router
+from aiogram import Router, Dispatcher
 from aiogram.fsm.context import FSMContext
 from aiogram_tool.depend import Depend
 
@@ -19,6 +19,7 @@ state_user_router = Router(name="state_user_router")
 async def login_state_code(
      message: Message, 
      state: FSMContext,
+     dispatcher: Dispatcher,
      client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
      response = await client.auth.telegram_processing(
@@ -29,6 +30,10 @@ async def login_state_code(
      if response.status in [DetailStatus.SUCCESS, DetailStatus.ERROR]:
           await state.clear()
           
+     if response.status == DetailStatus.SUCCESS:
+          if "login_users" not in dispatcher.workflow_data:
+               dispatcher["login_users"] = {}
+          dispatcher["login_users"][message.from_user.id] = True
      await message.answer(text=response.detail)
      
      

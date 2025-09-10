@@ -1,6 +1,5 @@
 from fastapi.responses import JSONResponse
-from fastapi import HTTPException, Request
-from slowapi.errors import RateLimitExceeded
+from fastapi import HTTPException
 
 from .abstract import AbstractResponse
 

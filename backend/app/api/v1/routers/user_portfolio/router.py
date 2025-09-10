@@ -40,7 +40,8 @@ user_portfolio_router = APIRouter(
           SecretTokenError,
           OffsetError
      ),
-     summary="Получение портфолио текущего аккаунта."
+     summary="Получение портфолио текущего аккаунта.",
+     response_model_exclude={"user"}
 )
 async def get_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],

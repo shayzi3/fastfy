@@ -54,6 +54,7 @@ class UsersMixin(Mixin):
      
 class SkinsMixin(Mixin):
      pydantic_model = SkinModel
+     pydantic_rel_model = SkinModel
      
      def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)

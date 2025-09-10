@@ -67,7 +67,7 @@ class UserPortfolioService:
                user_uuid=user_uuid,
                skin_name=skin_name
           )
-          if result is False:
+          if result is None:
                return SkinNotExists
           return SkinDeleteSuccess
           

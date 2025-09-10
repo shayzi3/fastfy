@@ -1,5 +1,8 @@
 from typing import Any, TypeVar, Generic, Type
+from datetime import datetime
+
 from pydantic import BaseModel, model_validator
+from aiogram.utils.text_decorations import markdown_decoration
 
 from .enums import DetailStatus
 
@@ -36,17 +39,45 @@ class SkinSchema(BaseModel):
      image: str
      skin_price_info: _SkinPriceInfoSchema | None
      
+     
+     def serialize_for_text(self) -> tuple[str, int, int, int]:
+          return (
+               datetime.fromisoformat(self.skin_price_info.last_update).
+               strftime("%d %B %H:%M:%S %Y"),
+               
+               self.skin_price_info.price
+               if self.skin_price_info.price 
+               else 0,
+               
+               self.skin_price_info.price_last_1_day
+               if self.skin_price_info.price_last_1_day
+               else 0,
+               
+               self.skin_price_info.price_last_30_day
+               if self.skin_price_info.price_last_30_day
+               else 0
+          )
+     
+     def to_text(self) -> str:
+          last_update, price, last_1, last_30 = self.serialize_for_text()
+          return (
+               f"*{markdown_decoration.quote(value=self.name)}*"
+               f"\n\nЦена за `{last_update}`: {price} р"
+               f"\nИзмение цены за 1 день: {last_1}%"
+               f"\nИзмение цены за 30 дней: {last_30}%"
+          )
+     
 
      
 class SkinsOnPageSchema(BaseModel, Generic[SKINS_ON_PAGE]):
      pages: int
      current_page: int
      skins: list[SKINS_ON_PAGE]
-     skin_model: Type[BaseModel]
+     skin_model: Type[SKINS_ON_PAGE]
      
      @model_validator(mode="before")
      def validator(data: dict[str, Any]) -> dict[str, Any]:
-          skin_model: Type[BaseModel] = data["skin_model"]
+          skin_model: Type[SKINS_ON_PAGE] = data["skin_model"]
           data["skins"] = [
                skin_model.model_validate(skin_data)
                for skin_data in data["skins"]
@@ -54,19 +85,19 @@ class SkinsOnPageSchema(BaseModel, Generic[SKINS_ON_PAGE]):
           return data
           
           
-class _HistortSchema(BaseModel):
+class _HistorySchema(BaseModel):
      price: float
      volume: int
      timestamp: str
      
        
 class SkinPriceHistorySchema(BaseModel):
-     all: list[_HistortSchema]
-     year: list[_HistortSchema]
-     month: list[_HistortSchema]
-     day: list[_HistortSchema]
+     all: list[_HistorySchema]
+     year: list[_HistorySchema]
+     month: list[_HistorySchema]
+     day: list[_HistorySchema]
      
-     
+
      
 class UserSchema(BaseModel):
      uuid: str
@@ -87,7 +118,6 @@ class UserSchema(BaseModel):
                f"\nTelegram username: {self.telegram_username}"
                f"\nПроцент: {self.skin_percent}"
           )
-     
      
 class SkinSteamInventorySchema(BaseModel):
      name: str

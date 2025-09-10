@@ -1,6 +1,7 @@
 import json
 
 from sqlalchemy import select, func
+from sqlalchemy.orm import selectinload
 
 from app.db.session import AsyncSession
 from app.infrastracture.redis import RedisPool

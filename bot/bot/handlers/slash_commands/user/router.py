@@ -38,8 +38,11 @@ async def account(
 @slash_commands_user_router.message(Command("profile"))
 async def profile(
      message: Message, 
-     user: UserSchema
+     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
+     user = await client.user.get_user(
+          telegram_id=message.from_user.id
+     )
      await message.answer_photo(
           photo=URLInputFile(url=user.steam_avatar),
           caption=user.profile_text(),
@@ -58,12 +61,11 @@ async def clear(
           return await message.answer("Событие пропущено.")
      await message.answer("Событий не найдено.")
      
-     
+
 @slash_commands_user_router.message(Command("portfolio"))
 async def portfolio(
      message: Message,
      client: Annotated[FastFyClient, Depend(get_fastfy_client)],
-     user: UserSchema
 ):
      response = await client.user.get_user_portfolio(
           telegram_id=message.from_user.id,
@@ -74,7 +76,7 @@ async def portfolio(
           return await message.answer(text=response.detail)
           
      await message.answer(
-          text=f"Портфолио для аккаунта: {user.steam_name}",
+          text=f"Портфолио скинов",
           reply_markup=paginate_buttons(
                skins=response,
                paginate_component="portfolio_skin"
@@ -92,11 +94,28 @@ async def search(
      await message.answer("Отправь название скина.")
      
      
+     
 @slash_commands_user_router.message(Command("steam_inventory"))
 async def steam_inventory(
-     message: Message
+     message: Message,
+     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
-     ...
+     response = await client.user.get_steam_inventory_user(
+          telegram_id=message.from_user.id,
+          offset=0,
+          limit=5
+     )
+     if is_detail(response):
+          return await message.answer(text=response.detail)
+     
+     await message.answer(
+          text="Steam инвентарь",
+          reply_markup=paginate_buttons(
+               skins=response,
+               paginate_component="steam_inventory_skin"
+          )
+     )
+          
      
      
      

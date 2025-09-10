@@ -26,7 +26,8 @@ async def startup() -> None:
                BotCommand(command="/profile", description="Текущие данные акканута"),
                BotCommand(command="/clear", description="Очистка событий"),
                BotCommand(command="/portfolio", description="Скины текущего акканута"),
-               BotCommand(command="/search", description="Поиск скинов")
+               BotCommand(command="/search", description="Поиск скинов"),
+               BotCommand(command="/steam_inventory", description="Просмотр Steam скинов текущего аккаунта")
           ]
      )
      logger.bot.info("BOT STARTED")

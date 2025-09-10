@@ -74,7 +74,13 @@ class UserClient(HttpClient):
                     detail="Steam не вернул ваш инвентарь. Повторите запрос позднее.", 
                     status=DetailStatus.DONE
                )
-          
+               
+          elif response.status_code == 404:
+               return DetailSchema(
+                    detail="Дальше листать не получится.",
+                    status=DetailStatus.DONE
+               )
+               
           elif response.status_code in [422, 500]:
                logger.fastfy_client.error(msg=f"Get steam inventory user error {response.status_code} {response.obj.get('detail')}")
                return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
@@ -160,7 +166,7 @@ class UserClient(HttpClient):
                return DetailSchema(detail="Этот скин отсутствует в портфолио.", status=DetailStatus.DONE)
           
           elif response.status_code == 200:
-               return DetailSchema(detail="Скин удалён.", status=DetailStatus.SUCCESS)
+               return DetailSchema(detail=f"Скин {skin_name} удалён.", status=DetailStatus.SUCCESS)
           
      
      async def get_all_users_notifies(self) -> None | list[UserNotifySchema]:

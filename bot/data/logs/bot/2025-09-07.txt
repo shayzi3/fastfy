@@ -206,3 +206,114 @@ INFO 2025-09-07 12:55:22,325 [log.py (__call__)] USER 2054556183~shayZi12345 ROU
 INFO 2025-09-07 12:55:35,381 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK click_portfolio_skin
 INFO 2025-09-07 12:55:40,049 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_portfolio_skin
 INFO 2025-09-07 12:55:47,021 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER user_callback_router CALLBACK paginate_portfolio_skin
+INFO 2025-09-07 22:55:28,294 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 22:55:46,985 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+ERROR 2025-09-07 22:55:48,078 [user.py (__call__)] Middleware get user error 500 Произошла ошибка. Повторите попытку позже.
+INFO 2025-09-07 22:55:56,391 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 22:56:48,296 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 22:56:59,325 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 22:57:03,455 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 22:57:07,907 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 22:57:24,886 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 22:58:15,378 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 22:58:25,370 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 22:58:25,776 [user.py (__call__)] New user in bot 2054556183 shayZi12345
+INFO 2025-09-07 22:59:41,232 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK login_state_code
+ERROR 2025-09-07 22:59:41,794 [log.py (__call__)] 'login_users'
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\states\user\router.py", line 34, in login_state_code
+    dispatcher["login_users"][message.from_user.id] = True
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 101, in __getitem__
+    return self.workflow_data[item]
+KeyError: 'login_users'
+INFO 2025-09-07 23:00:28,260 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:01:23,790 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:01:32,523 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:01:33,067 [user.py (__call__)] New user in bot 2054556183 shayZi12345
+INFO 2025-09-07 23:01:56,822 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK login_state_code
+INFO 2025-09-07 23:02:01,024 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:02:03,764 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:02:05,061 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:02:10,535 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+ERROR 2025-09-07 23:02:11,051 [log.py (__call__)] 'bool' object has no attribute 'steam_name'
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 72, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\handlers\slash_commands\user\router.py", line 77, in portfolio
+    text=f"Портфолио для аккаунта: {user.steam_name}",
+AttributeError: 'bool' object has no attribute 'steam_name'
+INFO 2025-09-07 23:02:35,393 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:03:09,068 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:03:21,052 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:07:37,792 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:08:10,599 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:15,166 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:16,550 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:17,610 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:19,243 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:28,061 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:30,546 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:33,688 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:08:47,185 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:08:52,148 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:08:52,530 [user.py (__call__)] New user in bot 2054556183 shayZi12345
+INFO 2025-09-07 23:09:07,899 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER state_user_router CALLBACK login_state_code
+INFO 2025-09-07 23:09:14,288 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:09:16,335 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:09:17,537 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:09:18,959 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK start
+INFO 2025-09-07 23:09:24,945 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+ERROR 2025-09-07 23:09:24,946 [log.py (__call__)] portfolio() missing 1 required positional argument: 'user'
+Traceback (most recent call last):
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\log.py", line 29, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\bot\bot\middleware\user.py", line 73, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram_tool\depend\components\inner_middleware.py", line 42, in __call__
+    return await handler(event, data)
+  File "C:\Users\dyadh\OneDrive\Рабочий стол\FastFy\venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+TypeError: portfolio() missing 1 required positional argument: 'user'
+INFO 2025-09-07 23:09:37,123 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:09:51,910 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:10:06,641 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:10:19,928 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:10:43,214 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK account
+INFO 2025-09-07 23:15:21,669 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:19:31,293 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:20:55,170 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:22:03,952 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:22:07,066 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:24:48,418 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:24:53,209 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:26:31,670 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:27:17,054 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:27:29,906 [main.py (shutdown)] BOT SHUTDOWN
+INFO 2025-09-07 23:32:15,890 [main.py (startup)] BOT STARTED
+INFO 2025-09-07 23:32:28,659 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:33:20,722 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:34:40,993 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:41:34,954 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:43:45,655 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:44:26,208 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:46:18,703 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:46:21,929 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:46:59,896 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:49:39,020 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:49:54,493 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:52:20,733 [log.py (__call__)] USER 2054556183~shayZi12345 ROUTER slash_commands_user_router CALLBACK portfolio
+INFO 2025-09-07 23:53:21,514 [main.py (shutdown)] BOT SHUTDOWN
