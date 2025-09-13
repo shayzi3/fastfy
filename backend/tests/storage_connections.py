@@ -36,7 +36,7 @@ class ConnectionTests:
                     password=my_config.redis_password
                )
                await connection.set(name="text", value="test")
-               await connection.delete("test")
+               await connection.delete("text")
           except Exception as ex:
                raise TestError(f"Test failed: connection to Redis. {ex}")
                

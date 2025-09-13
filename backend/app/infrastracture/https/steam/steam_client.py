@@ -48,7 +48,7 @@ class HttpSteamClient:
                          },
                          headers=self.headers()
                     )
-                    data = await response.json()
+                    data = response.json()
                except Exception as ex:
                     if mode == "request":
                          return await self.get_steam_profile(

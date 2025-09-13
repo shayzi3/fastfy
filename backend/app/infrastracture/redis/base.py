@@ -1,10 +1,16 @@
 from redis.asyncio import Redis
+from app.core import my_config
 
 
 
 class RedisPool(Redis):
      def __init__(self) -> None:
-          super().__init__(decode_responses=True)
+          super().__init__(
+               decode_responses=True,
+               host=my_config.redis_host,
+               port=my_config.redis_port,
+               password=my_config.redis_password
+          )
           
      
      

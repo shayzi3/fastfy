@@ -14,6 +14,7 @@ from app.tasks import (
      UpdatePriceAtDaysTask
 )
 from tests.storage_connections import test_connections
+from app.core import my_config
 
 
 
@@ -52,5 +53,6 @@ if __name__ == "__main__":
      uvicorn.run(
           app="main:app",
           reload=True,
-          port=8085
+          port=8085,
+          host=my_config.local_host
      )
