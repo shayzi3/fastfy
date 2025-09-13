@@ -1,0 +1,1 @@
+from .client import FastFyClient, get_fastfy_client
