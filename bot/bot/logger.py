@@ -1,6 +1,7 @@
 import logging
 
 from datetime import datetime
+from bot.core.config import Config
 
 
 
@@ -28,21 +29,21 @@ class FactoryBaseLogger:
      def bot(self) -> BaseLogger:
           return BaseLogger(
                name="BOT",
-               filename=f"data/logs/bot/{self.__current_day()}.txt"
+               filename=f"{Config.data_path}/logs/bot/{self.__current_day()}.txt"
           )
           
      @property
      def notify_task(self) -> BaseLogger:
           return BaseLogger(
                name="NOTIFY TASK",
-               filename=f"data/logs/notify_task/{self.__current_day()}.txt"
+               filename=f"{Config.data_path}/logs/notify_task/{self.__current_day()}.txt"
           )
           
      @property
      def fastfy_client(self) -> BaseLogger:
           return BaseLogger(
                name="FASTFY CLIENT",
-               filename=f"data/logs/fastfy_client/{self.__current_day()}.txt"
+               filename=f"{Config.data_path}/logs/fastfy_client/{self.__current_day()}.txt"
           )
           
 
