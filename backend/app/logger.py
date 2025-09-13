@@ -2,6 +2,8 @@ import logging
 
 from datetime import datetime
 
+from app.core import my_config
+
 
 class BaseLogger(logging.Logger):
      def __init__(self, name: str, filename: str):
@@ -26,28 +28,28 @@ class FactoryBaseLogger:
      def api(self) -> BaseLogger:
           return BaseLogger(
                name="API",
-               filename=f"data/logs/api/{self.__current_day()}.txt"
+               filename=f"{my_config.data_path}/logs/api/{self.__current_day()}.txt"
           )
           
      @property
      def http_steam(self) -> BaseLogger:
           return BaseLogger(
                name="HTTP_STEAM",
-               filename=f"data/logs/http_steam/{self.__current_day()}.txt"
+               filename=f"{my_config.data_path}/logs/http_steam/{self.__current_day()}.txt"
           )
           
      @property
      def task_update_notify(self) -> BaseLogger:
           return BaseLogger(
                name="TASK_UPDATE_NOTIFY",
-               filename=f"data/logs/task_update_notify/{self.__current_day()}.txt"
+               filename=f"{my_config.data_path}/logs/task_update_notify/{self.__current_day()}.txt"
           )
           
      @property
      def task_price_at_days(self) -> BaseLogger:
           return BaseLogger(
                name="TASK_PRICE_AT_DAYS",
-               filename=f"data/logs/task_price_at_days/{self.__current_day()}.txt"
+               filename=f"{my_config.data_path}/logs/task_price_at_days/{self.__current_day()}.txt"
           )
           
           

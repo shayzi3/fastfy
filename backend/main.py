@@ -13,6 +13,7 @@ from app.tasks import (
      UpdateNotifyTask,
      UpdatePriceAtDaysTask
 )
+from tests.storage_connections import test_connections
 
 
 
@@ -22,6 +23,7 @@ async def lifespan(_: FastAPI):
           UpdateNotifyTask(),
           UpdatePriceAtDaysTask()
      )
+     await test_connections.start()
      yield
 
 

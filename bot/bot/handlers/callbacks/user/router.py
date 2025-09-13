@@ -209,20 +209,7 @@ async def delete_portfolio_skin(
 async def history_portfolio_skin(
      query: CallbackQuery,
      callback_data: Skin,
-     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
-     response = await client.skin.price_history_skin(
-          skin_name=CompressName.compress(
-               skin_name=callback_data.skin_name,
-               mode="from",
-               callback_data=True
-          )
-     )
-     if is_detail(response):
-          return await query.answer(text=response.detail)
-     
-     wait_message = await query.message.answer(
-          text="График генерируется..."
-     )
+     await query.answer("Кнопка в разработке...")
      
      

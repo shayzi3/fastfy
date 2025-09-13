@@ -76,9 +76,9 @@ class UpdateNotifyBase:
           await self._notify_process(
                skin_name=skin.skin_name,
                new_skin_price=new_skin_price.price,
-               time_update=time_update.strftime("%Y-%m-%d %H:%M:%S"),
+               time_update=time_update.strftime("%d %B %H:%M:%S %Y"),
                last_skin_price=skin.price,
-               last_update=skin.last_update.strftime("%Y-%m-%d %H:%M:%S")
+               last_update=skin.last_update.strftime("%d %B %H:%M:%S %Y")
           )
           
           
@@ -141,7 +141,14 @@ class UpdateNotifyBase:
                                    "uuid": uuid.uuid4(),
                                    "user_uuid": user_skin.user.uuid,
                                    "text": (
-                                        
+                                        f"Цена на предмет *{skin_name}* `{price_mode}`\n\n"
+                                        f"Прошлая цена:\n"
+                                        f"Дата: `{last_update}`\n"
+                                        f"Цена: *{last_skin_price}р*\n\n"
+                                        f"Новая цена:\n"
+                                        f"Дата: `{time_update}`\n"
+                                        f"Цена: *{new_skin_price}р*\n\n"
+                                        f"Цена предмета изменилась на `{round(skin_change_percent, 2)}%`"
                                    ),
                                    "notify_type": NotifyType.SKIN
                               }
