@@ -11,7 +11,7 @@ from app.api.v1 import (
 from app.tasks import (
      run_tasks,
      UpdateNotifyTask,
-     UpdatePriceAtDaysTask
+     UpdatePriceAtDaysTask 
 )
 from tests.storage_connections import test_connections
 from app.core import my_config
