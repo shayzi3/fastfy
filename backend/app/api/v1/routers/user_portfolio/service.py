@@ -59,6 +59,7 @@ class UserPortfolioService:
      async def delete_portfolio(
           self,
           async_session: AsyncSession,
+          redis_session: RedisPool,
           user_uuid: str,
           skin_name: str,
      ) -> AbstractResponse:
@@ -69,12 +70,17 @@ class UserPortfolioService:
           )
           if result is None:
                return SkinNotExists
+          
+          users_portfolios = await redis_session.keys(f"*user_portfolio:{user_uuid}*")
+          if users_portfolios:
+               await redis_session.delete(*users_portfolios)
           return SkinDeleteSuccess
           
           
      async def post_portfolio(
           self,
           async_session: AsyncSession,
+          redis_session: RedisPool,
           skin_name: str,
           user_uuid: str
      ) -> AbstractResponse:
@@ -91,6 +97,10 @@ class UserPortfolioService:
                     skin_name=skin_name
                )
                return PortfolioSkinCreateSuccess
+          
+          users_portfolios = await redis_session.keys(f"*user_portfolio:{user_uuid}*")
+          if users_portfolios:
+               await redis_session.delete(*users_portfolios)
           return SkinPortfolioAlreadyExists
      
      

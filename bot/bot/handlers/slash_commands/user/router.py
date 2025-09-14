@@ -5,8 +5,9 @@ from aiogram.types import Message, URLInputFile
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram_tool.depend import Depend
+from aiogram.enums import ParseMode
 
-from bot.schemas.fastfy import UserSchema, is_detail
+from bot.schemas.fastfy import is_detail
 from bot.utils.buttons.inline.user import profile_button, login_button, paginate_buttons
 from bot.infrastracture.http.fastfy import FastFyClient, get_fastfy_client
 from bot.utils.filters.user.state import SearchState
@@ -46,7 +47,8 @@ async def profile(
      await message.answer_photo(
           photo=URLInputFile(url=user.steam_avatar),
           caption=user.profile_text(),
-          reply_markup=profile_button()
+          reply_markup=profile_button(),
+          parse_mode=ParseMode.MARKDOWN_V2
      )
      
      

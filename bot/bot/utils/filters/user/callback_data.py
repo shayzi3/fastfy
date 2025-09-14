@@ -1,11 +1,10 @@
-from typing import Any, Literal
+from typing import Literal
 from aiogram.filters.callback_data import CallbackData
 
-# from bot.utils.callback_data_storage import CallbackDataStorage
+from aiogram_tool.callback_data import LongCallbackData
 
 
-
-class Skin(CallbackData, prefix="?"):
+class Skin(LongCallbackData, prefix="&"):
      mode: str
      skin_name: str
      
@@ -15,6 +14,3 @@ class Paginate(CallbackData, prefix="&"):
      vector: Literal["left", "right"]
      offset: int
      query: str = ""
-     
-     
-skin = Skin(mode="mode", skin_name="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")

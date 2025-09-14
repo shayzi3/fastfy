@@ -112,11 +112,11 @@ class UserSchema(BaseModel):
      
      def profile_text(self) -> str:
           return (
-               f"Steam ID: {self.steam_id}"
-               f"\nSteam Name: {self.steam_name}"
-               f"\nTelegram ID: {self.telegram_id}"
-               f"\nTelegram username: {self.telegram_username}"
-               f"\nПроцент: {self.skin_percent}"
+               f"Steam ID: `{self.steam_id}`"
+               f"\nSteam Name: *{self.steam_name}*"
+               f"\nTelegram ID: `{self.telegram_id}`"
+               f"\nTelegram username: *{self.telegram_username}*"
+               f"\nПроцент: *{self.skin_percent}%*"
           )
      
 class SkinSteamInventorySchema(BaseModel):

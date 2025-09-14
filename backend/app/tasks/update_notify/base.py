@@ -38,40 +38,43 @@ class UpdateNotifyBase:
      async def _skin_process(self, skin: SkinPriceInfoModel) -> None:
           logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} START")
           
-          new_skin_price = await self.steam_http_client.get_skin_price(
-               skin_name=skin.skin_name
-          )
-          if isresponse(new_skin_price):
-               return logger.task_update_notify.info(f"ERROR GET PRICE FOR SKIN {skin.skin_name}")
-          
-          time_update = datetime.now()
-          update_mode = UpdateMode.filter_mode(
-               volume=new_skin_price.volume,
-               last_price=skin.price,
-               new_price=new_skin_price
-          )
-          
-          async with session_asynccontext() as async_session:
-               await SkinPriceInfoRepository.update(
-                    session=async_session,
-                    where={"skin_name": skin.skin_name},
-                    price=new_skin_price.price,
-                    last_update=time_update,
-                    update_mode=update_mode
+          try:
+               new_skin_price = await self.steam_http_client.get_skin_price(
+                    skin_name=skin.skin_name
                )
-               await SkinPriceHistoryRepository.create(
-                    session=async_session,
-                    data=[
-                         {
-                              "uuid": uuid.uuid4(),
-                              "skin_name": skin.skin_name,
-                              "price": new_skin_price.price,
-                              "volume": new_skin_price.volume,
-                              "timestamp": time_update
-                         }
-                    ]
+               if isresponse(new_skin_price):
+                    return logger.task_update_notify.info(f"ERROR GET PRICE FOR SKIN {skin.skin_name}")
+               
+               time_update = datetime.now()
+               update_mode = UpdateMode.filter_mode(
+                    volume=new_skin_price.volume,
+                    last_price=skin.price,
+                    new_price=new_skin_price
                )
-               logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} SUCCESS")
+               
+               async with session_asynccontext() as async_session:
+                    await SkinPriceInfoRepository.update(
+                         session=async_session,
+                         where={"skin_name": skin.skin_name},
+                         price=new_skin_price.price,
+                         last_update=time_update,
+                         update_mode=update_mode
+                    )
+                    await SkinPriceHistoryRepository.create(
+                         session=async_session,
+                         data=[
+                              {
+                                   "uuid": uuid.uuid4(),
+                                   "skin_name": skin.skin_name,
+                                   "price": new_skin_price.price,
+                                   "volume": new_skin_price.volume,
+                                   "timestamp": time_update
+                              }
+                         ]
+                    )
+                    logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} SUCCESS")
+          except Exception as ex:
+               logger.task_update_notify.error(f"TASK UPDATE NOTIFY ERROR {ex}")
                
           await self._notify_process(
                skin_name=skin.skin_name,
