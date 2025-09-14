@@ -28,7 +28,7 @@ class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
           logger.task_update_notify.info("1 HOUR START")
           
           await asyncio.sleep(timedelta(hours=1).total_seconds())
-          self._process(mode=UpdateMode.HIGH)
+          await self._process(mode=UpdateMode.HIGH)
           await self.run_every_one_hour()
      
      
