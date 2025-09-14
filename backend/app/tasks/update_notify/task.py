@@ -28,7 +28,7 @@ class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
           logger.task_update_notify.info("1 HOUR START")
           
           await asyncio.sleep(timedelta(hours=1).total_seconds())
-          asyncio.create_task(self._process(mode=UpdateMode.HIGH))
+          self._process(mode=UpdateMode.HIGH)
           await self.run_every_one_hour()
      
      
@@ -36,7 +36,7 @@ class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
           logger.task_update_notify.info("2 HOUR START")
           
           await asyncio.sleep(timedelta(hours=2).total_seconds())
-          asyncio.create_task(self._process(mode=UpdateMode.MEDIUM_WELL))
+          await self._process(mode=UpdateMode.MEDIUM_WELL)
           await self.run_every_two_hour()
      
      
@@ -44,7 +44,7 @@ class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
           logger.task_update_notify.info("3 HOUR START")
           
           await asyncio.sleep(timedelta(hours=3).total_seconds())
-          asyncio.create_task(self._process(mode=UpdateMode.MEDIUM))
+          await self._process(mode=UpdateMode.MEDIUM)
           await self.run_every_three_hour()
      
      
@@ -52,5 +52,5 @@ class UpdateNotifyTask(UpdateNotifyBase, AbstarctTask):
           logger.task_update_notify.info("4 HOUR START")
           
           await asyncio.sleep(timedelta(hours=4).total_seconds())
-          asyncio.create_task(self._process(mode=UpdateMode.LOW))
+          await self._process(mode=UpdateMode.LOW)
           await self.run_every_four_hour()
