@@ -63,7 +63,7 @@ async def skins_search(
      message: Message,
      client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
-     if message.text.encode() > 40:
+     if len(message.text.encode()) > 40:
           return await message.answer("Слишком длинный запрос.")
      
      response = await client.skin.search_skins(
