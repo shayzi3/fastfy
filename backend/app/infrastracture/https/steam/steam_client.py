@@ -170,8 +170,9 @@ class HttpSteamClient:
                          },
                          headers=self.headers()
                     )
-                    data = await response.json()
+                    data = response.json()
                except:
+                    logger.task_update_notify.error(f"RESTART FOR SKIN {skin_name}. Error: {response.status_code} {response.text}")
                     return await self.get_skin_price(
                          skin_name=skin_name,
                          time=time + 2
