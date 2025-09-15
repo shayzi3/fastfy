@@ -49,7 +49,7 @@ class UpdateNotifyBase:
                update_mode = UpdateMode.filter_mode(
                     volume=new_skin_price.volume,
                     last_price=skin.price,
-                    new_price=new_skin_price
+                    new_price=new_skin_price.price
                )
                
                async with session_asynccontext() as async_session:
@@ -74,7 +74,7 @@ class UpdateNotifyBase:
                     )
                     logger.task_update_notify.info(f"SAVE PRICE FOR SKIN {skin.skin_name} SUCCESS")
           except Exception as ex:
-               logger.task_update_notify.error(f"TASK UPDATE NOTIFY ERROR {ex}")
+               logger.task_update_notify.error(f"{ex}")
                
           await self._notify_process(
                skin_name=skin.skin_name,
