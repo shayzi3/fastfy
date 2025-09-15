@@ -65,7 +65,7 @@ class SkinPriceHistoryModel(BaseModel):
      timestamp: datetime
      
      def model_post_init(self, _: Any) -> None:
-          self.item_id = str(self.item_id)
+          self.uuid = str(self.uuid)
           
      
 

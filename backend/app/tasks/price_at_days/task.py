@@ -20,6 +20,6 @@ class UpdatePriceAtDaysTask(UpdatePriceAtDaysBase, AbstarctTask):
      async def run_price_at_days(self) -> None:
           logger.task_price_at_days.info("2 HOUR 30 MINUTES START")
           
-          await asyncio.sleep(timedelta(hours=2, minutes=30).total_seconds())
+          await asyncio.sleep(timedelta(minutes=5).total_seconds())
           asyncio.create_task(self._process())
           await self.run_price_at_days()
