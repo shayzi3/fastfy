@@ -83,7 +83,5 @@ class UpdatePriceAtDaysBase:
                          )
                          logger.task_price_at_days.info(f"SAVE DATA AT SKIN {skin.skin_name}")
           except Exception as ex:
-               logger.task_price_at_days.error(f"{ex}")
-               raise ex
-                    
+               logger.task_price_at_days.error(f"{ex}")                    
                

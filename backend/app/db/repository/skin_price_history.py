@@ -69,7 +69,7 @@ class SkinPriceHistoryRepository(
                price_history_obj = SkinHistoryModel(
                     price=skin[0],
                     volume=skin[1],
-                    timestamp=datetime.fromisoformat(skin[2])
+                    timestamp=skin[2]
                )
                for index, label in enumerate(sort_by_labels.keys()):
                     if skin[3:][index] is True:

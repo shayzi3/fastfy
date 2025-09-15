@@ -4,11 +4,10 @@ from typing import Literal, Any
 
 from bot.core.config import Config
 from bot.schemas.fastfy import ResponseObjectSchema
-from bot.utils.singleton import Singleton
 
 
 
-class HttpClient(Singleton):
+class HttpClient:
      
      
      @staticmethod
