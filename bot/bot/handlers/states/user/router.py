@@ -15,7 +15,7 @@ state_user_router = Router(name="state_user_router")
 
 
 
-@state_user_router.message(LoginState.code)
+@state_user_router.message(LoginState.code, LoginState.code_change_account)
 async def login_state_code(
      message: Message, 
      state: FSMContext,

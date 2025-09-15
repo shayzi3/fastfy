@@ -10,7 +10,7 @@ from aiogram.enums import ParseMode
 from bot.schemas.fastfy import is_detail
 from bot.utils.buttons.inline.user import profile_button, login_button, paginate_buttons
 from bot.infrastracture.http.fastfy import FastFyClient, get_fastfy_client
-from bot.utils.filters.user.state import SearchState
+from bot.utils.filters.user.state import SearchState, LoginState
 
 
 slash_commands_user_router = Router(name="slash_commands_user_router")
@@ -27,6 +27,7 @@ async def start(message: Message):
 @slash_commands_user_router.message(Command("account"))
 async def account(
      message: Message,
+     state: FSMContext,
      client: Annotated[FastFyClient, Depend(get_fastfy_client)]
 ):
      login_url = await client.auth.steam_login()
@@ -34,6 +35,8 @@ async def account(
           text="Смена аккаунта",
           reply_markup=login_button(login_url)
      )
+     await state.set_state(LoginState.code_change_account)
+     await message.answer("Отправь код, полученный после входа в Steam аккаунт.")
      
      
 @slash_commands_user_router.message(Command("profile"))
