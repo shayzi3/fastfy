@@ -4,6 +4,7 @@ from aiogram.enums import ParseMode
 
 from bot.schemas.fastfy import UserNotifySchema
 from bot.infrastracture.http.fastfy import FastFyClient
+from bot.infrastracture.http.fastfy.clients import AuthClient, SkinClient, UserClient
 from bot.core.bot import bot
 from bot.logger import logger
 
@@ -11,7 +12,11 @@ from bot.logger import logger
 
 class BaseNotifyTask:
      def __init__(self):
-          self.__client = FastFyClient()
+          self.__client = FastFyClient(
+               auth_client=AuthClient(),
+               skin_client=SkinClient(),
+               user_client=UserClient()
+          )
      
      
      async def _process(self) -> None:

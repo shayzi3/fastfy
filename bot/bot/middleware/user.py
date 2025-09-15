@@ -9,7 +9,7 @@ from aiogram.types import CallbackQuery
 from bot.utils.buttons.inline.user import login_button
 from bot.infrastracture.http.fastfy.base import HttpClient
 from bot.infrastracture.http.fastfy import FastFyClient
-from bot.infrastracture.http.fastfy.client import AuthClient, SkinClient, UserClient
+from bot.infrastracture.http.fastfy.clients import AuthClient, SkinClient, UserClient
 from bot.utils.filters.user.state import LoginState
 from bot.alerts import AlertMessage
 from bot.logger import logger
