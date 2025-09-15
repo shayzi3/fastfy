@@ -3,6 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, model_validator
 from aiogram.utils.text_decorations import markdown_decoration
+from aiogram.utils.markdown import bold, code
 
 from .enums import DetailStatus
 
@@ -40,7 +41,7 @@ class SkinSchema(BaseModel):
      skin_price_info: _SkinPriceInfoSchema | None
      
      
-     def serialize_for_text(self) -> tuple[str, int, int, int]:
+     def serialize_for_text(self) -> tuple[str, float, float, float]:
           return (
                datetime.fromisoformat(self.skin_price_info.last_update).
                strftime("%d %B %H:%M:%S %Y"),
@@ -57,15 +58,15 @@ class SkinSchema(BaseModel):
                if self.skin_price_info.price_last_30_day
                else 0
           )
-     
+          
      def to_text(self) -> str:
           last_update, price, last_1, last_30 = self.serialize_for_text()
-          return markdown_decoration.quote((
-               f"*{self.name}*"
-               f"\n\nЦена за `{last_update}`: {price}р"
-               f"\nИзменение цены за 1 день: {last_1}%"
-               f"\nИзменение цены за 30 дней: {last_30}%"
-          ))
+          return (
+               f"{bold(self.name)}"
+               f"\n\nЦена за {code(last_update)}: {bold(str(price) + "р")}"
+               f"\nИзменение цены за 1 день: {bold(str(last_1) + "%")}"
+               f"\nИзменение цены за 30 дней: {bold(str(last_30) + "%")}"
+          )
      
 
      
@@ -111,13 +112,13 @@ class UserSchema(BaseModel):
      
      
      def profile_text(self) -> str:
-          return markdown_decoration.quote((
-               f"Steam ID: `{self.steam_id}`"
-               f"\nSteam Name: *{self.steam_name}*"
-               f"\nTelegram ID: `{self.telegram_id}`"
-               f"\nTelegram username: *{self.telegram_username}*"
-               f"\nПроцент: *{self.skin_percent}%*"
-          ))
+          return (
+               f"Steam ID: {code(self.steam_id)}"
+               f"\nSteam Name: {bold(self.steam_name)}"
+               f"\nTelegram ID: {code(self.telegram_id)}"
+               f"\nTelegram username: {bold(self.telegram_username)}"
+               f"\nПроцент: {bold(str(self.skin_percent) + "%")}"
+          )
      
 class SkinSteamInventorySchema(BaseModel):
      name: str

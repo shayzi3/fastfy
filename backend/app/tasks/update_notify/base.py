@@ -3,6 +3,8 @@ import uuid
 
 from datetime import datetime
 
+from aiogram.utils.markdown import bold, code
+
 from app.schemas.enums import UpdateMode, NotifyType
 from app.schemas import SkinPriceInfoModel, UserSkinRelModel
 from app.db.session import session_asynccontext
@@ -144,14 +146,14 @@ class UpdateNotifyBase:
                                    "uuid": uuid.uuid4(),
                                    "user_uuid": user_skin.user.uuid,
                                    "text": (
-                                        f"Цена на предмет *{skin_name}* `{price_mode}`\n\n"
+                                        f"Цена на предмет {bold(skin_name)} {code(price_mode)}\n\n"
                                         f"Прошлая цена:\n"
-                                        f"Дата: `{last_update}`\n"
-                                        f"Цена: *{last_skin_price}р*\n\n"
+                                        f"Дата: {code(last_update)}\n"
+                                        f"Цена: {bold(str(last_skin_price) + "р")}\n\n"
                                         f"Новая цена:\n"
-                                        f"Дата: `{time_update}`\n"
-                                        f"Цена: *{new_skin_price}р*\n\n"
-                                        f"Цена предмета изменилась на `{round(skin_change_percent, 2)}%`"
+                                        f"Дата: {code(time_update)}\n"
+                                        f"Цена: {bold(str(new_skin_price) + "р")}\n\n"
+                                        f"Цена предмета изменилась на {code(str(round(skin_change_percent, 2)) + "р")}"
                                    ),
                                    "notify_type": NotifyType.SKIN
                               }

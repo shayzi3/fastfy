@@ -1,7 +1,6 @@
 import asyncio
 
 from aiogram.enums import ParseMode
-from aiogram.utils.text_decorations import markdown_decoration
 
 from bot.schemas.fastfy import UserNotifySchema
 from bot.infrastracture.http.fastfy import FastFyClient
@@ -34,6 +33,6 @@ class BaseNotifyTask:
           async with bot as session:
                await session.send_message(
                     chat_id=notify.user.telegram_id,
-                    text=markdown_decoration.quote(notify.text),
+                    text=notify.text,
                     parse_mode=ParseMode.MARKDOWN_V2
                )
