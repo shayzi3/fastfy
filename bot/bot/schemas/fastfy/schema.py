@@ -63,9 +63,9 @@ class SkinSchema(BaseModel):
           last_update, price, last_1, last_30 = self.serialize_for_text()
           return (
                f"{bold(self.name)}"
-               f"\n\nЦена за {code(last_update)}: {bold(str(price) + "р")}"
-               f"\nИзменение цены за 1 день: {bold(str(last_1) + "%")}"
-               f"\nИзменение цены за 30 дней: {bold(str(last_30) + "%")}"
+               f"\n\nЦена за {code(last_update)}: {bold(str(price) + 'р')}"
+               f"\nИзменение цены за 1 день: {bold(str(last_1) + '%')}"
+               f"\nИзменение цены за 30 дней: {bold(str(last_30) + '%')}"
           )
      
 
@@ -117,7 +117,7 @@ class UserSchema(BaseModel):
                f"\nSteam Name: {bold(self.steam_name)}"
                f"\nTelegram ID: {code(self.telegram_id)}"
                f"\nTelegram username: {bold(self.telegram_username)}"
-               f"\nПроцент: {bold(str(self.skin_percent) + "%")}"
+               f"\nПроцент: {bold(str(self.skin_percent) + '%')}"
           )
      
 class SkinSteamInventorySchema(BaseModel):
