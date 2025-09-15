@@ -15,7 +15,7 @@ state_user_router = Router(name="state_user_router")
 
 
 
-@state_user_router.message(LoginState.code, LoginState.code_change_account)
+@state_user_router.message(LoginState.code)
 async def login_state_code(
      message: Message, 
      state: FSMContext,
@@ -35,6 +35,15 @@ async def login_state_code(
                dispatcher["login_users"] = {}
           dispatcher["login_users"][message.from_user.id] = True
      await message.answer(text=response.detail)
+     
+     
+@state_user_router.message(LoginState.code_change_account)
+async def change_account_code(
+     message: Message,
+     state: FSMContext,
+     client: Annotated[FastFyClient, Depend(get_fastfy_client)]
+):
+     await message.answer("В разработке...")
      
      
 @state_user_router.message(UserPercentState.percent)

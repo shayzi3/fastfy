@@ -1,5 +1,6 @@
-from bot.schemas.fastfy import DetailSchema
+from aiogram_tool.depend import Scope, dependency_scope
 
+from bot.schemas.fastfy import DetailSchema
 from bot.logger import logger
 from bot.schemas.fastfy.enums import DetailStatus
 from ..base import HttpClient
@@ -35,3 +36,8 @@ class AuthClient(HttpClient):
                return DetailSchema(detail="Произошла ошибка. Повторите запрос позже.", status=DetailStatus.ERROR)
           
           return DetailSchema(detail="Регистрация прошла успешно.", status=DetailStatus.SUCCESS)
+     
+     
+@dependency_scope(scope=Scope.APP)
+async def get_auth_client() -> AuthClient:
+     return AuthClient()

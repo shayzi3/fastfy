@@ -1,3 +1,5 @@
+from aiogram_tool.depend import Scope, dependency_scope
+
 from bot.schemas.fastfy import (
      UserSchema,
      DetailSchema,
@@ -183,3 +185,7 @@ class UserClient(HttpClient):
           
           return [UserNotifySchema.model_validate(notify_obj) for notify_obj in response.obj]
           
+          
+@dependency_scope(scope=Scope.APP)
+async def get_user_client() -> UserClient:
+     return UserClient()

@@ -153,7 +153,7 @@ class UpdateNotifyBase:
                                         f"Новая цена:\n"
                                         f"Дата: {code(time_update)}\n"
                                         f"Цена: {bold(str(new_skin_price) + 'р')}\n\n"
-                                        f"Цена предмета изменилась на {code(str(round(skin_change_percent, 2)) + 'р')}"
+                                        f"Цена предмета изменилась на {code(str(round(skin_change_percent, 2)) + '%')}"
                                    ),
                                    "notify_type": NotifyType.SKIN
                               }

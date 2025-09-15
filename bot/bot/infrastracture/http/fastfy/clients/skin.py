@@ -1,3 +1,5 @@
+from aiogram_tool.depend import Scope, dependency_scope
+
 from bot.schemas.fastfy import (
      DetailSchema, 
      SkinSchema, 
@@ -81,5 +83,7 @@ class SkinClient(HttpClient):
           
                
           
-     
+@dependency_scope(scope=Scope.APP)
+async def get_skin_client() -> SkinClient:
+     return SkinClient()
      
