@@ -149,11 +149,11 @@ class UpdateNotifyBase:
                                         f"Цена на предмет {bold(skin_name)} {code(price_mode)}\n\n"
                                         f"Прошлая цена:\n"
                                         f"Дата: {code(last_update)}\n"
-                                        f"Цена: {bold(str(last_skin_price) + "р")}\n\n"
+                                        f"Цена: {bold(str(last_skin_price) + 'р')}\n\n"
                                         f"Новая цена:\n"
                                         f"Дата: {code(time_update)}\n"
-                                        f"Цена: {bold(str(new_skin_price) + "р")}\n\n"
-                                        f"Цена предмета изменилась на {code(str(round(skin_change_percent, 2)) + "р")}"
+                                        f"Цена: {bold(str(new_skin_price) + 'р')}\n\n"
+                                        f"Цена предмета изменилась на {code(str(round(skin_change_percent, 2)) + 'р')}"
                                    ),
                                    "notify_type": NotifyType.SKIN
                               }
