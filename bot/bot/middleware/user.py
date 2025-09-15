@@ -9,6 +9,7 @@ from aiogram.types import CallbackQuery
 from bot.utils.buttons.inline.user import login_button
 from bot.infrastracture.http.fastfy.base import HttpClient
 from bot.infrastracture.http.fastfy import FastFyClient
+from bot.infrastracture.http.fastfy.client import AuthClient, SkinClient, UserClient
 from bot.utils.filters.user.state import LoginState
 from bot.alerts import AlertMessage
 from bot.logger import logger
@@ -19,7 +20,11 @@ from bot.logger import logger
 class UserMiddleware(BaseMiddleware):
      def __init__(self):
           self.client = HttpClient()
-          self.fastfy_client = FastFyClient()
+          self.fastfy_client = FastFyClient(
+               auth_client=AuthClient(),
+               skin_client=SkinClient(),
+               user_client=UserClient()
+          )
           
           
      async def __call__(
