@@ -113,12 +113,14 @@ async def post_portfolio(
 )
 async def delete_portfolio(
      async_session: Annotated[AsyncSession, Depends(get_async_session)],
+     redis_session: Annotated[RedisPool, Depends(get_redis_session)],
      current_user_uuid: Annotated[str, Depends(current_user_uuid)],
      service: Annotated[UserPortfolioService, Depends(get_user_portfolio_service)],
      skin_name: str
 ):   
      result = await service.delete_portfolio(
           async_session=async_session,
+          redis_session=redis_session,
           user_uuid=current_user_uuid,
           skin_name=skin_name
      )
