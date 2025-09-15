@@ -60,12 +60,12 @@ class SkinSchema(BaseModel):
      
      def to_text(self) -> str:
           last_update, price, last_1, last_30 = self.serialize_for_text()
-          return (
-               f"*{markdown_decoration.quote(value=self.name)}*"
-               f"\n\nЦена за `{last_update}`: {price} р"
-               f"\nИзмение цены за 1 день: {last_1}%"
-               f"\nИзмение цены за 30 дней: {last_30}%"
-          )
+          return markdown_decoration.quote((
+               f"*{self.name}*"
+               f"\n\nЦена за `{last_update}`: {price}р"
+               f"\nИзменение цены за 1 день: {last_1}%"
+               f"\nИзменение цены за 30 дней: {last_30}%"
+          ))
      
 
      
@@ -111,13 +111,13 @@ class UserSchema(BaseModel):
      
      
      def profile_text(self) -> str:
-          return (
+          return markdown_decoration.quote((
                f"Steam ID: `{self.steam_id}`"
                f"\nSteam Name: *{self.steam_name}*"
                f"\nTelegram ID: `{self.telegram_id}`"
                f"\nTelegram username: *{self.telegram_username}*"
                f"\nПроцент: *{self.skin_percent}%*"
-          )
+          ))
      
 class SkinSteamInventorySchema(BaseModel):
      name: str
