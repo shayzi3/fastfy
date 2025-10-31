@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel
 
 
@@ -37,12 +38,40 @@ class UpdateModeEnum(BaseModel):
           return "LOW"
      
 
-     
-
 class NotifyTypeEnum(BaseModel):
      INFO: str = "INFO"
      SKIN: str = "SKIN"
      
+     
+class OrderByPaginateSkinsEnum(Enum):
+     PRICE = "price"
+     PRICE_LAST_1_DAY = "price_last_1_day"
+     PRICE_LAST_30_DAY = "price_last_30_day"
+     EMPTY = "empty"
+     
+     def __str__(self):
+          return self.value
+     
+     
+class OrderByModeEnum(Enum):
+     DESC = "desc"
+     ASC = "asc"
+     EMPTY = "empty"
+     
+     def __str__(self):
+          return self.value
+     
+     
+class UserNotifyEnum(Enum):
+     ON = "on"
+     OFF = "off"
+     EMPTY = "empty"
+     
+     def __str__(self):
+          return self.value
+     
+     
+
      
 UpdateMode = UpdateModeEnum()
 NotifyType = NotifyTypeEnum()

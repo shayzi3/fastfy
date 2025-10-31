@@ -3,13 +3,14 @@ from sqlalchemy import text
 from redis.asyncio import Redis
 
 from app.core import my_config
-from .error import TestError
+from .exception import TestError
 
 
 
 
 
 class ConnectionTests:
+     # Tests for hosting
      
      async def start(self) -> None:
           await self.test_postgresql()
@@ -35,8 +36,7 @@ class ConnectionTests:
                     port=my_config.redis_port,
                     password=my_config.redis_password
                )
-               await connection.set(name="text", value="test")
-               await connection.delete("text")
+               await connection.ping()
           except Exception as ex:
                raise TestError(f"Test failed: connection to Redis. {ex}")
                

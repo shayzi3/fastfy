@@ -1,8 +1,8 @@
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
-from app.logger import logger
-from app.api.v1.routers.exceptions import exception_server_error
+from backend.app.utils.logger import logger
+from backend.app.api.v1.exceptions import exception_server_error
 
 
 

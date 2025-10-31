@@ -1,25 +1,19 @@
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 
-from .abstract import AbstractResponse
+from .abc import BaseResponse
 
 
 
-class BaseResponse(AbstractResponse):
-     description = ""
-     detail = ""
+class Response(BaseResponse):
+     description = "Empty"
      status_code = 200
           
           
      @classmethod
-     def content_detail(cls) -> str:
-          return cls.detail if cls.detail else cls.__name__
-     
-     
-     @classmethod
      def response(cls) -> JSONResponse:
           return JSONResponse(
-               content={"detail": cls.content_detail()},
+               content={"detail": cls.description},
                status_code=cls.status_code
           )
           
@@ -27,43 +21,25 @@ class BaseResponse(AbstractResponse):
      def exec(cls) -> HTTPException:
           return HTTPException(
                status_code=cls.status_code,
-               detail=cls.content_detail()
+               detail=cls.description
           )
           
      @classmethod
      def schema(cls) -> dict[int, dict]:
-          return {
-               cls.status_code: {
-                    "description": cls.description,
-                    "content": {
-                         "application/json": {
-                              "example": {
-                                   "detail": [cls.content_detail()]
-                              }
-                         }
-                    }
-               }
-          }
+          return {cls.status_code: {"description": cls.description}}
      
           
      
 def isresponse(obj: type) -> bool:
-     return isinstance(obj, type) and AbstractResponse in obj.mro()
+     return isinstance(obj, type) and BaseResponse in obj.mro()
 
 
-def router_responses(*values: AbstractResponse) -> dict[int, dict]:
+def router_responses(*values: BaseResponse) -> dict[int, dict[str, str]]:
      responses = {}
      for resp in values:
           schema = resp.schema()
           if resp.status_code in responses.keys():
-               (
-                    responses[resp.status_code]
-                    ["content"]
-                    ["application/json"]
-                    ["example"]
-                    ["detail"]
-                    .append(resp.content_detail())
-               )
+               responses[resp.status_code]["description"] += f" | {schema[resp.status_code]["description"]}"
           else:
                responses.update(schema)
      return responses

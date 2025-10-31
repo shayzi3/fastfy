@@ -2,7 +2,7 @@ import asyncio
 
 from datetime import timedelta
 
-from app.logger import logger
+from backend.app.utils.logger import logger
 
 from .base import UpdatePriceAtDaysBase
 from ..base import AbstarctTask

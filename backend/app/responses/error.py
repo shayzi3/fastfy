@@ -1,79 +1,100 @@
-from .base import BaseResponse
+from fastapi import status
+
+from .base import Response
 
 
 
-class SteamLoginError(BaseResponse):
-     description = "Произошла ошибка при авторизации через Steam."
-     detail = "Произошла ошибка при авторизации через Steam."
-     status_code = 400
+class SteamLoginError(Response):
+     description = "Auth error of Steam"
+     status_code = status.HTTP_400_BAD_REQUEST
      
 
-class HttpError(BaseResponse):
-     description = "Повторите попытку позже."
-     detail = "Повторите попытку позже."
-     status_code = 403
+class HttpError(Response):
+     description = "Try Later"
+     status_code = status.HTTP_403_FORBIDDEN
      
      
-class TelegramLoginError(BaseResponse):
-     description = "Недействительный код."
-     detail = "Недействительный код."
-     status_code = 400
+class TelegramLoginError(Response):
+     description = "Invalid code"
+     status_code = status.HTTP_400_BAD_REQUEST
      
      
-class ServerError(BaseResponse):
-     description = "Ошибка на стороне сервера."
-     detail = "Ошибка на стороне сервера."
-     status_code = 500
+class ServerError(Response):
+     description = "Internal Server Error"
+     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
      
      
-class AuthError(BaseResponse):
-     description = "Нужно пройти повторную авторизацию."
+class UserNotFoundError(Response):
+     description = "User not found"
+     status_code = status.HTTP_404_NOT_FOUND   
+     
+     
+class SkinNotFoundError(Response):
+     description = "Skin not found"
+     status_code = status.HTTP_404_NOT_FOUND   
+     
+     
+class SkinAlreadyExistsError(Response):
+     description = "Skin already exists"
+     status_code = status.HTTP_409_CONFLICT
+     
+     
+class PortfolioEmptyError(Response):
+     description = "Users portfolio empty"
+     status_code = status.HTTP_403_FORBIDDEN
+     
+     
+class SkinNotExistsError(Response):
+     description = "Skin not exists"
+     status_code = status.HTTP_400_BAD_REQUEST
+     
+     
+class NotifyEmptyError(Response):
+     description = "User notify not found"
+     status_code = status.HTTP_404_NOT_FOUND
+     
+     
+class OffsetError(Response):
+     description = "The offset parameter must be divisible by limit without remainder."
+     status_code = status.HTTP_403_FORBIDDEN
+     
+     
+class SteamInventoryBlockedError(Response):
+     description = "Impossible get user skins"
+     status_code = status.HTTP_400_BAD_REQUEST
+     
+     
+class JWTTokenExpireError(Response):
+     description = "Истёк срок действия JWT токена."
+     detail = "Истёк срок действия JWT токена."
      status_code = 401
      
      
-class SecretTokenError(BaseResponse):
-     description = "Недействительный секретный код."
-     detail = "Недействительный секретный код."
-     status_code = 400
+class JWTTokenInvalidError(Response):
+     description = "Invalid token"
+     status_code = status.HTTP_401_UNAUTHORIZED
      
      
-class UserNotFoundError(BaseResponse):
-     description = "Запрашивемый пользователь не найден."
-     status_code = 404     
+class ExchangeCodeInvalidError(Response):
+     description = "Invalid code"
+     status_code = status.HTTP_400_BAD_REQUEST
      
      
-class SkinNotFoundError(BaseResponse):
-     description = "Скин не найден."
-     status_code = 404
+class ArgumentError(Response):
+     description = "Not found arguments"
+     status_code = status.HTTP_403_FORBIDDEN
      
      
-class SkinPortfolioAlreadyExists(BaseResponse):
-     description = "Скин в портфолио польвателя уже существует."
-     status_code = 400
+class UserUpdateError(Response):
+     description = "User doesn't update"
+     status_code = status.HTTP_400_BAD_REQUEST
      
      
-     
-class PortfolioEmpty(BaseResponse):
-     description = "Портфолио пользователя пустое."
-     status_code = 400
-     
-     
-class SkinNotExists(BaseResponse):
-     description = "Скин не существует."
-     status_code = 400
+class TransactionNotFound(Response):
+     description = "Transaction not found"
+     status_code = status.HTTP_404_NOT_FOUND
      
      
-class NotifyEmpty(BaseResponse):
-     description = "Уведомления пользователя не найдены."
-     status_code = 404
-     
-     
-class OffsetError(BaseResponse):
-     description = "Параметр offset должен делиться на limit без остатка."
-     status_code = 403
-     
-     
-class SteamInventoryBlocked(BaseResponse):
-     description = "Невозможно получить скины пользователя."
-     detail = "Невозможно получить скины пользователя."
-     status_code = 400
+class SkinTransactionError(Response):
+     description = "Skin transaction error"
+     status_code = status.HTTP_400_BAD_REQUEST

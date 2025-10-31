@@ -1,25 +1,26 @@
-from .base import BaseResponse
+from .base import Response
 
 
 
 
-class TelegramLoginSuccess(BaseResponse):
-     detail = "Телеграмм акааунт привязан успешно."
-     description = "Телеграмм аккаунт привязан успешно."
-          
+class TelegramLoginSuccess(Response):
+     detail = "Telegram account linked successfully"          
      
-class PortfolioSkinCreateSuccess(BaseResponse):
-     description = "Скин в портфолио создан успешно."
+class SkinCreateSuccess(Response):
+     description = "Skin created"
      
      
-class SkinDeleteSuccess(BaseResponse):
-     description = "Скин удалён успешно."
+class SkinDeleteSuccess(Response):
+     description = "Skin deleted"
      
      
-class SkinChangeSuccess(BaseResponse):
-     description = "Данные скины успешно изменены."
+class SkinChangeSuccess(Response):
+     description = "Data changed"
      
      
-class UserUpdateSuccess(BaseResponse):
-     description = "Данные успешно обновлены."
-     detail = "Данные успешно обновлены."
+class UserUpdateSuccess(Response):
+     description = "Data updated"
+     
+     
+class SkinTransactionSuccess(Response):
+     description = "Skin transaction success"

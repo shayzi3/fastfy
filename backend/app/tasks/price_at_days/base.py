@@ -2,7 +2,7 @@ import asyncio
 
 from datetime import timedelta
 
-from app.logger import logger
+from backend.app.utils.logger import logger
 from app.schemas import SkinPriceInfoModel
 from app.db.session import session_asynccontext
 from app.db.repository import (

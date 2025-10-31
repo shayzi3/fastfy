@@ -21,6 +21,8 @@ class Config:
      redis_password: str = str(os.environ.get("REDIS_PASSWORD"))
      data_path: str = str(os.environ.get("DATA_PATH"))
      local_host: str = str(os.environ.get("LOCAL_HOST"))
+     jwt_secret_key: str = os.environ.get("JWT_SECRET_KEY")
+     jwt_algorithm: str = os.environ.get("JWT_ALGORITHM")
      
      
      @property
