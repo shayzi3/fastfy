@@ -1,6 +1,6 @@
 import json
 
-from typing import Generic, TypeVar, Any
+from typing import Generic, TypeVar, Any, Type
 from typing_extensions import Self
 from datetime import datetime
 
@@ -9,10 +9,17 @@ from pydantic import (
      BaseModel, 
      Field, 
      ConfigDict,
-     model_validator
+     model_validator,
 )
 
-from .enums import OrderByModeEnum, OrderByPaginateSkinsEnum, UserNotifyEnum
+from app.repositories.abc_condition import BaseWhereCondition
+from .enums import (
+     OrderByModeEnum, 
+     OrderByPaginateSkinsEnum, 
+     UserNotifyEnum, 
+     WhereConditionEnum,
+     NotifyTypeEnum
+)
 
 
 
@@ -21,13 +28,11 @@ SKIN_ON_PAGE = TypeVar("SKIN_ON_PAGE", bound=BaseModel)
         
         
 class _NullableValue(BaseModel):
-     model_config = ConfigDict(use_enum_values=True)
-     
      def non_nullable(self, exclude: list[str] = []) -> dict[str, Any]:
           return {
                key: value
                for key, value in self.__dict__.items()
-               if value is not None and key not in exclude
+               if (value is not None) and (key not in exclude)
           }  
           
      @model_validator(mode="after")
@@ -40,7 +45,34 @@ class _NullableValue(BaseModel):
      def cache_key(self, prefix: str, exclude: list[str] = []) -> str:
           non_nullable_values = self.non_nullable(exclude)
           return f"{prefix}:" + "~".join([f"{key}={value}" for key, value in non_nullable_values])
-       
+     
+     
+     def generate_conditions(
+          self,
+          attrs_conditions: dict[str, list[str, WhereConditionEnum]],
+          condition: Type[BaseWhereCondition],
+          additional_conditions: list[BaseWhereCondition] = [],
+          exclude: list[str] = []
+     ) -> list[BaseWhereCondition]:
+          non_nullable = self.non_nullable(exclude=exclude)
+          instance_conditions = [
+               condition(attrs_conditions[attr][0], value, attrs_conditions[attr][1]) 
+               for attr, value in non_nullable.items()
+               if attrs_conditions.get(attr, None)
+          ]
+          if additional_conditions:
+               instance_conditions.extend(additional_conditions)
+          return instance_conditions
+     
+     
+class _PatchModel(BaseModel):
+     def get_update_field_values(self) -> dict[str, Any]:
+          return {
+               key: value
+               for key, value in self.__dict__.items() if value is not None
+          }
+     
+
 
 class SkinPriceHistoryModel(BaseModel):
      price: float
@@ -134,53 +166,103 @@ class ExchangeKeyModel(BaseModel):
      
 class AccessTokenModel(BaseModel):
      access_token: str
+
      
-     
-     
-class PatchUserModel(_NullableValue):
+class PatchUserModel(_PatchModel):
      notify: UserNotifyEnum | None = Field(default=None)
      
-          
+     model_config = ConfigDict(use_enum_values=True)    
+     
+     
+class PatchPortfolioSkinModel(_PatchModel):
+     notify_percent: int | None = Field(default=None, ge=1) 
+     
+     
           
 class PaginateSkinsModel(_NullableValue):
      query: str | None = Field(default=None)
-     limit: int = Field(ge=1, le=20)
-     offset: int = Field(ge=0)
+     limit: int = Field(default=10, ge=1, le=20)
+     offset: int = Field(default=0, ge=0)
+     price_min: float | None = Field(default=None, ge=0)
+     price_max: float | None = Field(default=None, ge=0)
      category: str | None = Field(default=None)
      weapon: str | None = Field(default=None)
      wear: str | None = Field(default=None)
      rarity: str | None = Field(default=None)
-     stattrak: bool = Field(default=False)
-     souvenir: bool = Field(default=False)
-     order_by: OrderByPaginateSkinsEnum | None = Field(default=None)
-     order_by_mode: OrderByModeEnum | None = Field(default=None)
+     stattrak: bool | None = Field(default=None)
+     souvenir: bool | None = Field(default=None)
+     order_by: OrderByPaginateSkinsEnum | None = Field(default=OrderByPaginateSkinsEnum.POPULAR)
+     order_by_mode: OrderByModeEnum | None = Field(default=OrderByModeEnum.DESC)
+     
+     model_config = ConfigDict(use_enum_values=True)
+     
+     
+     def generate_conditions(
+          self, 
+          condition: Type[BaseWhereCondition],
+          additional_conditions: list[BaseWhereCondition] = [],
+          exclude: list[str] = []
+     ) -> list[BaseWhereCondition]:
+          attrs_conditions = {
+               "query": ["market_hash_name", WhereConditionEnum.ILIKE],
+               "price_min": ["price", WhereConditionEnum.GE],
+               "price_max": ["price", WhereConditionEnum.LE],
+               "category": ["category", WhereConditionEnum.EQ],
+               "weapon": ["weapon", WhereConditionEnum.EQ],
+               "wear": ["wear", WhereConditionEnum.EQ],
+               "rarity": ["rarity", WhereConditionEnum.EQ],
+               "stattrak": ["stattrak", WhereConditionEnum.EQ],
+               "souvenir": ["souvenir", WhereConditionEnum.EQ]
+          }
+          return super().generate_conditions(
+               attrs_conditions=attrs_conditions,
+               condition=condition,
+               additional_conditions=additional_conditions,
+               exclude=exclude
+          )
+          
+          
+class PaginateSkinsMetasModel(PaginateSkinsModel):
      metas: bool = Field(default=True)
-     
-     
-class PaginatePortfolioSkinsModel(_NullableValue):
-     limit: int = Field(ge=1, le=20)
-     offset: int = Field(ge=0)
-
-
-class PaginateUserLikeSkinsModel(_NullableValue):
-     limit: int = Field(ge=1, le=20)
-     offset: int = Field(ge=0)
-     
+          
      
 class SkinWithoutMetasModel(BaseModel):
      market_hash_name: str
      color: str
-     image_link: str
+     image: str
      
      
 class CreateSkinTransactionModel(BaseModel):
-     buy_price: float = Field(ge=0)
-     count: int = Field(ge=1)
-     when_buy: datetime | None = Field(default=None)
+     buy_price: float = Field(default=0, ge=0)
+     count: int = Field(default=1, ge=1)
+     when_buy: datetime = Field(default_factory=lambda: datetime.now())
      
      
-class UpdateSkinTransactionModel(_NullableValue):
+class PatchSkinTransactionModel(_PatchModel):
      buy_price: float | None = Field(default=None, ge=0)
      count: int | None = Field(default=None, ge=1)
      when_buy: datetime | None = Field(default=None)
      
+     
+class NotifyFiltersModel(_NullableValue):
+     is_read: bool | None = Field(default=None)
+     notify_type: NotifyTypeEnum | None = Field(default=None)
+     
+     model_config = ConfigDict(use_enum_values=True)
+     
+     def generate_conditions(
+          self,
+          condition: Type[BaseWhereCondition],
+          additional_conditions: list[BaseWhereCondition] = [],
+          exclude: list[str] = []
+     ) -> list[BaseWhereCondition]:
+          attrs_conditions = {
+               "is_read": ["is_read", WhereConditionEnum.EQ],
+               "notify_type": ["notify_type", WhereConditionEnum.EQ]
+          }
+          return super().generate_conditions(
+               attrs_conditions=attrs_conditions,
+               condition=condition,
+               additional_conditions=additional_conditions,
+               exclude=exclude
+          )

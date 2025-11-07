@@ -1,20 +1,22 @@
-
+from typing import Type
 
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.services.abc.abc_user_service import BaseUserService
 from app.infrastracture.https.clients.steam.abc import BaseSteamClient
 from app.responses.abc import BaseResponse
+from app.repositories.abc_condition import BaseWhereCondition
 
 from app.schemas import SkinsPage, JWTTokenPayloadModel, PatchUserModel
+from app.schemas.enums import WhereConditionEnum
 from app.schemas.dto import UserDTO
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
-     UserNotFoundError, 
-     UserUpdateSuccess, 
      isresponse, 
      ArgumentError,
-     UserUpdateError
+     NotFoundError,
+     UpdateSuccess,
+     UpdateError
 )
 
 
@@ -22,8 +24,10 @@ class UserService(BaseUserService):
      def __init__(
           self,
           steam_client: BaseSteamClient,
+          condition: Type[BaseWhereCondition]
      ):
-          self.http_steam_client = steam_client          
+          self.http_steam_client = steam_client      
+          self.condition = condition    
      
      
      async def get_user(
@@ -35,12 +39,12 @@ class UserService(BaseUserService):
           async with uow:
                async with cache:
                     user = await uow.user_repo.read(
-                         where={"uuid": token_payload.uuid},
+                         where={"default": [self.condition("uuid", token_payload.uuid, WhereConditionEnum.EQ)]},
                          cache=cache,
                          cache_key=f"user:{token_payload.uuid}",
                     )
           if user is None:
-               return UserNotFoundError
+               return NotFoundError
           return user
      
      
@@ -70,7 +74,7 @@ class UserService(BaseUserService):
           data: PatchUserModel,
           token_payload: JWTTokenPayloadModel
      ) -> BaseResponse:
-          if not data.non_nullable():
+          if not data.get_update_field_values():
                return ArgumentError
           
           async with uow:
@@ -78,10 +82,10 @@ class UserService(BaseUserService):
                     result = await uow.user_repo.update(
                          cache=cache,
                          cache_keys=[f"user:{token_payload.uuid}"],
-                         where={"uuid": token_payload.uuid},
-                         values=data.non_nullable(),
-                         returning=True,
+                         where={"default": [self.condition("uuid", token_payload.uuid, WhereConditionEnum.EQ)]},
+                         values=data.get_update_field_values(),
+                         returning="uuid",
                     )
                if result:
-                    return UserUpdateSuccess
-          return UserUpdateError
+                    return UpdateSuccess
+          return UpdateError

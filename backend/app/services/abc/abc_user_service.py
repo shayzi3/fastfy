@@ -1,16 +1,17 @@
-from typing import Protocol
+from typing import Protocol, Type
 
 from app.responses.abc import BaseResponse
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.https.clients.steam.abc import BaseSteamClient
+from app.repositories.abc_condition import BaseWhereCondition
 
 from app.schemas.dto import UserDTO
 from app.schemas import (
      JWTTokenPayloadModel, 
      SkinsPage, 
-     SteamItemModel, 
-     PatchUserModel
+     SteamInventorySkinModel, 
+     PatchUserModel,
 )
 
 
@@ -19,8 +20,10 @@ class BaseUserService(Protocol):
      def __init__(
           self, 
           steam_client: BaseSteamClient,
+          condition: Type[BaseWhereCondition]
      ):
           self.steam_client = steam_client
+          self.condition = condition
           
      
      async def get_user(
@@ -30,16 +33,15 @@ class BaseUserService(Protocol):
           token_payload: JWTTokenPayloadModel
      ) -> UserDTO | BaseResponse:
           ...
-          
+     
      async def get_user_steam_inventory(
           self,
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           offset: int,
           limit: int
-     ) -> SkinsPage[SteamItemModel] | BaseResponse:
+     ) -> SkinsPage[SteamInventorySkinModel] | BaseResponse:
           ...
-          
           
      async def patch_user(
           self,

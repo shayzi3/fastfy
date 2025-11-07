@@ -2,32 +2,32 @@ from typing import Annotated
 
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from dishka.integrations.fastapi import FromDishka
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from pydantic import HttpUrl
 
 from app.core.security.abc import BaseJWTSecurity
 from app.repositories.abc_uow import BaseUnitOfWork
-from backend.app.infrastracture.cache.abc import Cache
+from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseAuthService
 from app.schemas import ExchangeKeyModel, AccessTokenModel, TelegramDataModel
 from app.responses import (
      HttpError,
-     SteamLoginError,
-     TelegramLoginError,
-     TelegramLoginSuccess,
      isresponse,
      router_responses,
      ServerError,
-     ExchangeCodeInvalidError,
      JWTTokenExpireError,
-     JWTTokenInvalidError
+     JWTTokenInvalidError,
+     LoginError,
+     LoginSuccess,
+     InvalidCodeError
 )
 
 
 
 auth_router = APIRouter(
      prefix="/api/v1/auth",
-     tags=["Auth"]
+     tags=["Auth"],
+     route_class=DishkaRoute
 )
 
 
@@ -52,7 +52,7 @@ async def steam_redirect(
      response_model=ExchangeKeyModel,
      responses=router_responses(
           HttpError,
-          SteamLoginError,
+          LoginError,
           ServerError
      ),
      summary="Сюда происходит перенаправление после входа в Steam аккаунт."
@@ -84,7 +84,7 @@ async def steam_processing(
      response_model=AccessTokenModel,
      responses=router_responses(
           ServerError,
-          ExchangeCodeInvalidError
+          InvalidCodeError
      ),
      summary="Обмен кода на jwt token."
 )
@@ -129,8 +129,8 @@ async def telegram_exchange(
      path="/telegram/processing",
      responses=router_responses(
           ServerError,
-          TelegramLoginError,
-          TelegramLoginSuccess
+          LoginError,
+          LoginSuccess
      ),
      summary="Привязка Telegram аккаунта."
 )

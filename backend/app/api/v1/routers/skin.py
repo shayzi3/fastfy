@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from dishka.integrations.fastapi import FromDishka
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseSkinService
@@ -8,10 +8,10 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
      isresponse,
      router_responses,
-     SkinNotFoundError,
      ServerError,
      JWTTokenExpireError,
-     JWTTokenInvalidError
+     JWTTokenInvalidError,
+     NotFoundError
 )
 from app.schemas.dto import SkinDTO
 from app.schemas import (
@@ -25,6 +25,7 @@ from app.schemas import (
 skin_router = APIRouter(
      prefix="/api/v1",
      tags=["Skin"],
+     route_class=DishkaRoute
 )
 
 
@@ -33,7 +34,7 @@ skin_router = APIRouter(
      path="/skin", 
      response_model=SkinDTO,
      responses=router_responses(
-          SkinNotFoundError,
+          NotFoundError,
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError
@@ -89,7 +90,7 @@ async def search_skin(
      path="/skin/history", 
      response_model=SkinHistoryTimePartModel,
      responses=router_responses(
-          SkinNotFoundError,
+          NotFoundError,
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError

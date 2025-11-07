@@ -1,23 +1,25 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from dishka.integrations.fastapi import DishkaRoute
 
 from .routers.auth import auth_router
 from .routers.user import user_router
 from .routers.skin import skin_router
 from .routers.portfolio import user_portfolio_router
 from .routers.notification import notification_router
+from .routers.skin_likes import user_likes_skins_router
+from .routers.skin_transaction import skin_transaction_router
 from .exceptions import exception_validation_error
 from .middleware.logs import LogMiddleware
 
 
 _routers = [
-     APIRouter(route_class=DishkaRoute),
      auth_router,
      user_router,
      skin_router,
      user_portfolio_router,
      notification_router,
+     user_likes_skins_router,
+     user_portfolio_router
 ]
 _exceptions = [
      (RequestValidationError, exception_validation_error),

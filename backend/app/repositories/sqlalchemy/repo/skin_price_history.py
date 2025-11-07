@@ -5,10 +5,10 @@ from sqlalchemy import select
 from datetime import timedelta, datetime
 
 from app.schemas import SkinPriceHistoryModel
-from backend.app.infrastracture.cache.abc import Cache
+from app.infrastracture.cache.abc import Cache
 from app.schemas.dto import SkinPriceHistoryDTO
 from app.db.models import SkinPriceHistory
-from ..reposiotry import SQLAlchemyRepository
+from ..repository import SQLAlchemyRepository
 
 
 class SQLAlchemySkinPriceHisoryRepository(

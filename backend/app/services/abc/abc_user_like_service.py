@@ -1,22 +1,25 @@
-from typing import Protocol
+from typing import Protocol, Type
 
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
+from app.repositories.abc_condition import BaseWhereCondition
 
 from app.responses.abc import BaseResponse
-from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateUserLikeSkinsModel
+from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel
 from app.schemas.dto import UserLikeSkinDTO
 
 
 class BaseUserLikeSkinsService(Protocol):
-     
+     def __init__(self, condition: Type[BaseWhereCondition]):
+          self.condition = condition
+      
      
      async def get_likes_skins(
           self,
           uow: BaseUnitOfWork,
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
-          paginate_data: PaginateUserLikeSkinsModel
+          paginate_data: PaginateSkinsModel
      ) -> SkinsPage[UserLikeSkinDTO]:
           ...
           

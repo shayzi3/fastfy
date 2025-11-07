@@ -1,57 +1,59 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Form
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
+from app.infrastracture.cache.abc import Cache
+from app.repositories.abc_uow import BaseUnitOfWork
+from app.services.abc import BaseNotificationService
+from app.core.security.abc import BaseJWTSecurity
+
+from app.schemas.dto import UserNotifyDTO
+from app.schemas import NotifyFiltersModel
 from app.responses import (
      isresponse, 
      router_responses,
-     NotifyEmpty,
-     AuthError,
      ServerError,
-     SecretTokenError
+     JWTTokenExpireError,
+     JWTTokenInvalidError,
+     ArgumentError
 )
-from app.db.session import AsyncSession, get_async_session
-from app.schemas import UserNotifyRelModel
-from app.api.v1.routers.dependency import valide_secret_bot_token
 
-from .service import NotificationService, get_notification_service
 
 
 notification_router = APIRouter(
      prefix="/api/v1/user",
-     tags=["User", "User Notification", "Bot"],
-     dependencies=[Depends(valide_secret_bot_token)],
+     tags=["User Notification"],
+     route_class=DishkaRoute
 )
 
 
 
 @notification_router.get(
      path="/notify", 
-     response_model=list[UserNotifyRelModel],
+     response_model=list[UserNotifyDTO],
      responses=router_responses(
-          NotifyEmpty,
-          AuthError,
           ServerError,
-          SecretTokenError
+          JWTTokenExpireError,
+          JWTTokenInvalidError,
+          ArgumentError
      ),
-     summary=(
-          "Получение непрочитанных уведомлений всех пользователей, "
-          "у которых зафиксированно изменение цены на скин."
-     )
+     summary="Получение уведомлений пользователя."
 )
 async def get_notify_new(
-     async_session: Annotated[AsyncSession, Depends(get_async_session)],
-     service: Annotated[NotificationService, Depends(get_notification_service)],
-     background_task: BackgroundTasks
+     token_payload: FromDishka[BaseJWTSecurity],
+     service: FromDishka[BaseNotificationService],
+     cache: FromDishka[Cache],
+     uow: FromDishka[BaseUnitOfWork],
+     filter_data: Annotated[NotifyFiltersModel, Form()]
 ):
-     result = await service.get_notify_new(async_session=async_session)
+     result = await service.get_users_notify(
+          uow=uow,
+          cache=cache,
+          token_payload=token_payload,
+          filter_data=filter_data
+     )
      if isresponse(result):
           return result.response()
-     
-     background_task.add_task(
-          func=service.patch_notify,
-          async_session=async_session,
-          notifies=result
-     )
      return result
      
      

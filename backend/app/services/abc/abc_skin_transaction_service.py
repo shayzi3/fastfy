@@ -1,19 +1,22 @@
-from typing import Protocol
+from typing import Protocol, Type
 
 from app.repositories.abc_uow import BaseUnitOfWork
+from app.repositories.abc_condition import BaseWhereCondition
 from app.infrastracture.cache.abc import Cache
 from app.schemas.dto import PortfolioSkinTransactionDTO
 from app.responses.abc import BaseResponse
 from app.schemas import (
      JWTTokenPayloadModel, 
      CreateSkinTransactionModel, 
-     UpdateSkinTransactionModel
+     PatchSkinTransactionModel
 )
 
 
 
 
 class BaseSkinTransactionService(Protocol):
+     def __init__(self, condition: Type[BaseWhereCondition]):
+          self.condition = condition
      
      async def get_skin_transactions(
           self,
@@ -21,7 +24,7 @@ class BaseSkinTransactionService(Protocol):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str
-     ) -> list[PortfolioSkinTransactionDTO]:
+     ) -> list[PortfolioSkinTransactionDTO] | BaseResponse:
           ...
           
           
@@ -54,6 +57,6 @@ class BaseSkinTransactionService(Protocol):
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str,
           transaction_uuid: str,
-          transaction_data: UpdateSkinTransactionModel
+          transaction_data: PatchSkinTransactionModel
      ) -> BaseResponse:
           ...

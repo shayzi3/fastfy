@@ -2,25 +2,17 @@ from .base import Response
 
 
 
+class LoginSuccess(Response):
+     description = "Login success"
+     
+     
+class CreateSuccess(Response):
+     description = "Data created success"
+     
+     
+class DeleteSuccess(Response):
+     description = "Data deleted success"
+     
 
-class TelegramLoginSuccess(Response):
-     detail = "Telegram account linked successfully"          
-     
-class SkinCreateSuccess(Response):
-     description = "Skin created"
-     
-     
-class SkinDeleteSuccess(Response):
-     description = "Skin deleted"
-     
-     
-class SkinChangeSuccess(Response):
-     description = "Data changed"
-     
-     
-class UserUpdateSuccess(Response):
-     description = "Data updated"
-     
-     
-class SkinTransactionSuccess(Response):
-     description = "Skin transaction success"
+class UpdateSuccess(Response):
+     description = "Data updated success"

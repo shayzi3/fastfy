@@ -1,12 +1,11 @@
 from enum import Enum
-from pydantic import BaseModel
 
 
-class UpdateModeEnum(BaseModel):
-     HIGH: str = "HIGH"
-     MEDIUM_WELL: str = "MEDIUM_WELL"
-     MEDIUM: str = "MEDIUM"
-     LOW: str = "LOW"
+class UpdateModeEnum(Enum):
+     HIGH = "HIGH"
+     MEDIUM_WELL = "MEDIUM_WELL"
+     MEDIUM = "MEDIUM"
+     LOW = "LOW"
      
      
      def filter_mode(
@@ -38,25 +37,25 @@ class UpdateModeEnum(BaseModel):
           return "LOW"
      
 
-class NotifyTypeEnum(BaseModel):
-     INFO: str = "INFO"
-     SKIN: str = "SKIN"
+class NotifyTypeEnum(Enum):
+     INFO = "INFO"
+     SKIN = "SKIN"
      
      
 class OrderByPaginateSkinsEnum(Enum):
      PRICE = "price"
+     POPULAR = "sell_by_last_update"
      PRICE_LAST_1_DAY = "price_last_1_day"
+     PRICE_LAST_7_DAY = "price_last_7_day"
      PRICE_LAST_30_DAY = "price_last_30_day"
-     EMPTY = "empty"
      
      def __str__(self):
           return self.value
-     
+
      
 class OrderByModeEnum(Enum):
      DESC = "desc"
      ASC = "asc"
-     EMPTY = "empty"
      
      def __str__(self):
           return self.value
@@ -65,16 +64,18 @@ class OrderByModeEnum(Enum):
 class UserNotifyEnum(Enum):
      ON = "on"
      OFF = "off"
-     EMPTY = "empty"
      
      def __str__(self):
           return self.value
      
      
-
-     
-UpdateMode = UpdateModeEnum()
-NotifyType = NotifyTypeEnum()
-
+class WhereConditionEnum(Enum):
+     EQ = "="
+     GT = ">"
+     GE = ">="
+     LT = "<"
+     LE = "<="
+     ILIKE = "ilike"
+     IN = "in"
      
      

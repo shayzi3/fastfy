@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import BigInteger, ForeignKey, UUID, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.schemas.enums import NotifyType
+from app.schemas.enums import NotifyTypeEnum
 
 from .base import Base
 from .mixins import (
@@ -51,6 +51,7 @@ class Skin(SkinMixin, Base):
      price_last_all_day: Mapped[float] = mapped_column(nullable=True)
      last_price: Mapped[float] = mapped_column(nullable=True)
      last_price_update: Mapped[datetime] = mapped_column(nullable=True)
+     sell_by_last_update: Mapped[int] = mapped_column(default=0)
      
      
 class SkinPriceHistory(SkinPriceHistoryMixin, Base):
@@ -83,11 +84,8 @@ class UserPortfolio(UserPortfolioMixin, Base):
      
      skin: Mapped["Skin"] = relationship()
      user: Mapped["User"] = relationship()
-     transactions: Mapped[list["PortfolioSkinTransaction"]] = relationship(
-          uselist=True,
-          lazy="joined"
-     )
-     
+     transactions: Mapped[list["PortfolioSkinTransaction"]] = relationship(uselist=True)
+
      
 class PortfolioSkinTransaction(PortfolioSkinTransactionMixin, Base):
      __tablename__ = "portfolio_skins_transactions"
@@ -124,7 +122,7 @@ class UserNotify(UserNotifyMixin, Base):
      
      uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
      text: Mapped[str] = mapped_column()
-     notify_type: Mapped[str] = mapped_column(default=NotifyType.SKIN, index=True)
+     notify_type: Mapped[str] = mapped_column(default=NotifyTypeEnum.SKIN, index=True)
      created_at: Mapped[datetime] = mapped_column(server_default=func.now(), index=True)
      is_read: Mapped[bool] = mapped_column(default=False)
      user_uuid: Mapped[str] = mapped_column(UUID(), 

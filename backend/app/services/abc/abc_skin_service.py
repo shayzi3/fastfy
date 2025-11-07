@@ -3,14 +3,22 @@ from typing import Protocol
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses.abc import BaseResponse
+from app.repositories.abc_condition import BaseWhereCondition
 
-from app.schemas import SkinsPage, SkinHistoryTimePartModel, PaginateSkinsModel, SkinWithoutMetasModel
+from app.schemas import (
+     SkinsPage, 
+     SkinHistoryTimePartModel, 
+     PaginateSkinsMetasModel, 
+     SkinWithoutMetasModel
+)
 from app.schemas.dto import SkinDTO
 
 
 
 class BaseSkinService(Protocol):
-     
+     def __init__(self, condition: BaseWhereCondition):
+          self.condition = condition
+          
      
      async def get_skin(
           self,
@@ -25,7 +33,7 @@ class BaseSkinService(Protocol):
           self,
           cache: Cache,
           uow: BaseUnitOfWork,
-          paginate_data: PaginateSkinsModel
+          paginate_data: PaginateSkinsMetasModel
      ) -> SkinsPage[SkinDTO | SkinWithoutMetasModel]:
           ...
           

@@ -7,7 +7,7 @@ from fastapi import Request
 
 from app.schemas import JWTTokenPayloadModel
 from app.core import my_config
-from backend.app.responses.abc import BaseResponse
+from app.responses.abc import BaseResponse
 from app.responses import JWTTokenExpireError, JWTTokenInvalidError, isresponse
 from .abc import BaseJWTSecurity
 
@@ -49,7 +49,7 @@ class JWTSecurity(BaseJWTSecurity):
      async def encode(
           self, 
           data: dict[str, Any], 
-          expire: timedelta = timedelta(days=2)
+          expire: timedelta = timedelta(days=20)
      ) -> str:
           payload_time = {
                "iat": datetime.now(),

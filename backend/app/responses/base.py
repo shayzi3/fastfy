@@ -39,7 +39,7 @@ def router_responses(*values: BaseResponse) -> dict[int, dict[str, str]]:
      for resp in values:
           schema = resp.schema()
           if resp.status_code in responses.keys():
-               responses[resp.status_code]["description"] += f" | {schema[resp.status_code]["description"]}"
+               responses[resp.status_code]["description"] += f" | {schema[resp.status_code]['description']}"
           else:
                responses.update(schema)
      return responses

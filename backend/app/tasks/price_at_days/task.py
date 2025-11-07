@@ -1,25 +1,25 @@
-import asyncio
+# import asyncio
 
-from datetime import timedelta
+# from datetime import timedelta
 
-from backend.app.utils.logger import logger
+# from backend.app.utils.logger import logger
 
-from .base import UpdatePriceAtDaysBase
-from ..base import AbstarctTask
-
-
+# from .base import UpdatePriceAtDaysBase
+# from ..base import AbstarctTask
 
 
-class UpdatePriceAtDaysTask(UpdatePriceAtDaysBase, AbstarctTask):
+
+
+# class UpdatePriceAtDaysTask(UpdatePriceAtDaysBase, AbstarctTask):
      
-     async def run(self) -> None:
-          logger.task_price_at_days.info("TASK UPDATE PRICE AT DAYS START")
+#      async def run(self) -> None:
+#           logger.task_price_at_days.info("TASK UPDATE PRICE AT DAYS START")
           
-          asyncio.create_task(self.run_price_at_days())
+#           asyncio.create_task(self.run_price_at_days())
           
-     async def run_price_at_days(self) -> None:
-          logger.task_price_at_days.info("2 HOUR 30 MINUTES START")
+#      async def run_price_at_days(self) -> None:
+#           logger.task_price_at_days.info("2 HOUR 30 MINUTES START")
           
-          await asyncio.sleep(timedelta(hours=2, minutes=30).total_seconds())
-          asyncio.create_task(self._process())
-          await self.run_price_at_days()
+#           await asyncio.sleep(timedelta(hours=2, minutes=30).total_seconds())
+#           asyncio.create_task(self._process())
+#           await self.run_price_at_days()

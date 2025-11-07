@@ -4,19 +4,14 @@ from .base import Response
 
 
 
-class SteamLoginError(Response):
-     description = "Auth error of Steam"
+class LoginError(Response):
+     description = "Login error"
      status_code = status.HTTP_400_BAD_REQUEST
-     
+
 
 class HttpError(Response):
      description = "Try Later"
      status_code = status.HTTP_403_FORBIDDEN
-     
-     
-class TelegramLoginError(Response):
-     description = "Invalid code"
-     status_code = status.HTTP_400_BAD_REQUEST
      
      
 class ServerError(Response):
@@ -24,34 +19,14 @@ class ServerError(Response):
      status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
      
      
-class UserNotFoundError(Response):
-     description = "User not found"
-     status_code = status.HTTP_404_NOT_FOUND   
-     
-     
-class SkinNotFoundError(Response):
-     description = "Skin not found"
-     status_code = status.HTTP_404_NOT_FOUND   
-     
-     
-class SkinAlreadyExistsError(Response):
-     description = "Skin already exists"
-     status_code = status.HTTP_409_CONFLICT
-     
-     
-class PortfolioEmptyError(Response):
-     description = "Users portfolio empty"
-     status_code = status.HTTP_403_FORBIDDEN
-     
-     
-class SkinNotExistsError(Response):
-     description = "Skin not exists"
-     status_code = status.HTTP_400_BAD_REQUEST
-     
-     
-class NotifyEmptyError(Response):
-     description = "User notify not found"
+class NotFoundError(Response):
+     description = "Data not found"
      status_code = status.HTTP_404_NOT_FOUND
+     
+     
+class DataAlreadyExistsError(Response):
+     description = "Data already exists"
+     status_code = status.HTTP_409_CONFLICT
      
      
 class OffsetError(Response):
@@ -75,7 +50,7 @@ class JWTTokenInvalidError(Response):
      status_code = status.HTTP_401_UNAUTHORIZED
      
      
-class ExchangeCodeInvalidError(Response):
+class InvalidCodeError(Response):
      description = "Invalid code"
      status_code = status.HTTP_400_BAD_REQUEST
      
@@ -85,16 +60,16 @@ class ArgumentError(Response):
      status_code = status.HTTP_403_FORBIDDEN
      
      
-class UserUpdateError(Response):
-     description = "User doesn't update"
+class UpdateError(Response):
+     description = "Update error"
      status_code = status.HTTP_400_BAD_REQUEST
      
      
-class TransactionNotFound(Response):
-     description = "Transaction not found"
-     status_code = status.HTTP_404_NOT_FOUND
+class DataNotExistsError(Response):
+     description = "Data not exists error"
+     status_code = status.HTTP_403_FORBIDDEN
      
-     
-class SkinTransactionError(Response):
-     description = "Skin transaction error"
+
+class DeleteError(Response):
+     description = "Delete error"
      status_code = status.HTTP_400_BAD_REQUEST

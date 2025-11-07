@@ -1,38 +1,39 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Form
-from dishka.integrations.fastapi import FromDishka
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
-from backend.app.services.abc.abc_portfolio_service import BasePortfolioService
+from app.services.abc.abc_portfolio_service import BasePortfolioService
 from app.core.security.abc import BaseJWTSecurity
 from app.responses import (
      isresponse,
      router_responses,
-     PortfolioSkinCreateSuccess,
-     SkinDeleteSuccess,
      ServerError,
      OffsetError,
      JWTTokenExpireError,
      JWTTokenInvalidError,
-     SkinNotExistsError,
-     SkinPortfolioAlreadyExistsError,
-     SkinNotFoundError
+     CreateSuccess,
+     DeleteSuccess,
+     DataAlreadyExistsError,
+     DataNotExistsError,
+     NotFoundError
 )
 from app.schemas.dto import UserPortfolioDTO
-from app.schemas import SkinsPage, PaginatePortfolioSkinsModel
+from app.schemas import SkinsPage, PaginateSkinsModel
 
 
 user_portfolio_router = APIRouter(
-     prefix="/api/v1/user",
-     tags=["Portfolio"]
+     prefix="/api/v1",
+     tags=["Portfolio"],
+     route_class=DishkaRoute
 )
 
 
 
 @user_portfolio_router.get(
-     path="/skins", 
+     path="/portfolio", 
      response_model=SkinsPage[UserPortfolioDTO],
      responses=router_responses(
           ServerError,
@@ -48,7 +49,7 @@ async def get_portfolio(
      cache: FromDishka[Cache],
      service: FromDishka[BasePortfolioService],
      token_payload: FromDishka[BaseJWTSecurity],
-     paginate_data: Annotated[PaginatePortfolioSkinsModel, Form()]
+     paginate_data: Annotated[PaginateSkinsModel, Form()]
 ):
      result = await service.get_skins_portfolio(
           uow=uow,
@@ -64,14 +65,13 @@ async def get_portfolio(
     
      
 @user_portfolio_router.post(
-     path="/skins",
+     path="/portfolio",
      responses=router_responses(
-          PortfolioSkinCreateSuccess,
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError,
-          SkinNotFoundError,
-          SkinPortfolioAlreadyExistsError
+          CreateSuccess,
+          DataAlreadyExistsError
      ),
      summary="Создание нового скина в портфолио."
 )
@@ -94,14 +94,13 @@ async def create_skin_portfolio(
      
      
 @user_portfolio_router.delete(
-     path="/skins",
+     path="/portfolio",
      responses=router_responses(
-          SkinDeleteSuccess,
           ServerError,
           JWTTokenInvalidError,
           JWTTokenExpireError,
-          SkinNotFoundError,
-          SkinNotExistsError
+          DeleteSuccess,
+          DataNotExistsError
      ),
      summary="Удаление скина из портфолио."
 )

@@ -1,20 +1,26 @@
 import uuid
 
+from typing import Type
+
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
+from app.repositories.abc_condition import BaseWhereCondition
 
 from app.services.abc import BaseUserLikeSkinsService
 from app.responses.abc import BaseResponse
-from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateUserLikeSkinsModel
+from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel
+from app.schemas.enums import WhereConditionEnum
 from app.schemas.dto import UserLikeSkinDTO
 from app.responses import (
-     SkinDeleteSuccess,
-     SkinNotExistsError,
-     SkinAlreadyExistsError,
-     SkinCreateSuccess
+     DataNotExistsError,
+     DeleteSuccess,
+     DataAlreadyExistsError,
+     CreateSuccess
 )
 
 class UserLikeSkinsService(BaseUserLikeSkinsService):
+     def __init__(self, condition: Type[BaseWhereCondition]):
+          self.condition = condition
      
      
      async def get_likes_skins(
@@ -22,17 +28,24 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           uow: BaseUnitOfWork,
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
-          paginate_data: PaginateUserLikeSkinsModel,
+          paginate_data: PaginateSkinsModel,
           **kwargs
      ) -> SkinsPage[UserLikeSkinDTO]:
           async with uow:
                async with cache:
-                    skins, skins_count = await uow.user_like_skin_repo.paginate(
-                         limit=paginate_data.limit,
-                         offset=paginate_data.offset,
+                    skins, skins_count = await uow.user_like_skin_repo.read_many(
                          cache=cache,
                          cache_key=paginate_data.cache_key(prefix=f"user_like_skins-{token_payload.uuid}"),
-                         where={"user_uuid": token_payload.uuid}
+                         relationship_columns=["skin"],
+                         where={
+                              "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
+                              "skin": paginate_data.generate_conditions(condition=self.condition),
+                         },
+                         limit=paginate_data.limit,
+                         offset=paginate_data.offset,
+                         order_by={"skin": paginate_data.order_by.value},
+                         order_by_mode=paginate_data.order_by_mode,
+                         count=True
                     )
           return SkinsPage(
                pages=skins_count,
@@ -53,7 +66,12 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           async with uow:
                async with cache:
                     skin = await uow.user_like_skin_repo.read(
-                         where={"market_hash_name": skin_name, "user_uuid": token_payload.uuid}
+                         where={
+                              "default": [
+                                   self.condition("market_hash_name", skin_name, WhereConditionEnum.EQ),
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)
+                              ]
+                         }
                     )
                     if skin is None:
                          await uow.user_like_skin_repo.create(
@@ -66,8 +84,8 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
                               cache_keys=[f"user_like_skins-{token_payload.uuid}"]
                          )
                          await uow.commit()
-                         return SkinCreateSuccess
-                    return SkinAlreadyExistsError
+                         return CreateSuccess
+                    return DataAlreadyExistsError
 
           
      async def delete_like_skin(
@@ -81,12 +99,18 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           async with uow:
                async with cache:
                     result = await uow.user_like_skin_repo.delete(
-                         where={"user_uuid": token_payload.uuid, "market_hash_name": skin_name},
+                         where={
+                              "default": [
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ),
+                                   self.condition("market_hash_name", skin_name, WhereConditionEnum.EQ)
+                              ]
+                         },
                          cache=cache,
-                         cache_keys=[f"user_like_skins-{token_payload.uuid}"],
-                         returning=True
+                         cache_keys=[f"user_like_skins:{token_payload.uuid}"],
+                         returning="user_uuid"
                     )
+                    await uow.commit()
           if result:
-               return SkinDeleteSuccess
-          return SkinNotExistsError
+               return DeleteSuccess
+          return DataNotExistsError
                     

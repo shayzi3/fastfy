@@ -1,4 +1,4 @@
-from typing import Any, Protocol
+from typing import Any, Protocol, Type
 
 from fastapi.responses import RedirectResponse
 
@@ -7,7 +7,8 @@ from app.infrastracture.openid.abc import BaseOpenID
 from app.infrastracture.https.clients.steam.abc import BaseSteamClient
 from app.responses.abc import BaseResponse
 from app.repositories.abc_uow import BaseUnitOfWork
-from backend.app.infrastracture.cache.abc import Cache
+from app.infrastracture.cache.abc import Cache
+from app.repositories.abc_condition import BaseWhereCondition
 from app.schemas import (
      ExchangeKeyModel,
      AccessTokenModel,
@@ -22,11 +23,13 @@ class BaseAuthService(Protocol):
           self,
           steam_client: BaseSteamClient,
           jwt_security: BaseJWTSecurity,
-          openid: BaseOpenID
+          openid: BaseOpenID,
+          condition: Type[BaseWhereCondition]
      ):
           self.steam_client = steam_client
           self.jwt_security = jwt_security
           self.openid = openid
+          self.condition = condition
      
      
      async def steam_login(

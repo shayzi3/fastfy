@@ -3,11 +3,12 @@ import json
 from typing import Any, Generic, TypeVar, Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete, insert, desc, func
+from sqlalchemy import select, update, delete, insert, func, inspect, asc, desc
 from pydantic import BaseModel
 
-from backend.app.infrastracture.cache.abc import Cache
+from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_repository import BaseRepository
+from app.repositories.abc_condition import BaseWhereCondition
 from app.db.models import Base
 from app.schemas.enums import OrderByModeEnum
 
@@ -28,18 +29,21 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
      async def __query_builder(
           self,
           type_: Callable,
-          where: dict[str, Any] | list[Any] = {},
+          relationship_columns: list[str] = [],
+          where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
           values: dict[str, Any] = {},
-          selectinload: bool = False,
           returning: bool = False,
-          order_by: str | None = None,
-          order_by_mode: OrderByModeEnum = OrderByModeEnum.ASC,
+          order_by: dict[str, tuple[str, OrderByModeEnum]] | None = None,
           limit: int | None = None,
           offset: int | None = None,
-          filter_by: bool = True
+          count: bool = False
      ) -> Any:
           query = type_(self.model)
+          
+          if count is True:
+               query = type_(func.count(self.model))
+               
           if columns:
                query = type_(
                     *[
@@ -47,49 +51,76 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                          for attr in columns if hasattr(self.model, attr)
                     ]
                )
+          if relationship_columns:
+               query = query.join(
+                    *[getattr(self.model, column) for column in relationship_columns]
+               )
+          
           if values:
                query = query.values(**values)
                
           if where:
-               if filter_by:
-                    query = query.filter_by(**where)
-               else:
-                    query = query.where(*where)
-               
-          if selectinload:
-               selectinload_values = self.model.selectinload()
-               if selectinload_values:
-                    query = query.options(*selectinload_values)
+               where_default = []
+               for condition in where.get("default", []):
+                    value = condition(model=self.model)
+                    if getattr(value, "__iter__", None):
+                        where_default.extend(value)
+                    else:
+                        where_default.append(value)
 
-          if returning:
-               returning_value = self.model.returning()
-               if returning_value:
-                    query = query.returning(returning_value)
-                    
+               where_relationship_columns = []
+               model_relationships = inspect(self.model).relationships
+               
+               for relationship_column, conditions in where.items():
+                    if relationship_column != "default":
+                         relationship_obj = model_relationships.get(relationship_column, None)
+                         if relationship_obj:
+                              relationship_class = relationship_obj.mapper.class_
+
+                              for condition in conditions:
+                                   value = condition(model=relationship_class)
+                                   if isinstance(value, list | tuple):
+                                       where_relationship_columns.extend(value)
+                                   else:
+                                       where_relationship_columns.append(value)
+                                  
+               query = query.where(*where_default, *where_relationship_columns)
+          
           if order_by:
-               if hasattr(self.model, order_by):
-                    oby_value = getattr(self.model, order_by)
-                    if order_by_mode == OrderByModeEnum.DESC:
-                         oby_value = desc(getattr(self.model, order_by))
-                    query = query.order_by(oby_value)
+               order_by_values = []
+               for attr, column_mode in order_by.items():
+                    mode = asc if column_mode[1] == OrderByModeEnum.ASC else desc
+                    
+                    if attr == "default":
+                         order_by_values.append(mode(getattr(self.model, attr)))
+                    else:
+                         relationship_obj = model_relationships.get(attr, None)
+                         if relationship_obj:
+                              relationship_class = relationship_obj.mapper.class_
+                              order_by_values.append(mode(getattr(relationship_class, column_mode[0])))
+                         
+               query = query.order_by(*order_by_values)
+               
+          if returning:
+               if hasattr(self.model, returning):
+                    query = query.returning(getattr(self.model, returning))
           if limit:
                query = query.limit(limit)
           if offset:
                query = query.offset(offset)
-               
           return query
           
           
           
      async def read(
           self,
-          where: dict[str, Any] = {}, 
           cache: Cache | None = None,
           cache_key: str | None = None,
-          selectinload: bool = False, 
+          relationship_columns: list[str] = [],
+          where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
           **kwargs
-     ) -> DTO | Any:
+     ) -> DTO | list[tuple[Any]] | None:
           if cache and cache_key:
                data = await cache.get(name=cache_key)
                if data:
@@ -100,11 +131,11 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           query = await self.__query_builder(
                type_=select,
                where=where,
-               selectinload=selectinload,
-               columns=columns
+               columns=columns,
+               relationship_columns=relationship_columns
           )
           result = await self.session.execute(query)
-          data = result.scalar()
+          data = result.scalar() if not columns else result.all()
           
           if not data:
                return None
@@ -115,47 +146,66 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           if cache and cache_key:
                await cache.set(
                     name=cache_key, 
-                    value=data.model_dump_json() 
-                    if hasattr(data, "model_dump_json") else json.dumps(data)
+                    value=json.dumps(data)
+                    if columns else data.model_dump_json() 
                )
           return data
 
      
      async def read_all(
           self, 
-          where: dict[str, Any] = {},
           cache: Cache | None = None,
           cache_key: str | None = None,
-          selectinload: bool = False, 
+          relationship_columns: list[str] = [],
+          where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
-          order_by: str | None = None,
+          order_by: dict[str, str] = {},
           order_by_mode: OrderByModeEnum = OrderByModeEnum.ASC,
+          limit: int | None = None,
+          offset: int | None = None,
+          count: bool = False,
           **kwargs
-     ) -> list[DTO]:
+     ) -> tuple[list[DTO], int | None]:
           if cache and cache_key:
                data = await cache.get(name=cache_key)
                if data:
                     loads_data = json.loads(data)
                     if columns: 
                          return loads_data
-                    return [
-                         self.model.serialize_dto(obj=json.loads(dump_model), from_attributes=False)
-                         for dump_model in loads_data
-                    ]
+                    return (
+                         [
+                              self.model.serialize_dto(obj=json.loads(dump_model), from_attributes=False)
+                              for dump_model in loads_data[:-1]
+                         ],
+                         int(loads_data[-1]) if loads_data[-1] else None
+                    )
           
-          query = await self.__query_builder(
+          query_data = await self.__query_builder(
                type_=select,
                where=where,
                columns=columns,
-               selectinload=selectinload,
                order_by=order_by,
-               order_by_mode=order_by_mode
+               order_by_mode=order_by_mode,
+               relationship_columns=relationship_columns,
+               limit=limit,
+               offset=offset
           )
-          result = await self.session.execute(query)
-          data = result.scalars().all()
+          result_data = await self.session.execute(query_data)
+          data = result_data.all()
           
+          count_data = None
+          if count is True:
+               query_count = await self.__query_builder(
+                    type_=select,
+                    count=True,
+                    where=where,
+                    relationship_columns=relationship_columns
+               )
+               result_count = await self.session.execute(query_count)
+               count_data = result_count.scalar()
+               
           if not data:
-               return []
+               return ([], None)
           
           if not columns:
                data = [
@@ -164,18 +214,20 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                ]
                
           if cache and cache_key:
-               if hasattr(data[0], "model_dump_json"):
+               if not columns:
                     data = [model.model_dump_json() for model in data]
+               
+               data.append(count_data)
                await cache.set(name=cache_key, value=json.dumps(data))
-          return data
+          return (data, count_data)
                     
           
      async def create(
-          self, 
+          self,
           values: dict[str, Any],
           cache: Cache | None = None,
           cache_keys: list[str] = [],
-          returning: bool = False,
+          returning: str | None = None,
           **kwargs
      ) -> Any:
           query = await self.__query_builder(
@@ -188,7 +240,7 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           if cache and cache_keys:
                await cache.delete(*cache_keys)
           
-          if returning is True:
+          if returning:
                return result.scalar()
           
           
@@ -212,10 +264,10 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
      async def update(
           self, 
           values: dict[str, Any],
-          where: dict[str, Any],
+          where: dict[str, list[BaseWhereCondition]],
           cache: Cache | None = None,
           cache_keys: list[str] = [],
-          returning: bool = False, 
+          returning: str | None = None, 
           **kwargs
      ) -> Any:
           query = await self.__query_builder(
@@ -229,16 +281,16 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           if cache and cache_keys:
                await cache.delete(*cache_keys)
                
-          if returning is True:
+          if returning:
                return result.scalar()
           
           
      async def delete(
           self, 
-          where: dict[str, Any],
+          where: dict[str, list[BaseWhereCondition]],
           cache: Cache | None = None,
-          cache_key: list[str] = [],
-          returning: bool = False, 
+          cache_keys: list[str] = [],
+          returning: str | None = None,
           **kwargs
      ) -> Any:
           query = await self.__query_builder(
@@ -248,89 +300,8 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           )
           result = await self.session.execute(query)
           
-          if cache and cache_key:
-               await cache.delete(*cache_key)
+          if cache and cache_keys:
+               await cache.delete(*cache_keys)
                
-          if returning is True:
+          if returning:
                return result.scalar()
-          
-          
-     async def paginate(
-          self, 
-          limit: int, 
-          offset: int, 
-          query: str = "",
-          where: dict[str, Any] = {},
-          cache: Cache | None = None, 
-          cache_key: str | None = None, 
-          selectinload: bool = False, 
-          order_by: str = "",
-          order_by_mode: str = "",
-          columns: list[str] = [],
-          **kwargs
-     ) -> tuple[list[DTO | tuple[Any]], int]:
-          if cache and cache_key:
-               data = await cache.get(name=cache_key)
-               if data:
-                    loads_data = json.loads(data)
-                    if columns:
-                         return loads_data[:-1], int(loads_data[-1])
-                    return [self.model.serialize_dto(dump_dto) for dump_dto in loads_data[:-1]], int(loads_data[-1])
-          
-          where_values = []
-          if query:
-               where_values = [
-                    self.model.paginate_query_column().ilike(f"%{query_part}%")
-                    for query_part in query.split()
-               ]
-          if where:
-               where_values.extend(
-                    [
-                         getattr(self.model, key) == value for key, value in where.items() 
-                         if hasattr(self.model, key)
-                    ]
-               )
-               
-          query_items = await self.__query_builder(
-               type_=select,
-               where=where_values,
-               columns=columns,
-               selectinload=selectinload,
-               order_by=order_by,
-               order_by_mode=order_by_mode,
-               limit=limit,
-               offset=offset,
-               filter_by=False
-          )
-          query_count_items = (
-               select(func.count(self.model.returning())).
-               where(*where_values)
-          )
-          items = await self.session.execute(query_items)
-          result_items = items.scalars().all()
-          
-          count = await self.session.execute(query_count_items)
-          result_count = count.scalar()
-          
-          if not columns:
-               items = [
-                    self.model.serialize_dto(model, from_attributes=True)
-                    for model in result_items
-               ]
-               
-          if cache and cache_key:
-               if not columns:
-                    items = [dto.model_dump_json() for dto in items]
-                    
-               items.append(result_count)
-               await cache.set(
-                    key=cache_key,
-                    value=json.dumps(items),
-                    ex=80
-               )
-          return items, result_count          
-          
-          
-     
-     
-     

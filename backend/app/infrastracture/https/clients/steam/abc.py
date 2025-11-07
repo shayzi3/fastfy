@@ -1,8 +1,8 @@
 from typing import Protocol
 
-from backend.app.responses.abc import BaseResponse
-from backend.app.infrastracture.cache.abc import Cache
-from app.schemas import SkinsPage, SteamItemModel, SkinPriceVolumeModel, RepeatRequestModel, SteamUserModel
+from app.responses.abc import BaseResponse
+from app.infrastracture.cache.abc import Cache
+from app.schemas import SkinsPage, SteamInventorySkinModel, SkinPriceVolumeModel, RepeatRequestModel, SteamUserModel
 
 
 
@@ -22,7 +22,7 @@ class BaseSteamClient(Protocol):
           cache: Cache,
           offset: int,
           limit: int,
-     ) -> SkinsPage[SteamItemModel] | BaseResponse:
+     ) -> SkinsPage[SteamInventorySkinModel] | BaseResponse:
           ...
           
           

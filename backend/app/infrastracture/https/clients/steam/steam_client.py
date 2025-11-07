@@ -8,10 +8,10 @@ from app.schemas import (
      RepeatRequestModel,
      SteamUserModel
 )
-from backend.app.infrastracture.https.http_clients.abc import BaseHttpClient
+from app.infrastracture.https.http_clients.abc import BaseHttpClient
 from .abc import BaseSteamClient
-from backend.app.responses.abc import BaseResponse
-from backend.app.infrastracture.cache.abc import Cache
+from app.responses.abc import BaseResponse
+from app.infrastracture.cache.abc import Cache
 from app.infrastracture.https.repeater import retry
 from app.core import my_config
 from app.utils.logger import logger

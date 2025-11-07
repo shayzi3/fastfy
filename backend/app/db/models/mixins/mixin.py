@@ -1,4 +1,4 @@
-from typing import Any, Type, TypeVar, Generic, Iterable, Literal
+from typing import Any, Type, TypeVar, Generic, Iterable
 
 from pydantic import BaseModel
 
@@ -17,19 +17,3 @@ class Mixin(Generic[DTO]):
                obj=obj, 
                from_attributes=True if from_attributes else False
           )
-          
-     @classmethod
-     def returning(cls) -> None | Any:
-          return None
-     
-     @classmethod
-     def order_by(cls) -> None | Any:
-          return None
-     
-     @classmethod
-     def selectinload(cls) -> Iterable:
-          return []
-     
-     @classmethod
-     def paginate_query_column(cls):
-          return None

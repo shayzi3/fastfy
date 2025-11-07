@@ -15,8 +15,9 @@ from .schema import (
      PatchUserModel,
      PaginateSkinsModel,
      SkinWithoutMetasModel,
-     PaginatePortfolioSkinsModel,
-     PaginateUserLikeSkinsModel,
      CreateSkinTransactionModel,
-     UpdateSkinTransactionModel
+     PatchSkinTransactionModel,
+     PaginateSkinsMetasModel,
+     PatchPortfolioSkinModel,
+     NotifyFiltersModel
 )

@@ -1,10 +1,10 @@
-from typing import Any, TypeVar, Generic, Protocol, Type, Literal
+from typing import Any, TypeVar, Generic, Protocol
 
 from pydantic import BaseModel
 
 from app.schemas.enums import OrderByModeEnum
-from app.schemas import SkinsPage
 from app.infrastracture.cache.abc import Cache
+from app.repositories.abc_condition import BaseWhereCondition
 
 
 DTO = TypeVar("DTO", bound=BaseModel)
@@ -20,34 +20,66 @@ class BaseRepository(Protocol, Generic[DTO, ESSENCE]):
 
      async def read(
           self, 
-          where: dict[str, Any] = {},
           cache: Cache | None = None,
           cache_key: str | None = None,
-          selectinload: bool = False, 
+          relationship_columns: list[str] = [],
+          where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
-     ) -> DTO | None:
+     ) -> DTO | list[tuple[Any]] | None:
+          """Get one data
+
+          Args:
+              cache (Cache | None, optional): Cache instance. Defaults to None.
+              cache_key (str | None, optional): Key for get data from cache. Defaults to None.
+              relationship_columns (list[str], optional): Relationship columns which keeping in repository model. Defaults to [].
+              where (dict[str, list[BaseWhereCondition]], optional): For repository model 'default' for relationship column 'name a column'. Defaults to {}.
+              columns (list[str], optional): Columns from repository model. Defaults to [].
+
+          Returns:
+              DTO | list[tuple[Any]] | None
+          """
           ...
      
      
-     async def read_all(
+     async def read_many(
           self, 
-          where: dict[str, Any] = {},
           cache: Cache | None = None,
           cache_key: str | None = None,
-          selectinload: bool = False, 
+          relationship_columns: list[str] = [],
+          where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
-          order_by: str | None = None,
+          order_by: dict[str, str] = {},
           order_by_mode: OrderByModeEnum = OrderByModeEnum.ASC,
-     ) -> list[DTO]:
+          limit: int | None = None,
+          offset: int | None = None,
+          count: bool = False
+     ) -> tuple[list[DTO], int | None]:
+          """Get many data
+
+          Args:
+              cache (Cache | None, optional): Cache instance. Defaults to None.
+              cache_key (str | None, optional): Key for get data from cache. Defaults to None.
+              relationship_columns (list[str], optional): Relationship columns which keeping in repository model. Defaults to [].
+              where (dict[str, list[BaseWhereCondition]], optional): For repository model 'default' for relationship column 'name a column'. Defaults to {}.
+              columns (list[str], optional): Columns from repository model. Defaults to [].
+              order_by (dict[str, str], optional): For model repository: {"default": "any column"}, For relship {"relship column": "any column"}. Defaults to {}.
+              order_by_mode (OrderByModeEnum, optional): ASC or DESC. Defaults to OrderByModeEnum.ASC.
+              limit (int | None, optional): Defaults to None.
+              offset (int | None, optional): Defaults to None.
+              count (bool, optional): Count elements by where. Defaults to False.
+
+          Returns:
+              tuple[list[DTO], int | None]
+          """
           ...
      
      
      async def create(
-          self, 
+          self,
           values: dict[str, Any],
           cache: Cache | None = None,
           cache_keys: list[str] = [],
-          returning: bool = False,
+          returning: str | None = None,
      ) -> Any:
           ...
      
@@ -64,35 +96,18 @@ class BaseRepository(Protocol, Generic[DTO, ESSENCE]):
      async def update(
           self, 
           values: dict[str, Any],
-          where: dict[str, Any], 
+          where: dict[str, list[BaseWhereCondition]], 
           cache: Cache | None = None,
           cache_keys: list[str] = [],
-          returning: bool = False, 
+          returning: str | None = None, 
      ) -> Any:
           ...
-     
-     
+          
      async def delete(
           self, 
-          where: dict[str, Any],
+          where: dict[str, list[BaseWhereCondition]],
           cache: Cache | None = None,
           cache_keys: list[str] = [],
-          returning: bool = False, 
+          returning: str | None = None, 
      ) -> Any:
-          ...
-          
-          
-     async def paginate(
-          self,
-          limit: int,
-          offset: int,
-          query: str = "",
-          where: dict[str, Any] = {},
-          cache: Cache | None = None,
-          cache_key: str | None = None,
-          selectinload: bool = False,
-          order_by: str = "",
-          columns: list[str] = [],
-          order_by_mode: str = "",
-     ) -> tuple[list[DTO | tuple[Any]], int]:
           ...

@@ -48,6 +48,7 @@ class SkinDTO(Base):
      price_last_all_day: float | None = None
      last_price: float | None = None
      last_price_update: datetime | None = None
+     sell_by_last_update: int
                
      
      

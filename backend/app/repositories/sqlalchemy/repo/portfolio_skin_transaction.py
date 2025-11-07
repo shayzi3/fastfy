@@ -1,6 +1,6 @@
 from app.db.models import PortfolioSkinTransaction
 from app.schemas.dto import PortfolioSkinTransactionDTO
-from ..reposiotry import SQLAlchemyRepository
+from ..repository import SQLAlchemyRepository
 
 
 class SQLAlchemyPortfolioSkinTransactionRepository(

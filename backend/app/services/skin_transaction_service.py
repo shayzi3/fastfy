@@ -1,24 +1,34 @@
 import uuid
 
+from typing import Type
+
 from app.repositories.abc_uow import BaseUnitOfWork
+from app.repositories.abc_condition import BaseWhereCondition
 from app.infrastracture.cache.abc import Cache
 from app.schemas.dto import PortfolioSkinTransactionDTO
 from app.responses.abc import BaseResponse
 from app.services.abc import BaseSkinTransactionService
+from app.schemas.enums import WhereConditionEnum
 from app.responses import (
-     TransactionNotFound, 
-     SkinTransactionSuccess,
-     SkinTransactionError,
-     ArgumentError
+     ArgumentError,
+     NotFoundError,
+     CreateSuccess,
+     UpdateError,
+     UpdateSuccess,
+     DeleteSuccess,
+     DeleteError
 )
 from app.schemas import (
      JWTTokenPayloadModel, 
      CreateSkinTransactionModel, 
-     UpdateSkinTransactionModel
+     PatchSkinTransactionModel
 )
 
 
 class SkinTransactionService(BaseSkinTransactionService):
+     def __init__(self, condition: Type[BaseWhereCondition]):
+          self.condition = condition
+          
      
      async def get_skin_transactions(
           self,
@@ -32,18 +42,20 @@ class SkinTransactionService(BaseSkinTransactionService):
                async with cache:
                     skin_exists_at_user_portfolio = await uow.user_portfolio_repo.read(
                          where={
-                              "user_uuid": token_payload.uuid,
-                              "uuid": portfolio_skin_uuid
-                         }
+                              "default": [
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ),
+                                   self.condition("uuid", portfolio_skin_uuid, WhereConditionEnum.EQ)
+                              ]
+                         },
                     )
                     if skin_exists_at_user_portfolio:
-                         skins = await uow.portoflio_skin_transaction_repo.read_all(
-                              where={"porfolio_skin_uuid": portfolio_skin_uuid},
+                         skins, _ = await uow.portoflio_skin_transaction_repo.read_many(
+                              where={"default": [self.condition("uuid", portfolio_skin_uuid, WhereConditionEnum.EQ)]},
                               cache=cache,
                               cache_key=f"portfolio_skin_transaction:{portfolio_skin_uuid}"
                          )
                          return skins
-                    return TransactionNotFound
+                    return NotFoundError
           
           
      async def create_skin_transaction(
@@ -52,15 +64,18 @@ class SkinTransactionService(BaseSkinTransactionService):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str,
-          transaction_data: CreateSkinTransactionModel
+          transaction_data: CreateSkinTransactionModel,
+          **kwargs
      ) -> BaseResponse:
           async with uow:
                async with cache:
                     skin_exists_at_user_portfolio = await uow.user_portfolio_repo.read(
                          where={
-                              "user_uuid": token_payload.uuid,
-                              "uuid": portfolio_skin_uuid
-                         }
+                              "default": [
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ),
+                                   self.condition("uuid", portfolio_skin_uuid, WhereConditionEnum.EQ)
+                              ]
+                         },
                     )
                     if skin_exists_at_user_portfolio:
                          await uow.portoflio_skin_transaction_repo.create(
@@ -68,11 +83,13 @@ class SkinTransactionService(BaseSkinTransactionService):
                                    "uuid": uuid.uuid4(),
                                    "portfolio_skin_uuid": portfolio_skin_uuid,
                                    **transaction_data.model_dump()
-                              }
+                              },
+                              cache=cache,
+                              cache_keys=[f"portfolio_skin_transaction:{portfolio_skin_uuid}"]
                          )
                          await uow.commit()
-                         return SkinTransactionSuccess
-                    return SkinTransactionError
+                         return CreateSuccess
+                    return NotFoundError
           
           
      async def delete_skin_transaction(
@@ -88,24 +105,26 @@ class SkinTransactionService(BaseSkinTransactionService):
                async with cache:
                     skin_exists_at_user_portfolio = await uow.user_portfolio_repo.read(
                          where={
-                              "user_uuid": token_payload.uuid,
-                              "uuid": portfolio_skin_uuid
-                         }
+                              "default": [
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ),
+                                   self.condition("uuid", portfolio_skin_uuid, WhereConditionEnum.EQ)
+                              ]
+                         },
                     )
                     if skin_exists_at_user_portfolio:
                          result = await uow.portoflio_skin_transaction_repo.delete(
-                              where={"uuid": transaction_uuid},
+                              where={"default": [self.condition("uuid", transaction_uuid, WhereConditionEnum.EQ)]},
                               cache=cache,
                               cache_keys=[f"portfolio_skin_transaction:{portfolio_skin_uuid}"],
-                              returning=True
+                              returning="uuid"
                          )
                          await uow.commit()
                          if result:
-                              return SkinTransactionSuccess
-                         return SkinTransactionError
-                    return TransactionNotFound
+                              return DeleteSuccess
+                         return DeleteError
+                    return NotFoundError
           
-          
+     
      async def update_skin_transaction(
           self,
           uow: BaseUnitOfWork,
@@ -113,7 +132,7 @@ class SkinTransactionService(BaseSkinTransactionService):
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str,
           transaction_uuid: str,
-          transaction_data: UpdateSkinTransactionModel,
+          transaction_data: PatchSkinTransactionModel,
           **kwargs
      ) -> BaseResponse:
           if not transaction_data.non_nullable():
@@ -123,17 +142,19 @@ class SkinTransactionService(BaseSkinTransactionService):
                async with cache:
                     skin_exists_at_user_portfolio = await uow.user_portfolio_repo.read(
                          where={
-                              "user_uuid": token_payload.uuid,
-                              "uuid": portfolio_skin_uuid
-                         }
+                              "default": [
+                                   self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ),
+                                   self.condition("uuid", portfolio_skin_uuid, WhereConditionEnum.EQ)
+                              ]
+                         },
                     )
                     if skin_exists_at_user_portfolio:
                          await uow.portoflio_skin_transaction_repo.update(
-                              values=transaction_data.non_nullable(),
-                              where={"uuid": transaction_uuid},
+                              values=transaction_data.get_update_field_values(),
+                              where={"default": [self.condition("uuid", transaction_uuid, WhereConditionEnum.EQ)]},
                               cache=cache,
                               cache_keys=[f"portfolio_skin_transaction:{portfolio_skin_uuid}"]
                          )
                          await uow.commit()
-                         return SkinTransactionSuccess
-                    return SkinTransactionError
+                         return UpdateSuccess
+                    return UpdateError

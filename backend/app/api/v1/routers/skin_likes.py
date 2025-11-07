@@ -1,34 +1,35 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Form
-from dishka.integrations.fastapi import FromDishka
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.services.abc import BaseUserLikeSkinsService
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
 from app.core.security.abc import BaseJWTSecurity
-from app.schemas import SkinsPage, PaginateUserLikeSkinsModel
+from app.schemas import SkinsPage, PaginateSkinsModel
 from app.schemas.dto import UserLikeSkinDTO
 from app.responses import (
      isresponse,
      JWTTokenExpireError,
      JWTTokenInvalidError,
      ServerError,
-     SkinCreateSuccess,
-     SkinAlreadyExistsError,
-     SkinDeleteSuccess,
-     SkinNotExistsError,
-     router_responses
+     router_responses,
+     CreateSuccess,
+     DataAlreadyExistsError,
+     DeleteSuccess,
+     DataNotExistsError
 )
 
 
-user_likes_skins = APIRouter(
-     prefix="/api/v1/user",
-     tags=["User Likes"]
+user_likes_skins_router = APIRouter(
+     prefix="/api/v1",
+     tags=["Likes Skins"],
+     route_class=DishkaRoute
 )
 
 
-@user_likes_skins.get(
+@user_likes_skins_router.get(
      path="/likes",
      responses=router_responses(
           ServerError,
@@ -43,7 +44,7 @@ async def get_likes_skins(
      cache: FromDishka[Cache],
      service: FromDishka[BaseUserLikeSkinsService],
      token_payload: FromDishka[BaseJWTSecurity],
-     paginate_data: Annotated[PaginateUserLikeSkinsModel, Form()]
+     paginate_data: Annotated[PaginateSkinsModel, Form()]
 ):
      return await service.get_likes_skins(
           uow=uow,
@@ -53,14 +54,14 @@ async def get_likes_skins(
      )
      
      
-@user_likes_skins.post(
+@user_likes_skins_router.post(
      path="/likes",
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError,
-          SkinAlreadyExistsError,
-          SkinCreateSuccess
+          DataAlreadyExistsError,
+          CreateSuccess
      ),
      summary="Сделать скин любимым."
 )
@@ -82,14 +83,14 @@ async def create_like_skin(
      return result
 
 
-@user_likes_skins.delete(
+@user_likes_skins_router.delete(
      path="/likes",
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError,
-          SkinDeleteSuccess,
-          SkinNotExistsError
+          DeleteSuccess,
+          DataNotExistsError
      ),
      summary="Удалить скин из любимых."
 )

@@ -12,11 +12,11 @@ from app.api.v1 import (
      include_exception_handlers,
      include_middleware
 )
-from app.tasks import (
-     run_tasks,
-     UpdateNotifyTask,
-     UpdatePriceAtDaysTask 
-)
+# from app.tasks import (
+#      run_tasks,
+#      UpdateNotifyTask,
+#      UpdatePriceAtDaysTask 
+# )
 
 
 
@@ -24,11 +24,11 @@ from app.tasks import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-     await run_tasks(
-          UpdateNotifyTask(),
-          UpdatePriceAtDaysTask()
-     )
-     await test_connections.start()
+     # await run_tasks(
+     #      UpdateNotifyTask(),
+     #      UpdatePriceAtDaysTask()
+     # )
+     # await test_connections.start()
      yield
      await app.state.dishka_container.close()
 
@@ -46,11 +46,11 @@ app = FastAPI(
           "хранится uuid."
      ),
      version="1.0.0",
-     lifespan=lifespan
+     # lifespan=lifespan
 )
 include_routers(app)
 include_exception_handlers(app)
-include_middleware(app)
+# include_middleware(app)
 setup_dishka(container=container, app=app)
 
 

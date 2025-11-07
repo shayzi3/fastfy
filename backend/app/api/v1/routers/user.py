@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Query, Form
-from dishka.integrations.fastapi import FromDishka
+from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseUserService
@@ -10,14 +10,14 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
      isresponse,
      router_responses,
-     UserNotFoundError,
-     UserUpdateSuccess,
      HttpError,
      SteamInventoryBlockedError,
      ServerError,
      JWTTokenExpireError,
      JWTTokenInvalidError,
-     UserUpdateError
+     NotFoundError,
+     UpdateSuccess,
+     UpdateError
 )
 from app.schemas import SkinsPage, SteamInventorySkinModel, PatchUserModel
 from app.schemas.dto import UserDTO
@@ -27,6 +27,7 @@ from app.schemas.dto import UserDTO
 user_router = APIRouter(
      prefix="/api/v1",
      tags=["User"],
+     route_class=DishkaRoute
 )
 
 
@@ -35,10 +36,10 @@ user_router = APIRouter(
      path="/user", 
      response_model=UserDTO,
      responses=router_responses(
-          UserNotFoundError,
+          NotFoundError,
           ServerError,
           JWTTokenExpireError,
-          JWTTokenInvalidError
+          JWTTokenInvalidError,
      ),
      summary="Получения данных текущего аккаунта."
 )
@@ -62,8 +63,8 @@ async def get_user(
 @user_router.patch(
      path="/user",
      responses=router_responses(
-          UserUpdateSuccess,
-          UserUpdateError,
+          UpdateSuccess,
+          UpdateError,
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError

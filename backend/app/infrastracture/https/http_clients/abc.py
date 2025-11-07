@@ -1,7 +1,7 @@
 from typing import Protocol, Any
 
 from app.schemas import HttpResponseModel
-from app.infrastracture.https.proxy.manager.abc import BaseProxyManager
+# from app.infrastracture.https.proxy.manager.abc import BaseProxyManager
 
 
 
@@ -10,8 +10,8 @@ class BaseHttpClient(Protocol):
      base_url: str = ""
      
      
-     def __init__(self, proxy_mamanger: BaseProxyManager):
-          self.proxy_manager = proxy_mamanger
+     # def __init__(self, proxy_mamanger: BaseProxyManager):
+          # self.proxy_manager = proxy_mamanger
      
      
      def headers(self) -> dict[str, Any]:
