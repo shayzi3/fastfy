@@ -4,8 +4,10 @@ from sqlalchemy import select
 
 from datetime import timedelta, datetime
 
+from app.schemas.enums import WhereConditionEnum, OrderByModeEnum
 from app.schemas import SkinPriceHistoryModel
 from app.infrastracture.cache.abc import Cache
+from app.repositories.abc_condition import BaseWhereCondition
 from app.schemas.dto import SkinPriceHistoryDTO
 from app.db.models import SkinPriceHistory
 from ..repository import SQLAlchemyRepository
@@ -20,9 +22,11 @@ class SQLAlchemySkinPriceHisoryRepository(
      async def price_by_timestamp(
           self, 
           timestamps: list[tuple[timedelta, str]],
+          where: dict[str, list[BaseWhereCondition]] = {},
+          order_by: dict[str, list[tuple[str, OrderByModeEnum]]] = {},
           cache: Cache | None = None,
           cache_key: str | None = None,
-          **where_kwargs
+          **kwargs
      ) -> dict[str, list[SkinPriceHistoryModel]]:
           if cache and cache_key:
                data = await cache.get(name=cache_key)
@@ -33,20 +37,16 @@ class SQLAlchemySkinPriceHisoryRepository(
                          for label, value in loads_data.items()
                     }
                
-          query = (
-               select(
-                    self.model.price,
-                    self.model.volume,
-                    self.model.timestamp,
-                    *[
-                         (
-                              self.model.timestamp >= datetime.now() - timestamp
-                         ).label(label)
-                         for timestamp, label in timestamps
+          query = await self._query_builder(
+               type_=select,
+               columns=[
+                    "price", "volume", "timestamp",
+                    *[(self.model.timestamp >= datetime.now() - timestamp).label(label) 
+                      for timestamp, label in timestamps
                     ]
-               ).
-               filter_by(**where_kwargs).
-               order_by(self.model.order_by())
+               ],
+               where=where,
+               order_by=order_by
           )
           result = await self.session.execute(query)
           result = result.all()

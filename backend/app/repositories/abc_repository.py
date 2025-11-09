@@ -23,6 +23,7 @@ class BaseRepository(Protocol, Generic[DTO, ESSENCE]):
           cache: Cache | None = None,
           cache_key: str | None = None,
           relationship_columns: list[str] = [],
+          joinedload_relship_columns: list[str] = [],
           where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
      ) -> DTO | list[tuple[Any]] | None:
@@ -46,10 +47,10 @@ class BaseRepository(Protocol, Generic[DTO, ESSENCE]):
           cache: Cache | None = None,
           cache_key: str | None = None,
           relationship_columns: list[str] = [],
+          joinedload_relship_columns: list[str] = [],
           where: dict[str, list[BaseWhereCondition]] = {},
           columns: list[str] = [],
-          order_by: dict[str, str] = {},
-          order_by_mode: OrderByModeEnum = OrderByModeEnum.ASC,
+          order_by: dict[str, list[tuple[str, OrderByModeEnum]]] = {},
           limit: int | None = None,
           offset: int | None = None,
           count: bool = False

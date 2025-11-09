@@ -49,24 +49,24 @@ class OrderByPaginateSkinsEnum(Enum):
      PRICE_LAST_7_DAY = "price_last_7_day"
      PRICE_LAST_30_DAY = "price_last_30_day"
      
-     def __str__(self):
-          return self.value
+     
+     
+class OrderByPaginatePortfolioSkinsEnum(Enum):
+     BENEFIT = "benefit"
+     
+     
 
      
 class OrderByModeEnum(Enum):
      DESC = "desc"
      ASC = "asc"
      
-     def __str__(self):
-          return self.value
      
      
 class UserNotifyEnum(Enum):
      ON = "on"
      OFF = "off"
      
-     def __str__(self):
-          return self.value
      
      
 class WhereConditionEnum(Enum):

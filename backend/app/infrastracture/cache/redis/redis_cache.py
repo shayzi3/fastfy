@@ -13,15 +13,17 @@ class CacheRedis(Cache):
           self._connection = None
           
      async def __aenter__(self) -> None: 
-          self._connection = Redis(
-               host=my_config.redis_host,
-               port=my_config.redis_port,
-               password=my_config.redis_password,
-               decode_responses=True
-          )
+          if not self._connection:
+               self._connection = Redis(
+                    host=my_config.redis_host,
+                    port=my_config.redis_port,
+                    password=my_config.redis_password,
+                    decode_responses=True
+               )
      
      async def __aexit__(self, *args) -> None:
           await self.close()
+          self._connection = None
                   
      async def set(self, key: str, value: str, ex: int = 0) -> None:
           if self._connection:

@@ -5,5 +5,6 @@ from .schema import (
      UserPortfolioDTO,
      UserNotifyDTO,
      PortfolioSkinTransactionDTO,
-     UserLikeSkinDTO
+     UserLikeSkinDTO,
+     SkinCollectionDTO
 )

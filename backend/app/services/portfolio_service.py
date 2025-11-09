@@ -3,7 +3,12 @@ import uuid
 from typing import Type
 
 from app.responses.abc import BaseResponse
-from app.schemas import SkinsPage, JWTTokenPayloadModel, PaginateSkinsModel, PatchPortfolioSkinModel
+from app.schemas import (
+     SkinsPage, 
+     JWTTokenPayloadModel, 
+     PaginareSkinsPortfolioModel, 
+     PatchPortfolioSkinModel
+)
 from app.schemas.dto import UserPortfolioDTO
 from app.schemas.enums import WhereConditionEnum
 from app.responses import (
@@ -29,7 +34,7 @@ class PortfolioService(BasePortfolioService):
           uow: BaseUnitOfWork, 
           cache: Cache, 
           token_payload: JWTTokenPayloadModel, 
-          paginate_data: PaginateSkinsModel
+          paginate_data: PaginareSkinsPortfolioModel
      ) -> SkinsPage[UserPortfolioDTO]:
           async with uow:
                async with cache:
@@ -37,14 +42,17 @@ class PortfolioService(BasePortfolioService):
                          cache=cache,
                          cache_key=paginate_data.cache_key(prefix=f"user_portfolio:{token_payload.uuid}"),
                          relationship_columns=["skin"],
+                         joinedload_relship_columns=["skin", "transactions"],
                          limit=paginate_data.limit,
                          offset=paginate_data.offset,
                          where={
                               "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
-                              "skin": paginate_data.generate_conditions(condition=self.condition)
+                              "skin": paginate_data.generate_conditions(
+                                   condition=self.condition,
+                                   exclude=["price_min", "price_max"]
+                              )
                          },
-                         order_by={"skin": paginate_data.order_by.value} ,
-                         order_by_mode=paginate_data.order_by_mode.value,
+                         order_by={"default": [(paginate_data.order_by.value, paginate_data.order_by_mode.value)]},
                          count=True
                     )
                     

@@ -1,8 +1,7 @@
-from typing import Any, Callable
 from uuid import UUID
 from datetime import datetime
 
-from pydantic import BaseModel, model_validator, PrivateAttr
+from pydantic import BaseModel, model_validator, Field
 from typing_extensions import Self, Literal
 
 
@@ -27,7 +26,7 @@ class UserDTO(Base):
      created_at: datetime
      notify: bool
       
-               
+
                
 class SkinDTO(Base):
      market_hash_name: str
@@ -49,6 +48,8 @@ class SkinDTO(Base):
      last_price: float | None = None
      last_price_update: datetime | None = None
      sell_by_last_update: int
+     
+     collections: list["SkinCollectionDTO"] = []
                
      
      
@@ -65,6 +66,7 @@ class UserPortfolioDTO(Base):
      uuid: str
      user_uuid: str
      market_hash_name: str
+     benefit: float
      notify_percent: int
      
      skin: SkinDTO
@@ -86,6 +88,7 @@ class UserLikeSkinDTO(Base):
      user_uuid: str
      market_hash_name: str
      skin: SkinDTO
+     collections: list["SkinCollectionDTO"] = []
      
      
 class UserNotifyDTO(Base):
@@ -95,7 +98,12 @@ class UserNotifyDTO(Base):
      notify_type: Literal["SKIN", "INFO"]
      created_at: datetime
      is_read: bool
-     user: UserDTO     
+     user: UserDTO
                
                
-               
+class SkinCollectionDTO(Base):
+     uuid: str = Field(exclude=True)
+     market_hash_name: str = Field(exclude=True)
+     short_name: str = Field(exclude=True)
+     collection: str
+     image_link: str

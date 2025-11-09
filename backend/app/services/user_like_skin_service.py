@@ -33,18 +33,24 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
      ) -> SkinsPage[UserLikeSkinDTO]:
           async with uow:
                async with cache:
+                    where_conditions = {
+                         "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
+                         "skin": paginate_data.generate_conditions(condition=self.condition),
+                    }
+                    if paginate_data.collection:
+                         where_conditions.update(
+                              {"collections": [self.condition("collection", paginate_data.collection, WhereConditionEnum.EQ)]}
+                         )
+                         
                     skins, skins_count = await uow.user_like_skin_repo.read_many(
                          cache=cache,
                          cache_key=paginate_data.cache_key(prefix=f"user_like_skins-{token_payload.uuid}"),
-                         relationship_columns=["skin"],
-                         where={
-                              "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
-                              "skin": paginate_data.generate_conditions(condition=self.condition),
-                         },
+                         relationship_columns=["skin", "collections"],
+                         joinedload_relship_columns=["skin", "collections"],
+                         where=where_conditions,
                          limit=paginate_data.limit,
                          offset=paginate_data.offset,
-                         order_by={"skin": paginate_data.order_by.value},
-                         order_by_mode=paginate_data.order_by_mode,
+                         order_by={"skin": [(paginate_data.order_by.value, paginate_data.order_by_mode.value)]},
                          count=True
                     )
           return SkinsPage(

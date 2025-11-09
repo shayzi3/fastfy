@@ -33,6 +33,7 @@ class NotificationService(BaseNotificationService):
                     notifies, _ = await uow.user_notify_repo.read_many(
                          cache=cache,
                          cache_key=filters_data.cache_key(f"user_notify:{token_payload.uuid}"),
+                         joinedload_relship_columns=["user"],
                          where={
                               "default": filters_data.generate_conditions(
                                    condition=self.condition,

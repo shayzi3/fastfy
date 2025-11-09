@@ -18,7 +18,8 @@ from .enums import (
      OrderByPaginateSkinsEnum, 
      UserNotifyEnum, 
      WhereConditionEnum,
-     NotifyTypeEnum
+     NotifyTypeEnum,
+     OrderByPaginatePortfolioSkinsEnum
 )
 
 
@@ -118,7 +119,7 @@ class SteamProfileModel(BaseModel):
      steam_name: str
      steam_avatar: str
           
-     
+
 class SkinPriceVolumeModel(BaseModel):
      price: str | float
      volume: str | int
@@ -191,8 +192,9 @@ class PaginateSkinsModel(_NullableValue):
      rarity: str | None = Field(default=None)
      stattrak: bool | None = Field(default=None)
      souvenir: bool | None = Field(default=None)
-     order_by: OrderByPaginateSkinsEnum | None = Field(default=OrderByPaginateSkinsEnum.POPULAR)
-     order_by_mode: OrderByModeEnum | None = Field(default=OrderByModeEnum.DESC)
+     collection: str | None = Field(default=None)
+     order_by: OrderByPaginateSkinsEnum = Field(default=OrderByPaginateSkinsEnum.POPULAR)
+     order_by_mode: OrderByModeEnum = Field(default=OrderByModeEnum.DESC)
      
      model_config = ConfigDict(use_enum_values=True)
      
@@ -212,24 +214,21 @@ class PaginateSkinsModel(_NullableValue):
                "wear": ["wear", WhereConditionEnum.EQ],
                "rarity": ["rarity", WhereConditionEnum.EQ],
                "stattrak": ["stattrak", WhereConditionEnum.EQ],
-               "souvenir": ["souvenir", WhereConditionEnum.EQ]
+               "souvenir": ["souvenir", WhereConditionEnum.EQ],
           }
           return super().generate_conditions(
                attrs_conditions=attrs_conditions,
                condition=condition,
                additional_conditions=additional_conditions,
                exclude=exclude
-          )
+          )          
           
           
-class PaginateSkinsMetasModel(PaginateSkinsModel):
-     metas: bool = Field(default=True)
-          
+class PaginareSkinsPortfolioModel(PaginateSkinsModel):
+     order_by: OrderByPaginatePortfolioSkinsEnum = Field(
+          default=OrderByPaginatePortfolioSkinsEnum.BENEFIT
+     )
      
-class SkinWithoutMetasModel(BaseModel):
-     market_hash_name: str
-     color: str
-     image: str
      
      
 class CreateSkinTransactionModel(BaseModel):

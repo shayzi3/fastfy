@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, BackgroundTasks
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
@@ -105,6 +105,7 @@ async def update_skin_transaction(
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
      token_payload: FromDishka[BaseJWTSecurity],
+     background_tasks: BackgroundTasks,
      portfolio_skin_uuid: str,
      transaction_uuid: str,
      transaction_data: Annotated[PatchSkinTransactionModel, Form()]
@@ -116,6 +117,13 @@ async def update_skin_transaction(
           portfolio_skin_uuid=portfolio_skin_uuid,
           transaction_uuid=transaction_uuid,
           transaction_data=transaction_data
+     )
+     background_tasks.add_task(
+          service._update_skin_benefit,
+          uow=uow,
+          cache=cache,
+          portfolio_skin_uuid=portfolio_skin_uuid,
+          token_payload=token_payload
      )
      return result.response()
 

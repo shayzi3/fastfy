@@ -2,8 +2,6 @@ from datetime import datetime
 from sqlalchemy import BigInteger, ForeignKey, UUID, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.schemas.enums import NotifyTypeEnum
-
 from .base import Base
 from .mixins import (
      UserMixin,
@@ -12,7 +10,8 @@ from .mixins import (
      UserNotifyMixin,
      UserPortfolioMixin,
      PortfolioSkinTransactionMixin,
-     UserLikeSkinMixin
+     UserLikeSkinMixin,
+     SkinCollectionMixin
 )
 
 
@@ -53,6 +52,8 @@ class Skin(SkinMixin, Base):
      last_price_update: Mapped[datetime] = mapped_column(nullable=True)
      sell_by_last_update: Mapped[int] = mapped_column(default=0)
      
+     collections: Mapped[list["SkinCollection"]] = relationship()
+
      
 class SkinPriceHistory(SkinPriceHistoryMixin, Base):
      __tablename__ = "skins_price_history"
@@ -80,6 +81,7 @@ class UserPortfolio(UserPortfolioMixin, Base):
           ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
      )
+     benefit: Mapped[float] = mapped_column(default=0)
      notify_percent: Mapped[int] = mapped_column(default=10)
      
      skin: Mapped["Skin"] = relationship()
@@ -114,15 +116,19 @@ class UserLikeSkin(UserLikeSkinMixin, Base):
           index=True
      )
      skin: Mapped["Skin"] = relationship()
+     collections: Mapped[list["SkinCollection"]] = relationship(
+          primaryjoin="UserLikeSkin.market_hash_name == SkinCollection.market_hash_name",
+          viewonly=True
+     )
      
      
      
 class UserNotify(UserNotifyMixin, Base):
      __tablename__ = "users_notifies"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True) 
      text: Mapped[str] = mapped_column()
-     notify_type: Mapped[str] = mapped_column(default=NotifyTypeEnum.SKIN, index=True)
+     notify_type: Mapped[str] = mapped_column(index=True)
      created_at: Mapped[datetime] = mapped_column(server_default=func.now(), index=True)
      is_read: Mapped[bool] = mapped_column(default=False)
      user_uuid: Mapped[str] = mapped_column(UUID(), 
@@ -130,3 +136,17 @@ class UserNotify(UserNotifyMixin, Base):
           index=True
      )
      user: Mapped["User"] = relationship()
+     
+      
+     
+class SkinCollection(SkinCollectionMixin, Base):
+     __tablename__ = "skins_collections"
+     
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     market_hash_name: Mapped[str] = mapped_column(
+          ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"), 
+          index=True
+     )
+     short_name: Mapped[str] = mapped_column()
+     collection: Mapped[str] = mapped_column(index=True)
+     image_link: Mapped[str] = mapped_column()

@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Form
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
@@ -17,8 +19,7 @@ from app.schemas.dto import SkinDTO
 from app.schemas import (
      SkinHistoryTimePartModel, 
      SkinsPage, 
-     PaginateSkinsModel,
-     SkinWithoutMetasModel
+     PaginateSkinsModel
 )
 
 
@@ -61,7 +62,7 @@ async def get_skin(
           
 @skin_router.get(
      path="/skin/search", 
-     response_model=SkinsPage[SkinDTO | SkinWithoutMetasModel],
+     response_model=SkinsPage[SkinDTO],
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
@@ -74,7 +75,7 @@ async def search_skin(
      service: FromDishka[BaseSkinService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
-     paginate_data: PaginateSkinsModel
+     paginate_data: Annotated[PaginateSkinsModel, Form()]
 ):
      result = await service.search_skin(
           cache=cache,

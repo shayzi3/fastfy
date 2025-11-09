@@ -19,7 +19,7 @@ _routers = [
      user_portfolio_router,
      notification_router,
      user_likes_skins_router,
-     user_portfolio_router
+     skin_transaction_router
 ]
 _exceptions = [
      (RequestValidationError, exception_validation_error),
