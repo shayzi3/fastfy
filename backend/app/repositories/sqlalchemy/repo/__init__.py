@@ -5,3 +5,4 @@ from .skin_price_history import SQLAlchemySkinPriceHisoryRepository
 from .user_portfolio import SQLAlchemyUserPortfolioRepository
 from .user_like_skin import SQLAlchemyUserLikeSkinRepository
 from .portfolio_skin_transaction import SQLAlchemyPortfolioSkinTransactionRepository
+from .skin_collection import SQLAlchemySkinCollectionRepository

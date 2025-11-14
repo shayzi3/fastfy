@@ -54,7 +54,7 @@ class BaseRepository(Protocol, Generic[DTO, ESSENCE]):
           limit: int | None = None,
           offset: int | None = None,
           count: bool = False
-     ) -> tuple[list[DTO], int | None]:
+     ) -> tuple[list[DTO], int]:
           """Get many data
 
           Args:

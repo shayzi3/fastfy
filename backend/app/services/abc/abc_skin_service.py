@@ -8,10 +8,9 @@ from app.repositories.abc_condition import BaseWhereCondition
 from app.schemas import (
      SkinsPage, 
      SkinHistoryTimePartModel, 
-     PaginateSkinsMetasModel, 
-     SkinWithoutMetasModel
+     PaginateSkinsModel
 )
-from app.schemas.dto import SkinDTO
+from app.schemas.presentation.dto import SkinDTOPresentation
 
 
 
@@ -25,7 +24,7 @@ class BaseSkinService(Protocol):
           cache: Cache,
           uow: BaseUnitOfWork,
           skin_name: str
-     ) -> SkinDTO | BaseResponse:
+     ) -> SkinDTOPresentation | BaseResponse:
           ...
           
 
@@ -33,8 +32,8 @@ class BaseSkinService(Protocol):
           self,
           cache: Cache,
           uow: BaseUnitOfWork,
-          paginate_data: PaginateSkinsMetasModel
-     ) -> SkinsPage[SkinDTO | SkinWithoutMetasModel]:
+          paginate_data: PaginateSkinsModel
+     ) -> SkinsPage[SkinDTOPresentation]:
           ...
           
           

@@ -1,5 +1,6 @@
 import json
 
+from uuid import UUID
 from typing import Generic, TypeVar, Any, Type
 from typing_extensions import Self
 from datetime import datetime
@@ -45,7 +46,7 @@ class _NullableValue(BaseModel):
      
      def cache_key(self, prefix: str, exclude: list[str] = []) -> str:
           non_nullable_values = self.non_nullable(exclude)
-          return f"{prefix}:" + "~".join([f"{key}={value}" for key, value in non_nullable_values])
+          return f"{prefix}:" + "~".join([f"{key}={value}" for key, value in non_nullable_values.items()])
      
      
      def generate_conditions(
@@ -78,7 +79,7 @@ class _PatchModel(BaseModel):
 class SkinPriceHistoryModel(BaseModel):
      price: float
      volume: int
-     timestamp: str
+     timestamp: datetime
      
      
 
@@ -114,12 +115,6 @@ class TelegramDataModel(BaseModel):
      telegram_id: int
      
 
-class SteamProfileModel(BaseModel):
-     steamid: int
-     steam_name: str
-     steam_avatar: str
-          
-
 class SkinPriceVolumeModel(BaseModel):
      price: str | float
      volume: str | int
@@ -152,7 +147,7 @@ class SteamUserModel(BaseModel):
 
      
 class JWTTokenPayloadModel(BaseModel):
-     uuid: str
+     uuid: UUID
      steam_name: str
      steam_avatar: str
      steam_id: int

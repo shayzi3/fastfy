@@ -23,7 +23,6 @@ from app.db.models import Base
 from app.schemas.enums import OrderByModeEnum
 
 
-
 DTO = TypeVar("BM", bound=BaseModel)    
 SM = TypeVar("SM", bound=Base) # SQLAlchemy Model
      
@@ -53,7 +52,7 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           query = type_(self.model)
           
           if count is True:
-               query = type_(func.count(self.model))
+               query = select(func.count()).select_from(self.model)
                
           if columns:
                columns_objects = []
@@ -76,7 +75,10 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                )
           
           if values:
-               query = query.values(**values)
+               if isinstance(values, dict):
+                    query = query.values(**values)
+               else:
+                    query = query.values(values)
                
           if where:
                where_default = []
@@ -112,7 +114,7 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                          mode = asc if column_mode[1] == OrderByModeEnum.ASC else desc
                          
                          if attr == "default":
-                              order_by_values.append(mode(getattr(self.model, attr)))
+                              order_by_values.append(mode(getattr(self.model, column_mode[0])))
                          else:
                               relationship_obj = model_relationships.get(attr, None)
                               if relationship_obj:
@@ -144,12 +146,13 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           **kwargs
      ) -> DTO | list[tuple[Any]] | None:
           if cache and cache_key:
-               data = await cache.get(name=cache_key)
+               data = await cache.get(key=cache_key)
                if data:
+                    load_data = json.loads(data)
                     if columns:
-                         return json.loads(data)
-                    return self.model.serialize_dto(obj=data, from_attributes=False)
-                         
+                         return load_data
+                    return self.model.serialize_dto(load_data, from_attributes=False)
+                      
           query = await self._query_builder(
                type_=select,
                where=where,
@@ -168,14 +171,15 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           
           if cache and cache_key:
                await cache.set(
-                    name=cache_key, 
+                    key=cache_key, 
                     value=json.dumps(data)
-                    if columns else data.model_dump_json() 
+                    if columns else data.model_dump_json(),
+                    ex=60
                )
           return data
 
      
-     async def read_all(
+     async def read_many(
           self, 
           cache: Cache | None = None,
           cache_key: str | None = None,
@@ -188,19 +192,20 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
           offset: int | None = None,
           count: bool = False,
           **kwargs
-     ) -> tuple[list[DTO], int | None]:
+     ) -> tuple[list[DTO], int]:
           if cache and cache_key:
-               data = await cache.get(name=cache_key)
+               data = await cache.get(key=cache_key)
                if data:
                     loads_data = json.loads(data)
+                    payload, count_data = json.loads(loads_data["payload"]), loads_data["count"]
                     if columns: 
-                         return loads_data
+                         return (payload, count_data)
                     return (
                          [
                               self.model.serialize_dto(obj=json.loads(dump_model), from_attributes=False)
-                              for dump_model in loads_data[:-1]
+                              for dump_model in payload
                          ],
-                         int(loads_data[-1]) if loads_data[-1] else None
+                         count_data
                     )
           
           query_data = await self._query_builder(
@@ -214,9 +219,12 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                offset=offset
           )
           result_data = await self.session.execute(query_data)
-          data = result_data.all()
-          
-          count_data = None
+          if joinedload_relship_columns:
+               data = result_data.unique().all()
+          else:
+               data = result_data.all()
+               
+          count_data = 0
           if count is True:
                query_count = await self._query_builder(
                     type_=select,
@@ -228,20 +236,24 @@ class SQLAlchemyRepository(BaseRepository, Generic[DTO, SM]):
                count_data = result_count.scalar()
                
           if not data:
-               return ([], None)
+               return ([], 0)
           
           if not columns:
                data = [
-                    self.model.serialize_dto(obj=model, from_attributes=True) 
+                    self.model.serialize_dto(obj=model[0], from_attributes=True) 
                     for model in data
                ]
                
           if cache and cache_key:
+               redis_save_data = data.copy()
                if not columns:
-                    data = [model.model_dump_json() for model in data]
-               
-               data.append(count_data)
-               await cache.set(name=cache_key, value=json.dumps(data))
+                    redis_save_data = [model.model_dump_json() for model in data]
+                    
+               cache_data = {
+                    "payload": json.dumps(redis_save_data),
+                    "count": count_data
+               }
+               await cache.set(key=cache_key, value=json.dumps(cache_data), ex=60)
           return (data, count_data)
                     
           

@@ -18,7 +18,7 @@ class SQLAlchemySkinPriceHisoryRepository(
 ):
      model = SkinPriceHistory
      
-     
+
      async def price_by_timestamp(
           self, 
           timestamps: list[tuple[timedelta, str]],
@@ -29,7 +29,7 @@ class SQLAlchemySkinPriceHisoryRepository(
           **kwargs
      ) -> dict[str, list[SkinPriceHistoryModel]]:
           if cache and cache_key:
-               data = await cache.get(name=cache_key)
+               data = await cache.get(key=cache_key)
                if data:
                     loads_data: dict[str, list[str]] = json.loads(data)
                     return {
@@ -41,7 +41,7 @@ class SQLAlchemySkinPriceHisoryRepository(
                type_=select,
                columns=[
                     "price", "volume", "timestamp",
-                    *[(self.model.timestamp >= datetime.now() - timestamp).label(label) 
+                    *[(getattr(self.model, "timestamp") >= datetime.now() - timestamp).label(label) 
                       for timestamp, label in timestamps
                     ]
                ],
@@ -71,7 +71,7 @@ class SQLAlchemySkinPriceHisoryRepository(
                     for label, value in sort_by_labels.items()
                }
                await cache.set(
-                    name=cache_key,
+                    key=cache_key,
                     value=json.dumps(dump_models),
                     ex=300
                )

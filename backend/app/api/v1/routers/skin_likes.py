@@ -6,9 +6,8 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from app.services.abc import BaseUserLikeSkinsService
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
-from app.core.security.abc import BaseJWTSecurity
-from app.schemas import SkinsPage, PaginateSkinsModel
-from app.schemas.dto import UserLikeSkinDTO
+from app.schemas import SkinsPage, PaginateSkinsModel, JWTTokenPayloadModel
+from app.schemas.presentation.dto import UserLikeSkinDTOPresentation
 from app.responses import (
      isresponse,
      JWTTokenExpireError,
@@ -36,14 +35,14 @@ user_likes_skins_router = APIRouter(
           JWTTokenExpireError,
           JWTTokenExpireError
      ),
-     response_model=SkinsPage[UserLikeSkinDTO],
+     response_model=SkinsPage[UserLikeSkinDTOPresentation],
      summary="Получить все любимые скины."
 )
 async def get_likes_skins(
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
      service: FromDishka[BaseUserLikeSkinsService],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      paginate_data: Annotated[PaginateSkinsModel, Form()]
 ):
      return await service.get_likes_skins(
@@ -69,7 +68,7 @@ async def create_like_skin(
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
      service: FromDishka[BaseUserLikeSkinsService],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      skin_name: str
 ):
      result = await service.create_like_skin(
@@ -98,7 +97,7 @@ async def delete_like_skin(
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
      service: FromDishka[BaseUserLikeSkinsService],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      skin_name: str
 ):
      result = await service.delete_like_skin(

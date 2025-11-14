@@ -1,15 +1,19 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, Response
 from fastapi.responses import RedirectResponse
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from pydantic import HttpUrl
 
-from app.core.security.abc import BaseJWTSecurity
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseAuthService
-from app.schemas import ExchangeKeyModel, AccessTokenModel, TelegramDataModel
+from app.schemas import (
+     ExchangeKeyModel, 
+     AccessTokenModel, 
+     TelegramDataModel, 
+     JWTTokenPayloadModel
+)
 from app.responses import (
      HttpError,
      isresponse,
@@ -34,7 +38,6 @@ auth_router = APIRouter(
 
 @auth_router.get(
      path="/steam/login", 
-     response_class=RedirectResponse,
      responses=router_responses(ServerError),
      summary="Перенаправление на страницу входа через Steam аккаунт."
 )
@@ -48,8 +51,6 @@ async def steam_redirect(
      
 @auth_router.get(
      path="/steam/processing", 
-     response_class=RedirectResponse,
-     response_model=ExchangeKeyModel,
      responses=router_responses(
           HttpError,
           LoginError,
@@ -59,6 +60,7 @@ async def steam_redirect(
 )
 async def steam_processing(
      request: Request,
+     response: Response,
      service: FromDishka[BaseAuthService],
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
@@ -75,10 +77,10 @@ async def steam_processing(
      
      if redirect_url:
           return RedirectResponse(url=result)
-     return result
+     response.set_cookie("access_token", result)
      
      
-     
+
 @auth_router.get(
      path="/exchange",
      response_model=AccessTokenModel,
@@ -114,7 +116,7 @@ async def exchange(
      summary="Получения кода для привязки Telegram аккаунта."
 )
 async def telegram_exchange(
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      cache: FromDishka[Cache],
      service: FromDishka[BaseAuthService]
 ):
@@ -138,8 +140,8 @@ async def telegram_processing(
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
      service: FromDishka[BaseAuthService],
+     telegram_data: Annotated[TelegramDataModel, Form()],
      code: str,
-     telegram_data: Annotated[TelegramDataModel, Form()]
 ):
      result = await service.telegram_processing(
           telegram_data=telegram_data,

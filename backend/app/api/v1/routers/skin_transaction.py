@@ -6,9 +6,8 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.services.abc import BaseSkinTransactionService
-from app.core.security.abc import BaseJWTSecurity
-from app.schemas.dto import UserLikeSkinDTO
-from app.schemas import CreateSkinTransactionModel, PatchSkinTransactionModel
+from app.schemas.presentation.dto import PortfolioSkinTransactionDTOPresentation
+from app.schemas import CreateSkinTransactionModel, PatchSkinTransactionModel, JWTTokenPayloadModel
 from app.responses import (
      isresponse,
      router_responses,
@@ -34,7 +33,7 @@ skin_transaction_router = APIRouter(
 
 @skin_transaction_router.get(
      path="/transaction",
-     response_model=list[UserLikeSkinDTO],
+     response_model=list[PortfolioSkinTransactionDTOPresentation],
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
@@ -46,7 +45,7 @@ async def get_skin_transactions(
      service: FromDishka[BaseSkinTransactionService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      portfolio_skin_uuid: str
 ):
      result = await service.get_skin_transactions(
@@ -75,7 +74,7 @@ async def create_skin_transaction(
      service: FromDishka[BaseSkinTransactionService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      portfolio_skin_uuid: str,
      transaction_data: CreateSkinTransactionModel
 ):
@@ -104,7 +103,7 @@ async def update_skin_transaction(
      service: FromDishka[BaseSkinTransactionService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      background_tasks: BackgroundTasks,
      portfolio_skin_uuid: str,
      transaction_uuid: str,
@@ -143,7 +142,7 @@ async def delete_skin_transaction(
      service: FromDishka[BaseSkinTransactionService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      portfolio_skin_uuid: str,
      transaction_uuid: str,
 ):

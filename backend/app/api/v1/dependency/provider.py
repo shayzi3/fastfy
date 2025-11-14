@@ -11,6 +11,7 @@ from app.infrastracture.https.http_clients.httpx_client import HttpxClient
 from app.repositories.sqlalchemy.uow import SQLAlchemyUnitOfWork
 from app.infrastracture.openid.steam import SteamOpenID
 from app.core.security import JWTSecurity
+from app.schemas import JWTTokenPayloadModel
 from app.repositories.sqlalchemy.condition import SQLAlchemyWhereCondition
 from app.services.abc import (
      BaseAuthService,
@@ -39,26 +40,26 @@ class MainProvider(Provider):
      def cache(self, request: Request) -> Cache:
           return CacheRedis()
      
-     
      @provide(scope=Scope.REQUEST)
      def unit_of_work(self, request: Request) -> BaseUnitOfWork:
           return SQLAlchemyUnitOfWork()
      
+     @provide(scope=Scope.REQUEST)
+     async def jwt_security(self, request: Request, jwt_sec_ins: BaseJWTSecurity) -> JWTTokenPayloadModel:
+          return await jwt_sec_ins(request=request)
      
      @provide(scope=Scope.APP)
-     def jwt_security(self) -> BaseJWTSecurity:
+     def jwt_security_instance(self) -> BaseJWTSecurity:
           return JWTSecurity()
      
-     
      @provide(scope=Scope.APP)
-     def auth_service(self) -> BaseAuthService:
+     def auth_service(self, jwt_sec_ins: BaseJWTSecurity) -> BaseAuthService:
           return AuthService(
                steam_client=SteamClient(http_client=HttpxClient()),
                openid=SteamOpenID(),
-               jwt_security=JWTSecurity(),
+               jwt_security=jwt_sec_ins,
                condition=SQLAlchemyWhereCondition
           )
-     
      
      @provide(scope=Scope.APP)
      def user_service(self) -> BaseUserService:

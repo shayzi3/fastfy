@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from typing_extensions import Self
+
 from .abc_repo.abc_user import BaseUserRepository
 from .abc_repo.abc_skin import BaseSkinRepository
 from .abc_repo.abc_skin_price_history import BaseSkinPriceHistoryRepository
@@ -7,6 +9,7 @@ from .abc_repo.abc_user_portfolio import BaseUserPortfolioRepository
 from .abc_repo.abc_user_notify import BaseUserNotifyRepository
 from .abc_repo.abc_portfolio_skin_transaction import BasePortfolioSkinTransactionRepository
 from .abc_repo.abc_user_like_skin import BaseUserLikeSkinRepository
+from .abc_repo.abc_skin_collection import BaseSkinCollectionRepository
 
 
 
@@ -18,6 +21,7 @@ class BaseUnitOfWork(Protocol):
      portoflio_skin_transaction_repo: BasePortfolioSkinTransactionRepository
      user_like_skin_repo: BaseUserLikeSkinRepository
      user_notify_repo: BaseUserNotifyRepository
+     skin_collection_repo: BaseSkinCollectionRepository
      
      
      def __init__(self):
@@ -25,8 +29,8 @@ class BaseUnitOfWork(Protocol):
           self._session = None
      
      
-     async def __aenter__(self) -> None:
-          ...
+     async def __aenter__(self) -> Self:
+          return self
           
           
      async def __aexit__(self) -> None:

@@ -12,8 +12,5 @@ class Mixin(Generic[DTO]):
      dto: Type[DTO]
      
      @classmethod
-     def serialize_dto(cls, from_attributes: bool, obj: Any) -> DTO:
-          return cls.dto.model_validate(
-               obj=obj, 
-               from_attributes=True if from_attributes else False
-          )
+     def serialize_dto(cls, obj: Any, *, from_attributes: bool) -> DTO:
+          return cls.dto.model_validate(obj, from_attributes=from_attributes)

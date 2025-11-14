@@ -10,7 +10,7 @@ from app.services.abc import BaseUserLikeSkinsService
 from app.responses.abc import BaseResponse
 from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel
 from app.schemas.enums import WhereConditionEnum
-from app.schemas.dto import UserLikeSkinDTO
+from app.schemas.presentation.dto import UserLikeSkinDTOPresentation
 from app.responses import (
      DataNotExistsError,
      DeleteSuccess,
@@ -30,24 +30,18 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           token_payload: JWTTokenPayloadModel,
           paginate_data: PaginateSkinsModel,
           **kwargs
-     ) -> SkinsPage[UserLikeSkinDTO]:
+     ) -> SkinsPage[UserLikeSkinDTOPresentation]:
           async with uow:
                async with cache:
-                    where_conditions = {
-                         "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
-                         "skin": paginate_data.generate_conditions(condition=self.condition),
-                    }
-                    if paginate_data.collection:
-                         where_conditions.update(
-                              {"collections": [self.condition("collection", paginate_data.collection, WhereConditionEnum.EQ)]}
-                         )
-                         
                     skins, skins_count = await uow.user_like_skin_repo.read_many(
                          cache=cache,
                          cache_key=paginate_data.cache_key(prefix=f"user_like_skins-{token_payload.uuid}"),
                          relationship_columns=["skin", "collections"],
                          joinedload_relship_columns=["skin", "collections"],
-                         where=where_conditions,
+                         where={
+                              "default": [self.condition("user_uuid", token_payload.uuid, WhereConditionEnum.EQ)],
+                              "skin": paginate_data.generate_conditions(condition=self.condition),
+                         },
                          limit=paginate_data.limit,
                          offset=paginate_data.offset,
                          order_by={"skin": [(paginate_data.order_by.value, paginate_data.order_by_mode.value)]},
@@ -56,7 +50,7 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           return SkinsPage(
                pages=skins_count,
                current_page=paginate_data.offset,
-               skins=skins,
+               skins=[skin.as_presentation() for skin in skins],
                skins_on_page=paginate_data.limit
           ).serialize()
           

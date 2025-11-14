@@ -6,5 +6,6 @@ from .models import (
      UserPortfolio,
      UserNotify,
      PortfolioSkinTransaction,
-     UserLikeSkin
+     UserLikeSkin,
+     SkinCollection
 )

@@ -6,7 +6,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses.abc import BaseResponse
 
 from app.schemas import JWTTokenPayloadModel, NotifyFiltersModel
-from app.schemas.dto import UserNotifyDTO
+from app.schemas.presentation.dto import UserNotifyDTOPresentation
 
 
 
@@ -21,5 +21,5 @@ class BaseNotificationService(Protocol):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           filter_data: NotifyFiltersModel
-     ) -> list[UserNotifyDTO] | BaseResponse:
+     ) -> list[UserNotifyDTOPresentation] | BaseResponse:
           ...

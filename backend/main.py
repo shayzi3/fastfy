@@ -1,12 +1,12 @@
 import uvicorn
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
+from fastapi.responses import HTMLResponse
 from dishka.integrations.fastapi import setup_dishka
 
 from app.core import my_config
 from app.api.v1.dependency import container
-from tests.storage_connections import test_connections
 from app.api.v1 import (
      include_routers, 
      include_exception_handlers,
@@ -19,7 +19,7 @@ from app.api.v1 import (
 # )
 
 
-
+ 
 
 
 @asynccontextmanager
@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
      #      UpdateNotifyTask(),
      #      UpdatePriceAtDaysTask()
      # )
-     # await test_connections.start()
+     # await test_connections.start()  
      yield
      await app.state.dishka_container.close()
 
@@ -50,7 +50,7 @@ app = FastAPI(
 )
 include_routers(app)
 include_exception_handlers(app)
-# include_middleware(app)
+include_middleware(app)
 setup_dishka(container=container, app=app)
 
 

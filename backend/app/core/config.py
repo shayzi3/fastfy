@@ -30,6 +30,10 @@ class Config:
           return self.domain + "/api/v1/auth/steam/processing"
      
      @property
+     def redirect_after_steam_processing(self) -> str:
+          return self.domain + "/main"
+     
+     @property
      def postgres_url(self) -> str:
           return URL.create(
                drivername="postgresql+asyncpg",

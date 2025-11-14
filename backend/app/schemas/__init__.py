@@ -5,7 +5,6 @@ from .schema import (
      SkinsPage,
      SkinPriceVolumeModel,
      TelegramDataModel,
-     SteamProfileModel,
      HttpResponseModel,
      RepeatRequestModel,
      SteamUserModel,

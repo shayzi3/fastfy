@@ -1,3 +1,5 @@
+import uuid
+
 from datetime import datetime
 from sqlalchemy import BigInteger, ForeignKey, UUID, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -19,7 +21,7 @@ from .mixins import (
 class User(UserMixin, Base):
      __tablename__ = "users"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      steam_id: Mapped[int] = mapped_column(BigInteger, index=True)
      steam_name: Mapped[str] = mapped_column()
      steam_avatar: Mapped[str] = mapped_column()
@@ -41,7 +43,7 @@ class Skin(SkinMixin, Base):
      color: Mapped[str] = mapped_column()
      stattrak: Mapped[bool] = mapped_column(default=False, nullable=True)
      souvenir: Mapped[bool] = mapped_column(default=False, nullable=True)
-     image: Mapped[str] = mapped_column()
+     image_link: Mapped[str] = mapped_column()
      price: Mapped[float] = mapped_column(nullable=True)
      price_last_1_day: Mapped[float] = mapped_column(nullable=True)
      price_last_7_day: Mapped[float] = mapped_column(nullable=True)
@@ -58,7 +60,7 @@ class Skin(SkinMixin, Base):
 class SkinPriceHistory(SkinPriceHistoryMixin, Base):
      __tablename__ = "skins_price_history"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      market_hash_name: Mapped[str] = mapped_column(
           ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
@@ -72,7 +74,7 @@ class SkinPriceHistory(SkinPriceHistoryMixin, Base):
 class UserPortfolio(UserPortfolioMixin, Base):
      __tablename__ = "users_portfolio"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      user_uuid: Mapped[str] = mapped_column(UUID(), 
           ForeignKey("users.uuid", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
@@ -92,11 +94,12 @@ class UserPortfolio(UserPortfolioMixin, Base):
 class PortfolioSkinTransaction(PortfolioSkinTransactionMixin, Base):
      __tablename__ = "portfolio_skins_transactions"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      portfolio_skin_uuid: Mapped[str] = mapped_column(UUID(), 
           ForeignKey("users_portfolio.uuid", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
      )
+     comment: Mapped[str] = mapped_column()
      count: Mapped[int] = mapped_column()
      buy_price: Mapped[float] = mapped_column()
      when_buy: Mapped[datetime] = mapped_column(nullable=True)
@@ -106,7 +109,7 @@ class PortfolioSkinTransaction(PortfolioSkinTransactionMixin, Base):
 class UserLikeSkin(UserLikeSkinMixin, Base):
      __tablename__ = "users_likes_skins"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      user_uuid: Mapped[str] = mapped_column(UUID(), 
           ForeignKey("users.uuid", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
@@ -115,18 +118,13 @@ class UserLikeSkin(UserLikeSkinMixin, Base):
           ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"), 
           index=True
      )
-     skin: Mapped["Skin"] = relationship()
-     collections: Mapped[list["SkinCollection"]] = relationship(
-          primaryjoin="UserLikeSkin.market_hash_name == SkinCollection.market_hash_name",
-          viewonly=True
-     )
-     
+     skin: Mapped["Skin"] = relationship()     
      
      
 class UserNotify(UserNotifyMixin, Base):
      __tablename__ = "users_notifies"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True) 
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4()) 
      text: Mapped[str] = mapped_column()
      notify_type: Mapped[str] = mapped_column(index=True)
      created_at: Mapped[datetime] = mapped_column(server_default=func.now(), index=True)
@@ -142,11 +140,13 @@ class UserNotify(UserNotifyMixin, Base):
 class SkinCollection(SkinCollectionMixin, Base):
      __tablename__ = "skins_collections"
      
-     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True)
+     uuid: Mapped[str] = mapped_column(UUID(), primary_key=True, default=lambda: uuid.uuid4())
      market_hash_name: Mapped[str] = mapped_column(
-          ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"), 
+          ForeignKey("skins.market_hash_name", ondelete="CASCADE", onupdate="CASCADE"),
           index=True
      )
      short_name: Mapped[str] = mapped_column()
      collection: Mapped[str] = mapped_column(index=True)
      image_link: Mapped[str] = mapped_column()
+     is_collection: Mapped[bool] = mapped_column()
+     is_rare: Mapped[bool] = mapped_column()

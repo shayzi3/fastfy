@@ -6,7 +6,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.utils.math_operations.abc import BaseMathOperations
 from app.repositories.abc_condition import BaseWhereCondition
 from app.infrastracture.cache.abc import Cache
-from app.schemas.dto import PortfolioSkinTransactionDTO
+from app.schemas.presentation.dto import PortfolioSkinTransactionDTOPresentation
 from app.responses.abc import BaseResponse
 from app.services.abc import BaseSkinTransactionService
 from app.schemas.enums import WhereConditionEnum
@@ -44,7 +44,7 @@ class SkinTransactionService(BaseSkinTransactionService):
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str,
           **kwargs
-     ) -> list[PortfolioSkinTransactionDTO] | BaseResponse:
+     ) -> list[PortfolioSkinTransactionDTOPresentation] | BaseResponse:
           async with uow:
                async with cache:
                     skin_exists_at_user_portfolio = await uow.user_portfolio_repo.read(
@@ -61,7 +61,7 @@ class SkinTransactionService(BaseSkinTransactionService):
                               cache=cache,
                               cache_key=f"portfolio_skin_transaction:{portfolio_skin_uuid}"
                          )
-                         return skins
+                         return [skin.as_presentation() for skin in skins]
                     return NotFoundError
           
           

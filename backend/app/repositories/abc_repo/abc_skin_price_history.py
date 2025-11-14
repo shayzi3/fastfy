@@ -1,5 +1,5 @@
 from typing import Any
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from app.schemas.enums import OrderByModeEnum
 from app.repositories.abc_condition import BaseWhereCondition

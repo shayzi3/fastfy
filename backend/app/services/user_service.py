@@ -9,7 +9,7 @@ from app.repositories.abc_condition import BaseWhereCondition
 
 from app.schemas import SkinsPage, JWTTokenPayloadModel, PatchUserModel
 from app.schemas.enums import WhereConditionEnum
-from app.schemas.dto import UserDTO
+from app.schemas.presentation.dto import UserDTOPresentation
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
      isresponse, 
@@ -35,7 +35,7 @@ class UserService(BaseUserService):
           cache: Cache,
           uow: BaseUnitOfWork,
           token_payload: JWTTokenPayloadModel
-     ) -> UserDTO | BaseResponse:
+     ) -> UserDTOPresentation | BaseResponse:
           async with uow:
                async with cache:
                     user = await uow.user_repo.read(
@@ -45,7 +45,7 @@ class UserService(BaseUserService):
                     )
           if user is None:
                return NotFoundError
-          return user
+          return user.as_presentation()
      
      
      async def get_user_steam_inventory(

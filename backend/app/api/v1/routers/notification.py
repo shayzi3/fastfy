@@ -5,10 +5,9 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.services.abc import BaseNotificationService
-from app.core.security.abc import BaseJWTSecurity
 
-from app.schemas.dto import UserNotifyDTO
-from app.schemas import NotifyFiltersModel
+from app.schemas.presentation.dto import UserNotifyDTOPresentation
+from app.schemas import NotifyFiltersModel, JWTTokenPayloadModel
 from app.responses import (
      isresponse, 
      router_responses,
@@ -30,7 +29,7 @@ notification_router = APIRouter(
 
 @notification_router.get(
      path="/notify", 
-     response_model=list[UserNotifyDTO],
+     response_model=list[UserNotifyDTOPresentation],
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
@@ -40,7 +39,7 @@ notification_router = APIRouter(
      summary="Получение уведомлений пользователя."
 )
 async def get_notify_new(
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      service: FromDishka[BaseNotificationService],
      cache: FromDishka[Cache],
      uow: FromDishka[BaseUnitOfWork],

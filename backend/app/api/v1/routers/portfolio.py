@@ -6,7 +6,6 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
 from app.services.abc.abc_portfolio_service import BasePortfolioService
-from app.core.security.abc import BaseJWTSecurity
 from app.responses import (
      isresponse,
      router_responses,
@@ -18,10 +17,9 @@ from app.responses import (
      DeleteSuccess,
      DataAlreadyExistsError,
      DataNotExistsError,
-     NotFoundError
 )
-from app.schemas.dto import UserPortfolioDTO
-from app.schemas import SkinsPage, PaginateSkinsModel
+from app.schemas.presentation.dto import UserPortfolioDTOPresentation
+from app.schemas import SkinsPage, PaginateSkinsModel, JWTTokenPayloadModel
 
 
 user_portfolio_router = APIRouter(
@@ -34,7 +32,7 @@ user_portfolio_router = APIRouter(
 
 @user_portfolio_router.get(
      path="/portfolio", 
-     response_model=SkinsPage[UserPortfolioDTO],
+     response_model=SkinsPage[UserPortfolioDTOPresentation],
      responses=router_responses(
           ServerError,
           OffsetError,
@@ -48,7 +46,7 @@ async def get_portfolio(
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
      service: FromDishka[BasePortfolioService],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      paginate_data: Annotated[PaginateSkinsModel, Form()]
 ):
      result = await service.get_skins_portfolio(
@@ -79,7 +77,7 @@ async def create_skin_portfolio(
      uow: FromDishka[BaseUnitOfWork],
      service: FromDishka[BasePortfolioService],
      cache: FromDishka[Cache],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      skin_name: str
 ):
      result = await service.create_skin_portfolio(
@@ -107,7 +105,7 @@ async def create_skin_portfolio(
 async def delete_skin_portfolio(
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      service: FromDishka[BasePortfolioService],
      skin_name: str
 ):

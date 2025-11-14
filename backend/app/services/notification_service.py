@@ -9,7 +9,7 @@ from app.responses import ArgumentError
 
 from app.schemas.enums import WhereConditionEnum
 from app.schemas import JWTTokenPayloadModel, NotifyFiltersModel
-from app.schemas.dto import UserNotifyDTO
+from app.schemas.presentation.dto import UserNotifyDTOPresentation
 
 
 
@@ -24,7 +24,7 @@ class NotificationService(BaseNotificationService):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           filters_data: NotifyFiltersModel
-     ) -> list[UserNotifyDTO] | BaseResponse:
+     ) -> list[UserNotifyDTOPresentation] | BaseResponse:
           if not filters_data.non_nullable():
                return ArgumentError
           
@@ -43,5 +43,5 @@ class NotificationService(BaseNotificationService):
                               )
                          }
                     )
-                    return notifies
+                    return [notify.as_presentation() for notify in notifies]
                     

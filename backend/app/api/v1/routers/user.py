@@ -5,7 +5,7 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseUserService
-from app.core.security.abc import BaseJWTSecurity
+from app.core.security.abc import JWTTokenPayloadModel
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
      isresponse,
@@ -19,8 +19,14 @@ from app.responses import (
      UpdateSuccess,
      UpdateError
 )
-from app.schemas import SkinsPage, SteamInventorySkinModel, PatchUserModel
-from app.schemas.dto import UserDTO
+from app.schemas.presentation.dto import UserDTOPresentation
+from app.schemas import (
+     SkinsPage, 
+     SteamInventorySkinModel, 
+     PatchUserModel, 
+     JWTTokenPayloadModel
+)
+
 
 
 
@@ -34,7 +40,7 @@ user_router = APIRouter(
 
 @user_router.get(
      path="/user", 
-     response_model=UserDTO,
+     response_model=UserDTOPresentation,
      responses=router_responses(
           NotFoundError,
           ServerError,
@@ -47,7 +53,7 @@ async def get_user(
      service: FromDishka[BaseUserService],
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
-     token_payload: FromDishka[BaseJWTSecurity]
+     token_payload: FromDishka[JWTTokenPayloadModel]
 ):
      result = await service.get_user(
           cache=cache,
@@ -75,7 +81,7 @@ async def patch_user(
      service: FromDishka[BaseUserService],
      uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      data: Annotated[PatchUserModel, Form()]
 ):
      result = await service.patch_user(
@@ -86,7 +92,7 @@ async def patch_user(
      )
      return result.response()
      
-     
+
      
 @user_router.get(
      path="/user/SteamInventory", 
@@ -102,14 +108,12 @@ async def patch_user(
 )
 async def get_steam_inventory(
      service: FromDishka[BaseUserService],
-     uow: FromDishka[BaseUnitOfWork],
      cache: FromDishka[Cache],
-     token_payload: FromDishka[BaseJWTSecurity],
+     token_payload: FromDishka[JWTTokenPayloadModel],
      offset: int = Query(ge=0),
      limit: int = Query(ge=1, le=20)
 ):
      result = await service.get_user_steam_inventory(
-          uow=uow,
           cache=cache,
           token_payload=token_payload,
           offset=offset,

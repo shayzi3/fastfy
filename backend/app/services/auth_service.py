@@ -50,7 +50,7 @@ class AuthService(BaseAuthService):
           url_steam_processing = my_config.steam_return_to
           if redirect_url:
                url_steam_processing += f"?{urlencode({'redirect_url': str(redirect_url)})}"
-          
+
           url = await self.openid.construct_url(return_to=url_steam_processing)
           return await self.openid.redirect_user(url=url)
           
@@ -60,7 +60,7 @@ class AuthService(BaseAuthService):
           uow: BaseUnitOfWork,
           query_params: Any,
           cache: Cache,
-          redirect_url: HttpUrl | None
+          redirect_url: HttpUrl | None = None
      ) -> BaseResponse | ExchangeKeyModel | str:
           steamid = await self.openid.validate_results(query_params)
           if steamid is False:
@@ -68,51 +68,49 @@ class AuthService(BaseAuthService):
           
           steamid = int(steamid)
           async with uow:
-               account = await uow.user_repo.read(
+               account_steam_data = await uow.user_repo.read(
                     where={
                          "default": [
                               self.condition("steam_id", steamid, WhereConditionEnum.EQ)
                          ]
                     }
                )
-               if account is None:
-                    steam_data = await self.steam_client.get_steam_profile(
-                         steam_id=steamid
-                    )
-                    if isresponse(steam_data):
-                         return steam_data
+               user_uuid = getattr(account_steam_data, "uuid", None)
+               if account_steam_data is None:
+                    account_steam_data = await self.steam_client.get_steam_profile(steam_id=steamid)
+                    if isresponse(account_steam_data):
+                         return account_steam_data
                     
                     user_uuid = uuid.uuid4()
                     await uow.user_repo.create(
                          values={
                               "uuid": user_uuid,
                               "steam_id": steamid,
-                              **steam_data.model_dump()
+                              **account_steam_data.model_dump()
                          }
                     )
                     await uow.commit()
-               
-          jwt_token = await self.jwt_security.encode(
-               data={
-                    "uuid": user_uuid if not account else account.uuid,
-                    "steam_id": steamid,
-                    "steam_name": steam_data.steam_name if not account else account.steam_name,
-                    "steam_avatar": steam_data.steam_avatar if not account else steam_data.steam_avatar
-               }
-          )
-          key_for_exchange = await async_random_string_generator(
-               max_length=25,
-               use_digits=True,
-               use_letters=True
-          )
-          async with cache:
-               await cache.set(key=key_for_exchange, value=jwt_token, ex=300)
-               
+                  
+          data = {
+               "uuid": str(user_uuid),
+               "steam_id": steamid,
+               "steam_name": account_steam_data.steam_name,
+               "steam_avatar": account_steam_data.steam_avatar
+          }
+          jwt_token = await self.jwt_security.encode(data)
           if redirect_url:
+               key_for_exchange = await async_random_string_generator(
+                    max_length=25,
+                    use_digits=True,
+                    use_letters=True
+               )
+               async with cache:
+                    await cache.set(key=key_for_exchange, value=jwt_token, ex=300)
+
                redirect_url_parse = urlparse(url=str(redirect_url))
                separator = "?" if not redirect_url_parse.query else "&"
                return str(redirect_url) + separator + urlencode({"code": key_for_exchange})
-          return ExchangeKeyModel(exchange_key=key_for_exchange)
+          return jwt_token
                
      
      async def exchange(

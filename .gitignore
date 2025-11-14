@@ -5,3 +5,4 @@ test.py
 migrations/versions/
 logs_data
 testy.py
+crawlers/

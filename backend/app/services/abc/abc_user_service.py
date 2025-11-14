@@ -6,7 +6,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.https.clients.steam.abc import BaseSteamClient
 from app.repositories.abc_condition import BaseWhereCondition
 
-from app.schemas.dto import UserDTO
+from app.schemas.presentation.dto import UserDTOPresentation
 from app.schemas import (
      JWTTokenPayloadModel, 
      SkinsPage, 
@@ -31,7 +31,7 @@ class BaseUserService(Protocol):
           cache: Cache,
           uow: BaseUnitOfWork,
           token_payload: JWTTokenPayloadModel
-     ) -> UserDTO | BaseResponse:
+     ) -> UserDTOPresentation | BaseResponse:
           ...
      
      async def get_user_steam_inventory(

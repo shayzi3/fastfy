@@ -7,7 +7,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses.abc import BaseResponse
 from app.repositories.abc_condition import BaseWhereCondition
 from app.responses import NotFoundError
-from app.schemas.dto import SkinDTO
+from app.schemas.presentation.dto import SkinDTOPresentation
 from app.schemas.enums import WhereConditionEnum, OrderByModeEnum
 from app.schemas import (
      SkinHistoryTimePartModel, 
@@ -28,7 +28,7 @@ class SkinService(BaseSkinService):
           cache: Cache,
           uow: BaseUnitOfWork,
           skin_name: str
-     ) -> SkinDTO | BaseResponse:
+     ) -> SkinDTOPresentation | BaseResponse:
           async with uow:
                async with cache:
                     result = await uow.skin_repo.read(
@@ -39,7 +39,7 @@ class SkinService(BaseSkinService):
                     )
           if result is None:
                return NotFoundError
-          return result
+          return result.as_presentation()
      
      
      async def search_skin(
@@ -47,7 +47,7 @@ class SkinService(BaseSkinService):
           cache: Cache,
           uow: BaseUnitOfWork,
           paginate_data: PaginateSkinsModel
-     ) -> SkinsPage[SkinDTO]:
+     ) -> SkinsPage[SkinDTOPresentation]:
           async with uow:
                async with cache:
                     where_conditions = {
@@ -66,15 +66,16 @@ class SkinService(BaseSkinService):
                          relationship_columns=["collections"] if where_conditions.get("collections", None) else [],
                          joinedload_relship_columns=["collections"],
                          where=where_conditions,
-                         order_by={"default": [(paginate_data.order_by.value, paginate_data.order_by_mode.value)]},
+                         order_by={"default": [(paginate_data.order_by, paginate_data.order_by_mode)]},
                          count=True
                     )
           return SkinsPage(
                pages=skins_count,
                current_page=paginate_data.offset,
-               skins=skins,
+               skins=[skin.as_presentation() for skin in skins],
                skins_on_page=paginate_data.limit
           ).serialize()
+
 
           
      async def skin_price_history(
@@ -89,7 +90,7 @@ class SkinService(BaseSkinService):
                          cache=cache,
                          cache_key=f"skin_price_history:{skin_name}",
                          timestamps=[
-                              (timedelta(), "all"),
+                              (timedelta(days=100*356), "all"),
                               (timedelta(days=365), "year"),
                               (timedelta(days=30), "month"),
                               (timedelta(days=7), "week"),

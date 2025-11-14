@@ -11,7 +11,7 @@ class BaseJWTSecurity(Protocol):
      async def encode(
           self, 
           data: dict[str, Any], 
-          expire: timedelta | None = None
+          expire: timedelta = timedelta(days=20)
      ) -> str:
           ...
           

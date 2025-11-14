@@ -1,8 +1,8 @@
-import jwt
 
 from typing import Any
 from datetime import timedelta, datetime
 
+from jose import jwt
 from fastapi import Request
 
 from app.schemas import JWTTokenPayloadModel
@@ -34,7 +34,7 @@ class JWTSecurity(BaseJWTSecurity):
      ) -> JWTTokenPayloadModel | BaseResponse:
           try:
                data = jwt.decode(
-                    jwt=encode_token,
+                    token=encode_token,
                     key=my_config.jwt_secret_key,
                     algorithms=[my_config.jwt_algorithm]
                )
@@ -45,7 +45,7 @@ class JWTSecurity(BaseJWTSecurity):
           except jwt.InvalidTokenError:
                return JWTTokenInvalidError
           
-          
+     
      async def encode(
           self, 
           data: dict[str, Any], 
@@ -58,7 +58,7 @@ class JWTSecurity(BaseJWTSecurity):
           data.update(payload_time)
           
           return jwt.encode(
-               payload=data,
+               claims=data,
                key=my_config.jwt_secret_key,
                algorithm=my_config.jwt_algorithm
           )
