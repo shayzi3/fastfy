@@ -24,7 +24,7 @@ class UpdateModeEnum(Enum):
                elif volume >= 2000:
                     return "MEDIUM"
                return "HIGH"
-               
+          
           price_change_percent = ((new_price - last_price) / last_price) * 100
           if (price_change_percent >= 10) or (price_change_percent <= -10):
                return "HIGH"

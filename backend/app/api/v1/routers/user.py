@@ -1,12 +1,14 @@
 from typing import Annotated
+from datetime import timedelta
 
-from fastapi import APIRouter, Query, Form
+from fastapi import APIRouter, Query, Form, Depends
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
 
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseUserService
 from app.core.security.abc import JWTTokenPayloadModel
 from app.repositories.abc_uow import BaseUnitOfWork
+from app.api.v1.dependency.rate_limit import RateLimitDepend
 from app.responses import (
      isresponse,
      router_responses,
@@ -17,9 +19,10 @@ from app.responses import (
      JWTTokenInvalidError,
      NotFoundError,
      UpdateSuccess,
-     UpdateError
+     UpdateError,
+     TooManyRequestError
 )
-from app.schemas.presentation.dto import UserDTOPresentation
+from app.schemas.dto import UserDTO
 from app.schemas import (
      SkinsPage, 
      SteamInventorySkinModel, 
@@ -40,14 +43,16 @@ user_router = APIRouter(
 
 @user_router.get(
      path="/user", 
-     response_model=UserDTOPresentation,
+     response_model=UserDTO,
      responses=router_responses(
           NotFoundError,
           ServerError,
           JWTTokenExpireError,
           JWTTokenInvalidError,
+          TooManyRequestError
      ),
-     summary="Получения данных текущего аккаунта."
+     summary="Получения данных текущего аккаунта.",
+     dependencies=[Depends(RateLimitDepend(2, timedelta(seconds=10), "get_user"))]
 )
 async def get_user(
      service: FromDishka[BaseUserService],

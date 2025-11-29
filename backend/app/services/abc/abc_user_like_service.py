@@ -6,7 +6,7 @@ from app.repositories.abc_condition import BaseWhereCondition
 
 from app.responses.abc import BaseResponse
 from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel
-from app.schemas.presentation.dto import UserLikeSkinDTOPresentation
+from app.schemas.dto import UserLikeSkinDTO
 
 
 class BaseUserLikeSkinsService(Protocol):
@@ -20,7 +20,7 @@ class BaseUserLikeSkinsService(Protocol):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           paginate_data: PaginateSkinsModel
-     ) -> SkinsPage[UserLikeSkinDTOPresentation]:
+     ) -> SkinsPage[UserLikeSkinDTO]:
           ...
           
           

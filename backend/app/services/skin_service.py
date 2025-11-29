@@ -7,7 +7,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses.abc import BaseResponse
 from app.repositories.abc_condition import BaseWhereCondition
 from app.responses import NotFoundError
-from app.schemas.presentation.dto import SkinDTOPresentation
+from app.schemas.dto import SkinDTO
 from app.schemas.enums import WhereConditionEnum, OrderByModeEnum
 from app.schemas import (
      SkinHistoryTimePartModel, 
@@ -28,7 +28,7 @@ class SkinService(BaseSkinService):
           cache: Cache,
           uow: BaseUnitOfWork,
           skin_name: str
-     ) -> SkinDTOPresentation | BaseResponse:
+     ) -> SkinDTO | BaseResponse:
           async with uow:
                async with cache:
                     result = await uow.skin_repo.read(
@@ -47,7 +47,7 @@ class SkinService(BaseSkinService):
           cache: Cache,
           uow: BaseUnitOfWork,
           paginate_data: PaginateSkinsModel
-     ) -> SkinsPage[SkinDTOPresentation]:
+     ) -> SkinsPage[SkinDTO]:
           async with uow:
                async with cache:
                     where_conditions = {

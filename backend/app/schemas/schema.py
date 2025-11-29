@@ -66,14 +66,6 @@ class _NullableValue(BaseModel):
                instance_conditions.extend(additional_conditions)
           return instance_conditions
      
-     
-class _PatchModel(BaseModel):
-     def get_update_field_values(self) -> dict[str, Any]:
-          return {
-               key: value
-               for key, value in self.__dict__.items() if value is not None
-          }
-     
 
 
 class SkinPriceHistoryModel(BaseModel):
@@ -164,13 +156,13 @@ class AccessTokenModel(BaseModel):
      access_token: str
 
      
-class PatchUserModel(_PatchModel):
+class PatchUserModel(_NullableValue):
      notify: UserNotifyEnum | None = Field(default=None)
      
      model_config = ConfigDict(use_enum_values=True)    
      
      
-class PatchPortfolioSkinModel(_PatchModel):
+class PatchPortfolioSkinModel(_NullableValue):
      notify_percent: int | None = Field(default=None, ge=1) 
      
      
@@ -229,12 +221,14 @@ class PaginareSkinsPortfolioModel(PaginateSkinsModel):
 class CreateSkinTransactionModel(BaseModel):
      buy_price: float = Field(default=0, ge=0)
      count: int = Field(default=1, ge=1)
+     comment: str | None = Field(default=None)
      when_buy: datetime = Field(default_factory=lambda: datetime.now())
      
      
-class PatchSkinTransactionModel(_PatchModel):
+class PatchSkinTransactionModel(_NullableValue):
      buy_price: float | None = Field(default=None, ge=0)
      count: int | None = Field(default=None, ge=1)
+     comment: str | None = Field(default=None)
      when_buy: datetime | None = Field(default=None)
      
      

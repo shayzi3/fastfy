@@ -2,10 +2,11 @@ from .base import Base
 from .models import (
      User,
      Skin,
+     SkinWear,
      SkinPriceHistory,
-     UserPortfolio,
+     SkinPortfolio,
      UserNotify,
-     PortfolioSkinTransaction,
+     SkinPortfolioTransaction,
      UserLikeSkin,
      SkinCollection
 )

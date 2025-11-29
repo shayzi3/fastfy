@@ -27,7 +27,7 @@ class CacheRedis(Cache):
                   
      async def set(self, key: str, value: str, ex: int = 0) -> None:
           if self._connection:
-               await self._connection.set(name=key, value=value, ex=ex)
+               await self._connection.set(name=key, value=value, ex=ex if ex != 0 else None)
           
      async def get(self, key: str) -> Any:
           if self._connection:

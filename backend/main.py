@@ -1,8 +1,7 @@
 import uvicorn
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Response
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
 from dishka.integrations.fastapi import setup_dishka
 
 from app.core import my_config
@@ -12,6 +11,7 @@ from app.api.v1 import (
      include_exception_handlers,
      include_middleware
 )
+from app.crawlers.weapons import crawler_start
 # from app.tasks import (
 #      run_tasks,
 #      UpdateNotifyTask,
@@ -31,7 +31,6 @@ async def lifespan(app: FastAPI):
      # await test_connections.start()  
      yield
      await app.state.dishka_container.close()
-
 
 
 app = FastAPI(
@@ -56,9 +55,10 @@ setup_dishka(container=container, app=app)
 
 
 if __name__ == "__main__":
-     uvicorn.run(
-          app="main:app",
-          reload=True,
-          port=8085,
-          host=my_config.local_host
-     )
+     # uvicorn.run(
+     #      app="main:app",
+     #      reload=True,
+     #      port=8085,
+     #      host=my_config.local_host
+     # )
+     crawler_start()

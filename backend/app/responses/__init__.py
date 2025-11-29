@@ -12,7 +12,8 @@ from .error import (
      ArgumentError,
      UpdateError,
      DataNotExistsError,
-     DeleteError
+     DeleteError,
+     TooManyRequestError
 )
 from .success import (
      LoginSuccess,

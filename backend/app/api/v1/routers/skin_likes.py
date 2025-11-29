@@ -7,7 +7,7 @@ from app.services.abc import BaseUserLikeSkinsService
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
 from app.schemas import SkinsPage, PaginateSkinsModel, JWTTokenPayloadModel
-from app.schemas.presentation.dto import UserLikeSkinDTOPresentation
+from app.schemas.dto import UserLikeSkinDTO
 from app.responses import (
      isresponse,
      JWTTokenExpireError,
@@ -35,7 +35,7 @@ user_likes_skins_router = APIRouter(
           JWTTokenExpireError,
           JWTTokenExpireError
      ),
-     response_model=SkinsPage[UserLikeSkinDTOPresentation],
+     response_model=SkinsPage[UserLikeSkinDTO],
      summary="Получить все любимые скины."
 )
 async def get_likes_skins(

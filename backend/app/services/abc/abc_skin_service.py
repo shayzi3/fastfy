@@ -10,7 +10,7 @@ from app.schemas import (
      SkinHistoryTimePartModel, 
      PaginateSkinsModel
 )
-from app.schemas.presentation.dto import SkinDTOPresentation
+from app.schemas.dto import SkinDTO
 
 
 
@@ -24,7 +24,7 @@ class BaseSkinService(Protocol):
           cache: Cache,
           uow: BaseUnitOfWork,
           skin_name: str
-     ) -> SkinDTOPresentation | BaseResponse:
+     ) -> SkinDTO | BaseResponse:
           ...
           
 
@@ -33,7 +33,7 @@ class BaseSkinService(Protocol):
           cache: Cache,
           uow: BaseUnitOfWork,
           paginate_data: PaginateSkinsModel
-     ) -> SkinsPage[SkinDTOPresentation]:
+     ) -> SkinsPage[SkinDTO]:
           ...
           
           

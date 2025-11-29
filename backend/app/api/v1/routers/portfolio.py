@@ -18,7 +18,7 @@ from app.responses import (
      DataAlreadyExistsError,
      DataNotExistsError,
 )
-from app.schemas.presentation.dto import UserPortfolioDTOPresentation
+from app.schemas.dto import SkinPortfolioDTO
 from app.schemas import SkinsPage, PaginateSkinsModel, JWTTokenPayloadModel
 
 
@@ -32,7 +32,7 @@ user_portfolio_router = APIRouter(
 
 @user_portfolio_router.get(
      path="/portfolio", 
-     response_model=SkinsPage[UserPortfolioDTOPresentation],
+     response_model=SkinsPage[SkinPortfolioDTO],
      responses=router_responses(
           ServerError,
           OffsetError,

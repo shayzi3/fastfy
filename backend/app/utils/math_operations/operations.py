@@ -1,4 +1,4 @@
-from app.schemas.dto import PortfolioSkinTransactionDTO
+from app.schemas.dto import SkinPortfolioTransactionDTO
 
 
 
@@ -6,7 +6,7 @@ class BaseMathOperations:
      
      async def update_portfolio_skin_benefit(
           self,
-          transactions: list[PortfolioSkinTransactionDTO],
+          transactions: list[SkinPortfolioTransactionDTO],
           price_by_market_1pc: float,
           **kwargs
      ) -> float | None:

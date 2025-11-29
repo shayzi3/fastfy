@@ -9,7 +9,7 @@ from app.schemas import (
      PaginareSkinsPortfolioModel, 
      PatchPortfolioSkinModel
 )
-from app.schemas.presentation.dto import UserPortfolioDTOPresentation
+from app.schemas.dto import SkinPortfolioDTO
 from app.schemas.enums import WhereConditionEnum
 from app.responses import (
     CreateSuccess,
@@ -35,7 +35,7 @@ class PortfolioService(BasePortfolioService):
           cache: Cache, 
           token_payload: JWTTokenPayloadModel, 
           paginate_data: PaginareSkinsPortfolioModel
-     ) -> SkinsPage[UserPortfolioDTOPresentation]:
+     ) -> SkinsPage[SkinPortfolioDTO]:
           async with uow:
                async with cache:
                     skins, skins_count = await uow.user_portfolio_repo.read_many(

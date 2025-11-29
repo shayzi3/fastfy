@@ -10,10 +10,11 @@ from .repo import (
      SQLAlchemyUserNotifyRepository,
      SQLAlchemySkinRepository,
      SQLAlchemySkinPriceHisoryRepository,
-     SQLAlchemyUserPortfolioRepository,
-     SQLAlchemyPortfolioSkinTransactionRepository,
+     SQLAlchemySkinPortfolioRepository,
+     SQLAlchemySkinPortfolioTransactionRepository,
      SQLAlchemyUserLikeSkinRepository,
-     SQLAlchemySkinCollectionRepository
+     SQLAlchemySkinCollectionRepository,
+     SQLAlchemySkinWearRepository
 )
 
 
@@ -25,11 +26,12 @@ class SQLAlchemyUnitOfWork(BaseUnitOfWork):
      def __init__(self):
           self._session_factory = async_session_maker
           self._session: AsyncSession | None = None
+          self._cached_repository = {}
           
      async def __aenter__(self) -> Self:
           if not self._session:
                self._session = self._session_factory()
-          return self     
+          return self  
           
      async def __aexit__(self, *args) -> None:
           if args[0]:
@@ -49,38 +51,78 @@ class SQLAlchemyUnitOfWork(BaseUnitOfWork):
           if self._session:
                await self._session.__aexit__(*args)
                self._session = None   
+               self._cached_repository.clear()
                
      @property
      def user_repo(self) -> SQLAlchemyUserRepository:
-          return SQLAlchemyUserRepository(self._session)
+          cache_key = "user_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemyUserRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
      def user_notify_repo(self) -> SQLAlchemyUserNotifyRepository:
-          return SQLAlchemyUserNotifyRepository(self._session)
+          cache_key = "user_notify_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemyUserNotifyRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
      def skin_repo(self) -> SQLAlchemySkinRepository:
-          return SQLAlchemySkinRepository(self._session)
+          cache_key = "skin_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinRepository(self._session)
+          return self._cached_repository[cache_key]
+     
+     @property
+     def skin_wear_repo(self) -> SQLAlchemySkinWearRepository:
+          cache_key = "skin_wear_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinWearRepository(self._session)
+          return self._cached_repository[cache_key] 
      
      @property
      def skin_price_history_repo(self) -> SQLAlchemySkinPriceHisoryRepository:
-          return SQLAlchemySkinPriceHisoryRepository(self._session)
+          cache_key = "skin_price_history_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinPriceHisoryRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
-     def user_skin_repo(self) -> SQLAlchemyUserPortfolioRepository:
-          return SQLAlchemyUserPortfolioRepository(self._session)
+     def skin_portfolio_repo(self) -> SQLAlchemySkinPortfolioRepository:
+          cache_key = "skin_portfolio_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinPortfolioRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
      def user_like_skin_repo(self) -> SQLAlchemyUserLikeSkinRepository:
-          return SQLAlchemyUserLikeSkinRepository(self._session)
+          cache_key = "user_like_skin"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemyUserLikeSkinRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
-     def skin_transaction_repo(self) -> SQLAlchemyPortfolioSkinTransactionRepository:
-          return SQLAlchemyPortfolioSkinTransactionRepository(self._session)
+     def skin_portfolio_transaction_repo(self) -> SQLAlchemySkinPortfolioTransactionRepository:
+          cache_key = "skin_portfolio_transaction_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinPortfolioTransactionRepository(self._session)
+          return self._cached_repository[cache_key]
      
      @property
      def skin_collection_repo(self) -> SQLAlchemySkinCollectionRepository:
-          return SQLAlchemySkinCollectionRepository(self._session)
-     
+          cache_key = "skin_collection_repo"
+          
+          if cache_key not in self._cached_repository:
+               self._cached_repository[cache_key] = SQLAlchemySkinCollectionRepository(self._session)
+          return self._cached_repository[cache_key]     
           
           

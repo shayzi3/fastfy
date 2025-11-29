@@ -10,7 +10,7 @@ from app.services.abc import BaseUserLikeSkinsService
 from app.responses.abc import BaseResponse
 from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel
 from app.schemas.enums import WhereConditionEnum
-from app.schemas.presentation.dto import UserLikeSkinDTOPresentation
+from app.schemas.dto import UserLikeSkinDTO
 from app.responses import (
      DataNotExistsError,
      DeleteSuccess,
@@ -30,7 +30,7 @@ class UserLikeSkinsService(BaseUserLikeSkinsService):
           token_payload: JWTTokenPayloadModel,
           paginate_data: PaginateSkinsModel,
           **kwargs
-     ) -> SkinsPage[UserLikeSkinDTOPresentation]:
+     ) -> SkinsPage[UserLikeSkinDTO]:
           async with uow:
                async with cache:
                     skins, skins_count = await uow.user_like_skin_repo.read_many(

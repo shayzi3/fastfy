@@ -1,49 +1,60 @@
+from __future__ import annotations
+
 from datetime import datetime
-from uuid import UUID
 
-from pydantic import ConfigDict
-from typing_extensions import Literal
+from typing_extensions import Self
+from pydantic import ConfigDict, BaseModel
 
-from app.schemas.presentation import BaseModelPresentation
-from app.schemas.presentation.dto import (
-     SkinDTOPresentation,
-     SkinCollectionDTOPresentation,
-     SkinPriceHistoryDTOPresentation,
-     UserLikeSkinDTOPresentation,
-     PortfolioSkinTransactionDTOPresentation,
-     UserPortfolioDTOPresentation,
-     UserNotifyDTOPresentation
-)
+from app.schemas.enums import NotifyTypeEnum
 
 
 
+class PresentationMixin:
+     
+     def presentation(self, exclude: list[str] = []) -> Self:
+          """Метод исключает ненужные поля. Нужен, чтобы не возврщать лишние данные из эндпоинта."""
+          
+          dump = self.model_dump(exclude=exclude)
+          return self.model_construct(**dump)
 
 
-class UserDTO(BaseModelPresentation):
-     uuid: UUID
-     steam_id: int
-     steam_name: str
-     steam_avatar: str
+
+class UserDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     steam_id: int | None = None
+     steam_name: str | None = None
+     steam_avatar: str | None = None
      telegram_id: int | None = None
      telegram_username: str | None = None
-     created_at: datetime
-     notify: bool  
+     created_at: datetime | None = None
+     notify: bool | None = None
+     
+     portfolio_skins: list[SkinPortfolioDTO] = []
+     like_skins: list[UserLikeSkinDTO] = []
+     notifies: list[UserNotifyDTO] = []
            
 
                
-class SkinDTO(BaseModelPresentation[SkinDTOPresentation]):
-     _presentation = SkinDTOPresentation
+class SkinDTO(PresentationMixin, BaseModel):
+     short_name: str | None = None
+     rarity: str | None = None
+     color: str | None = None
+     category: str | None = None
+     weapon: str | None
      
-     market_hash_name: str
-     short_name: str
-     category: str
-     weapon: str | None  
+     wears: list[SkinWearDTO] = []
+     collections: list[SkinCollectionDTO] = []
+     
+               
+class SkinWearDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     short_name: str | None = None
+     market_hash_name: str | None = None
+     image_link: str | None = None
      wear: str | None
-     rarity: str
-     color: str
+     phase: str | None
      stattrak: bool | None
      souvenir: bool | None
-     image_link: str     
      price: float | None = None
      price_last_1_day: float | None = None
      price_last_7_day: float | None = None
@@ -52,82 +63,84 @@ class SkinDTO(BaseModelPresentation[SkinDTOPresentation]):
      price_last_all_day: float | None = None
      last_price: float | None = None
      last_price_update: datetime | None = None
-     sell_by_last_update: int
+     sell_by_last_update: int | None = None
      
-     collections: list["SkinCollectionDTO"] = []
+     skin: SkinDTO | None = None
+     price_history: list[SkinPriceHistoryDTO] = []
+     portfolio_skins: list[SkinPortfolioDTO] = []
+     transaction_skins: list[SkinPortfolioTransactionDTO] = []
+     like_skins: list[UserLikeSkinDTO] = []
      
-     model_config = ConfigDict(arbitrary_types_allowed=True)
+     
+     
+class SkinPriceHistoryDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     skin_wear_uuid: str | None = None
+     volume: int | None = None
+     price: float | None = None
+     timestamp: datetime | None = None
+     
+     skin_wear: SkinWearDTO | None = None
+     
                
      
+class SkinPortfolioDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     user_uuid: str | None = None
+     skin_wear_uuid: str | None = None
+     benefit: float | None = None
+     notify_percent: int | None = None
      
-class SkinPriceHistoryDTO(BaseModelPresentation[SkinPriceHistoryDTOPresentation]):
-     _presentation = SkinPriceHistoryDTOPresentation
-     
-     uuid: UUID
-     market_hash_name: str
-     volume: int
-     price: float
-     timestamp: datetime
-     
-               
-     
-class UserPortfolioDTO(BaseModelPresentation[UserPortfolioDTOPresentation]):
-     _presentation = UserPortfolioDTOPresentation
-     
-     uuid: UUID
-     user_uuid: str
-     market_hash_name: str
-     benefit: float
-     notify_percent: int
-     
-     skin: SkinDTO
+     skin_wear: SkinWearDTO | None = None
      user: UserDTO | None = None
-     transations: list["PortfolioSkinTransactionDTO"] = []
+     transations: list[SkinPortfolioTransactionDTO] = []
      
-     model_config = ConfigDict(arbitrary_types_allowed=True)
      
                
                
-class PortfolioSkinTransactionDTO(BaseModelPresentation[PortfolioSkinTransactionDTOPresentation]):
-     _presentation = PortfolioSkinTransactionDTOPresentation
-     
-     uuid: UUID
-     portfolio_skin_uuid: str
-     comment: str
-     count: int
-     buy_price: float
+class SkinPortfolioTransactionDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     portfolio_skin_uuid: str | None = None
+     skin_wear_uuid: str | None = None
+     comment: str | None = None
+     count: int | None = None
+     buy_price: float | None = None
      when_buy: datetime | None = None
      
-     
-class UserLikeSkinDTO(BaseModelPresentation[UserLikeSkinDTOPresentation]):
-     _presentation = UserLikeSkinDTOPresentation
-     
-     uuid: UUID
-     user_uuid: str
-     market_hash_name: str
-     short_name: str
-     skin: SkinDTO
+     skin_wear: SkinWearDTO | None = None
+     skin_portfolio: SkinPortfolioDTO | None = None
      
      
-class UserNotifyDTO(BaseModelPresentation[UserNotifyDTOPresentation]):
-     _presentation = UserNotifyDTOPresentation
+class UserLikeSkinDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     user_uuid: str | None = None
+     skin_wear_uuid: str | None = None
+     short_name: str | None = None
      
-     uuid: UUID
-     user_uuid: str
-     text: str
-     notify_type: Literal["SKIN", "INFO"]
-     created_at: datetime
-     is_read: bool
-     user: UserDTO
+     user: UserDTO | None = None
+     skin: SkinDTO | None = None
+     skin_wear: SkinWearDTO | None = None
+     
+     
+class UserNotifyDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     user_uuid: str | None = None
+     text: str | None = None
+     notify_type: NotifyTypeEnum | None = None
+     created_at: datetime | None = None
+     is_read: bool | None = None
+     
+     user: UserDTO | None = None
+     
+     model_config = ConfigDict(use_enum_values=True)
                
-               
-class SkinCollectionDTO(BaseModelPresentation[SkinCollectionDTOPresentation]):
-     _presentation = SkinCollectionDTOPresentation
+      
+class SkinCollectionDTO(PresentationMixin, BaseModel):
+     uuid: str | None = None
+     short_name: str | None = None
+     collection: str | None = None
+     image_link: str | None = None
+     is_collection: bool | None = None
+     is_rare: bool | None = None
      
-     uuid: UUID
-     market_hash_name: str
-     short_name: str
-     collection: str
-     image_link: str
-     is_collection: bool
-     is_rare: bool
+     skin: SkinDTO | None = None

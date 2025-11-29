@@ -5,7 +5,7 @@ from app.infrastracture.cache.abc import Cache
 from app.responses.abc import BaseResponse
 from app.repositories.abc_condition import BaseWhereCondition
 
-from app.schemas.presentation.dto import UserPortfolioDTOPresentation
+from app.schemas.dto import SkinPortfolioDTO
 from app.schemas import JWTTokenPayloadModel, SkinsPage, PaginateSkinsModel, PatchPortfolioSkinModel
 
 
@@ -21,7 +21,7 @@ class BasePortfolioService(Protocol):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           paginate_data: PaginateSkinsModel
-     ) -> SkinsPage[UserPortfolioDTOPresentation]:
+     ) -> SkinsPage[SkinPortfolioDTO]:
           ...
           
      async def delete_skin_portolio(

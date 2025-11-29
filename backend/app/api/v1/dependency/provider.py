@@ -74,21 +74,17 @@ class MainProvider(Provider):
      def skin_service(self) -> BaseSkinService:
           return SkinService(condition=SQLAlchemyWhereCondition)
      
-     
      @provide(scope=Scope.APP)
      def notification_service(self) -> BaseNotificationService:
           return NotificationService(condition=SQLAlchemyWhereCondition)
-     
      
      @provide(scope=Scope.APP)
      def portfolio_service(self) -> BasePortfolioService:
           return PortfolioService(condition=SQLAlchemyWhereCondition)
      
-     
      @provide(scope=Scope.APP)
      def user_like_skins_service(self) -> BaseUserLikeSkinsService:
           return UserLikeSkinsService(condition=SQLAlchemyWhereCondition)
-     
      
      @provide(scope=Scope.APP)
      def skin_transactions_service(self) -> BaseSkinTransactionService:

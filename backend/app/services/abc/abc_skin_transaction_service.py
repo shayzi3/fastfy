@@ -4,7 +4,7 @@ from app.repositories.abc_uow import BaseUnitOfWork
 from app.repositories.abc_condition import BaseWhereCondition
 from app.utils.math_operations.abc import BaseMathOperations
 from app.infrastracture.cache.abc import Cache
-from app.schemas.presentation.dto import PortfolioSkinTransactionDTOPresentation
+from app.schemas.dto import SkinPortfolioTransactionDTO
 from app.responses.abc import BaseResponse
 from app.schemas import (
      JWTTokenPayloadModel, 
@@ -31,7 +31,7 @@ class BaseSkinTransactionService(Protocol):
           cache: Cache,
           token_payload: JWTTokenPayloadModel,
           portfolio_skin_uuid: str
-     ) -> list[PortfolioSkinTransactionDTOPresentation] | BaseResponse:
+     ) -> list[SkinPortfolioTransactionDTO] | BaseResponse:
           ...
           
           

@@ -1,7 +1,9 @@
 from typing import Any
 
-from app.schemas.enums import WhereConditionEnum
-from app.repositories.abc_condition import BaseWhereCondition
+from sqlalchemy import asc, desc
+
+from app.schemas.enums import WhereConditionEnum, OrderByModeEnum
+from app.repositories.abc_condition import BaseWhereCondition, BaseOrderByCondition
 
 
 
@@ -28,6 +30,28 @@ class SQLAlchemyWhereCondition(BaseWhereCondition):
         }
     
     def __call__(self, model: type) -> Any:
-        column_obj = getattr(model, self._column, None)
-        if column_obj is not None:
-            return self._all_conditions[self._cond.value](column_obj)
+        if hasattr(model, self._column):
+            mapped_object = getattr(model, self._column)
+            return self._all_conditions[self._cond.value](mapped_object)
+        else:
+            raise TypeError(f"model {model} has no attribute {self._column}")
+            
+        
+        
+class SQLAlchemyOrderByCondition(BaseOrderByCondition):
+    
+    def __init__(
+        self, 
+        column: str, 
+        mode: OrderByModeEnum
+    ) -> None:
+        self._column = column
+        self._mode = mode
+        
+    def __call__(self, model: Any) -> Any:
+        if hasattr(model, self._column):
+            mapped_object = getattr(model, self._column)
+            mode = asc if self._mode == OrderByModeEnum.ASC else desc
+            return mode(mapped_object)
+        else:
+            raise TypeError

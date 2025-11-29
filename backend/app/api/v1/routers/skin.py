@@ -14,7 +14,7 @@ from app.responses import (
      JWTTokenInvalidError,
      NotFoundError
 )
-from app.schemas.presentation.dto import SkinDTOPresentation
+from app.schemas.dto import SkinDTO
 from app.schemas import (
      SkinHistoryTimePartModel, 
      SkinsPage, 
@@ -33,7 +33,7 @@ skin_router = APIRouter(
 
 @skin_router.get(
      path="/skin", 
-     response_model=SkinDTOPresentation,
+     response_model=SkinDTO,
      responses=router_responses(
           NotFoundError,
           ServerError,
@@ -62,7 +62,7 @@ async def get_skin(
           
 @skin_router.get(
      path="/skin/search", 
-     response_model=SkinsPage[SkinDTOPresentation],
+     response_model=SkinsPage[SkinDTO],
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,

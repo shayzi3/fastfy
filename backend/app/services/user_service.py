@@ -9,7 +9,7 @@ from app.repositories.abc_condition import BaseWhereCondition
 
 from app.schemas import SkinsPage, JWTTokenPayloadModel, PatchUserModel
 from app.schemas.enums import WhereConditionEnum
-from app.schemas.presentation.dto import UserDTOPresentation
+from app.schemas.dto import UserDTO
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.responses import (
      isresponse, 
@@ -35,7 +35,7 @@ class UserService(BaseUserService):
           cache: Cache,
           uow: BaseUnitOfWork,
           token_payload: JWTTokenPayloadModel
-     ) -> UserDTOPresentation | BaseResponse:
+     ) -> UserDTO | BaseResponse:
           async with uow:
                async with cache:
                     user = await uow.user_repo.read(
@@ -83,7 +83,7 @@ class UserService(BaseUserService):
                          cache=cache,
                          cache_keys=[f"user:{token_payload.uuid}"],
                          where={"default": [self.condition("uuid", token_payload.uuid, WhereConditionEnum.EQ)]},
-                         values=data.get_update_field_values(),
+                         values=data.non_nullable(),
                          returning="uuid",
                     )
                if result:

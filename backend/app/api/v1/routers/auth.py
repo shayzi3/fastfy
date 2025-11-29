@@ -1,6 +1,7 @@
 from typing import Annotated
+from datetime import timedelta
 
-from fastapi import APIRouter, Request, Form, Response
+from fastapi import APIRouter, Request, Form, Response, Depends
 from fastapi.responses import RedirectResponse
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from pydantic import HttpUrl
@@ -8,6 +9,7 @@ from pydantic import HttpUrl
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.infrastracture.cache.abc import Cache
 from app.services.abc import BaseAuthService
+from app.api.v1.dependency.rate_limit import RateLimitDepend
 from app.schemas import (
      ExchangeKeyModel, 
      AccessTokenModel, 
@@ -23,7 +25,8 @@ from app.responses import (
      JWTTokenInvalidError,
      LoginError,
      LoginSuccess,
-     InvalidCodeError
+     InvalidCodeError,
+     TooManyRequestError
 )
 
 
@@ -37,9 +40,9 @@ auth_router = APIRouter(
 
 
 @auth_router.get(
-     path="/steam/login", 
+     path="/steam/login",  
      responses=router_responses(ServerError),
-     summary="Перенаправление на страницу входа через Steam аккаунт."
+     summary="Перенаправление на страницу входа через Steam аккаунт.",
 )
 async def steam_redirect(
      service: FromDishka[BaseAuthService],
@@ -86,9 +89,11 @@ async def steam_processing(
      response_model=AccessTokenModel,
      responses=router_responses(
           ServerError,
-          InvalidCodeError
+          InvalidCodeError,
+          TooManyRequestError
      ),
-     summary="Обмен кода на jwt token."
+     summary="Обмен кода на jwt token.",
+     dependencies=[Depends(RateLimitDepend(1, timedelta(seconds=1), "exchange"))]
 )
 async def exchange(
      code: str,
@@ -111,9 +116,11 @@ async def exchange(
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
-          JWTTokenInvalidError
+          JWTTokenInvalidError,
+          TooManyRequestError
      ),
-     summary="Получения кода для привязки Telegram аккаунта."
+     summary="Получения кода для привязки Telegram аккаунта.",
+     dependencies=[Depends(RateLimitDepend(1, timedelta(seconds=1), "tg_exchange"))]
 )
 async def telegram_exchange(
      token_payload: FromDishka[JWTTokenPayloadModel],
@@ -134,7 +141,8 @@ async def telegram_exchange(
           LoginError,
           LoginSuccess
      ),
-     summary="Привязка Telegram аккаунта."
+     summary="Привязка Telegram аккаунта.",
+     dependencies=[Depends(RateLimitDepend(1, timedelta(seconds=1), "tg_processing"))]
 )
 async def telegram_processing(
      cache: FromDishka[Cache],

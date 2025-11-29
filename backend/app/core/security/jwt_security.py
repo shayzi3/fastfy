@@ -2,7 +2,7 @@
 from typing import Any
 from datetime import timedelta, datetime
 
-from jose import jwt
+from jose import jwt, exceptions
 from fastapi import Request
 
 from app.schemas import JWTTokenPayloadModel
@@ -39,10 +39,10 @@ class JWTSecurity(BaseJWTSecurity):
                     algorithms=[my_config.jwt_algorithm]
                )
                return JWTTokenPayloadModel.model_validate(data)
-          except jwt.ExpiredSignatureError:
+          except exceptions.ExpiredSignatureError:
                return JWTTokenExpireError
           
-          except jwt.InvalidTokenError:
+          except exceptions.JWTError:
                return JWTTokenInvalidError
           
      
@@ -52,8 +52,8 @@ class JWTSecurity(BaseJWTSecurity):
           expire: timedelta = timedelta(days=20)
      ) -> str:
           payload_time = {
-               "iat": datetime.now(),
-               "exp": datetime.now() + expire
+               "iat": datetime.now().timestamp(),
+               "exp": (datetime.now() + expire).timestamp()
           }
           data.update(payload_time)
           
@@ -62,3 +62,20 @@ class JWTSecurity(BaseJWTSecurity):
                key=my_config.jwt_secret_key,
                algorithm=my_config.jwt_algorithm
           )
+          
+          
+     async def verify(
+          self, 
+          encode_token: str
+     ) -> BaseResponse | None:
+          try:
+               jwt.decode(
+                    token=encode_token,
+                    key=my_config.jwt_secret_key,
+                    algorithms=[my_config.jwt_algorithm]
+               )
+          except exceptions.ExpiredSignatureError:
+               return JWTTokenExpireError
+          
+          except exceptions.JWTError:
+               return JWTTokenInvalidError

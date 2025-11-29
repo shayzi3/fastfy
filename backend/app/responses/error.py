@@ -73,3 +73,8 @@ class DataNotExistsError(Response):
 class DeleteError(Response):
      description = "Delete error"
      status_code = status.HTTP_400_BAD_REQUEST
+     
+     
+class TooManyRequestError(Response):
+     description = "Too many request"
+     status_code = status.HTTP_429_TOO_MANY_REQUESTS

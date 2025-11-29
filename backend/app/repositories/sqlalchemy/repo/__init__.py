@@ -2,7 +2,8 @@ from .user import SQLAlchemyUserRepository
 from .user_notify import SQLAlchemyUserNotifyRepository
 from .skin import SQLAlchemySkinRepository
 from .skin_price_history import SQLAlchemySkinPriceHisoryRepository
-from .user_portfolio import SQLAlchemyUserPortfolioRepository
+from .skin_portfolio import SQLAlchemySkinPortfolioRepository
 from .user_like_skin import SQLAlchemyUserLikeSkinRepository
-from .portfolio_skin_transaction import SQLAlchemyPortfolioSkinTransactionRepository
+from .skin_portfolio_transaction import SQLAlchemySkinPortfolioTransactionRepository
 from .skin_collection import SQLAlchemySkinCollectionRepository
+from .skin_wear import SQLAlchemySkinWearRepository

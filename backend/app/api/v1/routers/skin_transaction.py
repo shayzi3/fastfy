@@ -6,7 +6,7 @@ from dishka.integrations.fastapi import FromDishka, DishkaRoute
 from app.infrastracture.cache.abc import Cache
 from app.repositories.abc_uow import BaseUnitOfWork
 from app.services.abc import BaseSkinTransactionService
-from app.schemas.presentation.dto import PortfolioSkinTransactionDTOPresentation
+from app.schemas.dto import SkinPortfolioTransactionDTO
 from app.schemas import CreateSkinTransactionModel, PatchSkinTransactionModel, JWTTokenPayloadModel
 from app.responses import (
      isresponse,
@@ -33,7 +33,7 @@ skin_transaction_router = APIRouter(
 
 @skin_transaction_router.get(
      path="/transaction",
-     response_model=list[PortfolioSkinTransactionDTOPresentation],
+     response_model=list[SkinPortfolioTransactionDTO],
      responses=router_responses(
           ServerError,
           JWTTokenExpireError,
